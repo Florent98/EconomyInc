@@ -1,0 +1,20 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   " X ",
+   "XY ",
+   "  X"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:iron_ingot"
+    },
+   "Y": {
+    "item": "economy:item_gear"
+    }
+   },
+   "result": {
+    "item": "economy:item_remover",
+    "data": 0
+   }
+}

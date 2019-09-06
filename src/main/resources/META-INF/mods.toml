@@ -1,0 +1,10 @@
+modLoader="javafml" #mandatory
+loaderVersion="[25,)" #mandatory
+credits="FifouBE" #optional
+[[mods]] #mandatory
+modId="economyinc" #mandatory
+version="1.6" #mandatory
+displayName="Economy Inc." #mandatory
+description='''
+DESCRIPTION
+'''

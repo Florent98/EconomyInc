@@ -1,0 +1,23 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "ZXZ",
+   "XYX",
+   "ZXZ"
+ ],
+ "key": {
+   "X": {
+    "item": "economy:item_gear"
+    },
+   "Y": {
+    "item": "minecraft:gold_nugget"
+    },
+   "Z": {
+    "item": "minecraft:diamond"
+    }
+   },
+   "result": {
+    "item": "economy:item_gearmecanism",
+    "data": 0
+   }
+}

@@ -1,0 +1,22 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XYX",
+   "XWX",
+   "XYX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:iron_ingot"
+    },
+   "Y": {
+    "item": "economy:item_gear"
+    },
+   "W": {
+    "item": "economy:item_gearmecanism"
+    }
+   },
+   "result": {
+    "item": "economy:item_vault_cracker"
+   }
+}

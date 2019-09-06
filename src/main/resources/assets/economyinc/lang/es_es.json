@@ -1,0 +1,87 @@
+{
+"item.economyinc.item_creditcard": "Tarjeta de credito",
+"item.economyinc.item_oneb":"Uno d�lar",
+"item.economyinc.item_fiveb":"Cinco d�lares",
+"item.economyinc.item_tenb":"Diez d�lares",
+"item.economyinc.item_twentyb":"Veinte d�lares",
+"item.economyinc.item_fiftybe":"Cincuenta d�lares",
+"item.economyinc.item_hundreedb":"Cientos d�lares",
+"item.economyinc.item_twohundreedb":"Doscientos d�lares",
+"item.economyinc.item_fivehundreedb":"Qunientos d�lares",
+"item.economyinc.item_remover":"Llave inglesa",
+"item.economyinc.item_gear":"Engranaje",
+"item.economyinc.item_gearmecanism":"Mecanismo de engranajes",
+"item.economyinc.item_wireless":"Microchip",
+"item.economyinc.item_goldnuggetsubs":"Pepita de oro",
+"item.economyinc.item_packetone":"Paquete de uno d�lar",
+"item.economyinc.item_packetfive":"Paquete de cinco d�lares",
+"item.economyinc.item_packetten":"Paquete de dies d�lares",
+"item.economyinc.item_packettwenty":"Paquete de veinte d�lares",
+"item.economyinc.item_packetfifty":"Paquete de cincuenta d�lares",
+"item.economyinc.item_packethundreed":"Paquete de cien d�lares",
+"item.economyinc.item_packettwohundreed":"Paquete de doscientos d�lares",
+"item.economyinc.item_packetfivehundreed":"Paquete de quinientos d�lares",
+"item.economyinc.item_vault_cracker": "Digital ladr�n de cajas de caudales",
+
+"block.economyinc.block_vault":"Caja de seguridad",
+"block.economyinc.block_seller":"Maquina expenderdora",
+"block.economyinc.block_changer":"Cambio de oro",
+"block.economyinc.block_atm":"Distribuidor de billetes",
+"block.economyinc.block_village":"Caja de seguridad de banco",
+"block.economyinc.block_bills":"Almacenamiento de facturas",
+
+
+"entity.entityInformater":"Informador",
+
+"title.ownerCard":"Propietario",
+"title.fundsCard":"Fondos",
+
+"title.deleteC1":"Eliminas tu tarjeta",
+
+"title.yes":"Si",
+"title.no":"No",
+
+"title.block_vault":"Caja de seguridad",
+
+"title.linkdCard":"Mejorar",
+
+"title.wireless":"Microchip",
+
+"title.stranger":"Hey extranjero !",
+"title.informations":"Tengo informaciones para ti.",
+"title.seevault":"Ves la caja de seguridad",
+"title.codevault":"en el banco ? Tengo su codigo",
+"title.onlyhundred":"para solamente 100 d�lares...",
+"title.deal":"Deal ?",
+"title.accept":"Deal !",
+
+"commands.balance.usage":"/balance <check|add|remove> [player] <amout:5|10|20|50|100|200|500>",
+"commands.balance.notsameowner":"Parece que la tarjeta no es la tarjeta del jugador.",
+"commands.balance.funds":"S�lo puede agregar 5|10|20|50|100|200|500 en un comando.",
+
+"title.validate":"Validar",
+"title.sellAir":"No pudes vender aire ;)",
+"title.noCost":"Debe estableced un coste.",
+"title.block_seller":"Maquina expendedora",
+"title.buy":"Comprar",
+"title.recover":"Recuperar los fondos",
+"title.noUpgrade":"Necesita la microchip para comprar.",
+"title.noEnoughFunds":"Sin fondos suficientes.",
+"title.noSameCardBuy":"No te puede comprar cosas con la tarjeta de una otra personna.",
+"title.seller":"Vendedor : ",
+"title.cost":"Costo : ",
+"title.amount":"Cantidad : ",
+"title.fundsToRecover":"Fondos par recuperar : ",
+"title.item":"Item : ",
+"title.unlimited":"Pila ilimitada",
+"title.unlimitedStack":"Establecer pila ilimitada.",
+"title.limitedStack":"Establecer pila limitada.",
+"title.weight":"Peso : ",
+"title.alreadyUsed":"La maquina ya es usado por alguien m�s.",
+"title.block_changer":"Cambio de oro",
+"title.exchange": "Aceptar la interacci�n ?",
+"title.noCardFoundAndNoLink":"No encontr� niguna tarjeta de cr�dito y no te tenes la tecnologia microchip.",
+"title.noMoreQuantity":"la maquina es vacio, contacto el vendedor.",
+
+ "itemGroup.eic": "Economy Inc."
+}

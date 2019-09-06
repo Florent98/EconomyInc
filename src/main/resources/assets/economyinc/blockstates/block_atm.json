@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "economyinc:block/block_atm" },
+        "facing=south": { "model": "economyinc:block/block_atm", "y": 180 },
+        "facing=west":  { "model": "economyinc:block/block_atm", "y": 270 },
+        "facing=east":  { "model": "economyinc:block/block_atm", "y": 90 }
+    }
+}

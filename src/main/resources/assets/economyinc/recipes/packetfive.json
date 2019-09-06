@@ -1,0 +1,17 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XXX",
+   "XXX",
+   "XXX"
+ ],
+ "key": {
+   "X": {
+    "item": "economy:item_fiveb"
+    }
+   },
+   "result": {
+    "item": "economy:item_packetfive",
+    "data": 0
+   }
+}

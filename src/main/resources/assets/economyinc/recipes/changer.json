@@ -1,0 +1,23 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XZX",
+   "XYX",
+   "XZX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:cobblestone"
+    },
+   "Y": {
+    "item": "minecraft:redstone"
+    },
+   "Z": {
+    "item": "economy:item_gear"
+    }
+   },
+   "result": {
+    "item": "economy:block_changer",
+    "data": 0
+   }
+}

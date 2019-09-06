@@ -1,0 +1,26 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XXX",
+   "WYZ",
+   "XXX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:iron_ingot"
+    },
+   "Y": {
+    "item": "minecraft:paper"
+    },
+   "Z": {
+    "item": "minecraft:redstone"
+    },
+   "W": {
+    "item": "minecraft:gold_nugget"
+    }
+   },
+   "result": {
+    "item": "economy:item_creditcard",
+    "data": 0
+   }
+}

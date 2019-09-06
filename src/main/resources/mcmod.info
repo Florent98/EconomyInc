@@ -1,0 +1,16 @@
+[
+{
+  "modid": "economyinc",
+  "name": "Mod Economy",
+  "description": "With this mod, your money system on minecraft is safe !",
+  "version": "2.0",
+  "mcversion": "1.12.2",
+  "url": "https://www.planetminecraft.com/mod/economy-inc/",
+  "updateUrl": "https://www.planetminecraft.com/mod/economy-inc/",
+  "authorList": ["Florent T."],
+  "credits": "The Forge and FML team. MinecraftForgeFrance and MinecraftForge forums for their help !",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

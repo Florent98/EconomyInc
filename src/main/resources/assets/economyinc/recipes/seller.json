@@ -1,0 +1,27 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XWX",
+   "XYX",
+   "XZX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:planks",
+    "data": 0
+    },
+   "Y": {
+    "item": "economy:item_gear"
+    },
+   "Z": {
+    "item": "minecraft:glass_pane"
+    },
+   "W": {
+    "item": "minecraft:redstone"
+    }
+   },
+   "result": {
+    "item": "economy:block_seller",
+    "data": 0
+   }
+}

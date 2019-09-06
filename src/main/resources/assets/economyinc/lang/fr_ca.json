@@ -1,0 +1,87 @@
+{
+"item.economyinc.item_creditcard": "Carte de crédit",
+"item.economyinc.item_oneb":"Un dollar",
+"item.economyinc.item_fiveb":"Cinq dollars",
+"item.economyinc.item_tenb":"Dix dollars",
+"item.economyinc.item_twentyb":"Vingt dollars",
+"item.economyinc.item_fiftybe":"Cinquante dollars",
+"item.economyinc.item_hundreedb":"Cent dollars",
+"item.economyinc.item_twohundreedb":"Deux cents dollars",
+"item.economyinc.item_fivehundreedb":"Cinq cents dollars",
+"item.economyinc.item_remover":"Clé anglaise",
+"item.economyinc.item_gear":"Engrenage",
+"item.economyinc.item_gearmecanism":"Mécanisme d'engrenages",
+"item.economyinc.item_wireless":"Technologie sans fil",
+"item.economyinc.item_goldnuggetsubs":"Pépite d'or",
+"item.economyinc.item_packetone":"Paquets de un dollar",
+"item.economyinc.item_packetfive":"Paquets de cinq dollars",
+"item.economyinc.item_packetten":"Paquets de dix dollars",
+"item.economyinc.item_packettwenty":"Paquets de vingt dollars",
+"item.economyinc.item_packetfifty":"Paquets de cinquante dollars",
+"item.economyinc.item_packethundreed":"Paquets de cents dollars",
+"item.economyinc.item_packettwohundreed":"Paquets de deux cents dollars",
+"item.economyinc.item_packetfivehundreed":"Paquets de cinq cents dollars",
+"item.economyinc.item_vault_cracker": "Craqueur de coffre fort",
+
+"block.economyinc.block_vault":"Coffre-fort",
+"block.economyinc.block_seller":"Vendeur automatique",
+"block.economyinc.block_changer":"Changeur d'or",
+"block.economyinc.block_atm":"Distributeur de billets",
+"block.economyinc.block_village":"Coffre-fort sécurisé",
+"block.economyinc.block_bills":"Stockage à billets",
+
+
+"entity.entityInformater":"Informateur",
+
+"title.ownerCard":"Propriétaire",
+"title.fundsCard":"Fonds",
+
+"title.deleteC1":"Supprimer la carte",
+
+"title.yes":"Oui",
+"title.no":"Non",
+
+"title.block_vault":"Coffre-fort",
+
+"title.linkdCard":"Améliorée",
+
+"title.wireless":"Technologie sans fil",
+
+"title.stranger":"Salut étranger!",
+"title.informations":"J'ai des infos",
+"title.seevault":"pour toi. Tu vois le coffre-fort à la",
+"title.codevault":"banque ? Je peux t'en donner le code",
+"title.onlyhundred":"pour seulement cent dollars...",
+"title.deal":"Deal ?",
+"title.accept":"Deal !",
+
+"commands.balance.usage":"/balance <check|add|remove> [player] <amout:5|10|20|50|100|200|500>",
+"commands.balance.notsameowner":"Il semble que l'une des cartes ne soit pas celle du joueur.",
+"commands.balance.funds":"Ajout de seulement 5|10|20|50|100|200|500 par commande.",
+
+"title.validate":"Valider",
+"title.sellAir":"Tu ne peux pas vendre de l'air ;)",
+"title.noCost":"Il faut un coût pour l'item",
+"title.block_seller":"Vendeur automatique",
+"title.buy":"Acheter",
+"title.recover":"Récuperer les fonds",
+"title.noUpgrade":"Il faut la technologie sans fil pour accéder à la machine.",
+"title.noEnoughFunds":"Fonds insuffisants.",
+"title.noSameCardBuy":"Vous ne pouvez pas acheter avec la carte de quelqu'un d'autre",
+"title.seller":"Vendeur : ",
+"title.cost":"Coût : ",
+"title.amount":"Quantité : ",
+"title.fundsToRecover":"Fonds à récuperer : ",
+"title.item":"Objet : ",
+"title.unlimited":"Stack illimité",
+"title.unlimitedStack":"Stack illimité.",
+"title.limitedStack":"Stack limité.",
+"title.weight":"Poids : ",
+"title.alreadyUsed":"Ce vendeur automatique est déjà en cours d'utilisation.'",
+"title.block_changer":"Changeur d'or",
+"title.exchange": "Accepter l'intéraction ?",
+"title.noCardFoundAndNoLink":"Aucune carte de crédit n'a été trouvée ou vous n'avez pas la technologie sans fil",
+"title.noMoreQuantity":"Le vendeur automatique est vide, contacter le vendeur.",
+
+ "itemGroup.eic": "Economy Inc."
+}

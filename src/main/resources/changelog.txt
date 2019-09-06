@@ -1,0 +1,156 @@
+Keys : + Added
+       - Removed
+       * Fixed
+       @ Others
+
+1.0
+
+  @ Mod created ! Yay ! 01/07/2017
+
+1.1
+
+ + Added changelog to file.
+ + Added method if card is used by someone else !
+ + Added Spanish language file.
+ + Added modification to French language file.
+ + Added Canadian French language file.
+ + Added United-Kingdom English language file.
+ + Added Australian English language file.
+ + Added New Zealand English language file.
+ 
+    1.1.2
+     
+     * Fix bugs
+ 
+1.2
+ 
+ + Added function when someone is using someone else card will now return the name of the thief and not his UUID.
+ + Added micro chip (wireless technology).
+ + Updated for Minecraft 1.12.
+ @ Changed items name to respect java's rules.
+ + Added player model in credit card's GUI.
+ + Added Taking or deposit money will now show up directly in credit card's GUI.
+ + Added translation of GUI,Card,NBT's title in different languages.
+ + Added an upgraded slot in item credit card, once updated you can buy via wireless technology.
+ + Added a texture for the wireless technology.
+ + Added administrator command to check/add/remove funds of someone card. (Only works if player you want to check has card in inventory and if it's his card).
+ - Removed : Using someone else card will now return the name of the thief and not his UUID. (Bugged)
+ * Fixed bug, when card was updated with micro chip, it added a chip to the inventory.
+ * Fixed render in credit card GUI where player appears red.
+ + Added model for block seller.
+ + Added block seller is now fully functional and allow player to sell items to others.
+ * Fixed block seller and vault. By placing hopper you could extract/insert items.
+ + Added function to remove block seller with wrench if you're the owner.
+ + Added function for creative players to put unlimited stack in vending machine (button only appear for creatives player). I'm looking for a way to only allow it to operators/administrators.
+ + Added status of vending machine (unlimited/limited stack) in chat for the administrator using it.
+ * Fixed title.limitedStack was not implemented and translated.
+ * Fixed French translation for Quantity.
+ * Fixed synchronization between clients in multiplayer.
+ * Fixed render of items (some parts were transparent).
+ * Fixed JSON model for micro chip item, it was bigger than it has to be.
+ * Fixed command servers side.
+ * Fixed command autocompletion and allow only op player to use it.
+ * Fixed add/remove, were not working on servers.
+ + Added crafting in json ways.
+ + Added craft for micro chip.
+ 
+ 1.3
+ 
+ + Added render of the item you're selling into seller's GUI.
+ + Added preview of the item in 3D in world inside Block Seller. Allow the player to see what the block is selling.
+ + Added configuration file to remove preview of the item in 3D for low PC.
+ + Added item gold nugget as substitution for the Minecraft gold nugget.
+ - Removed recipe for gold ore, it will now return the gold nugget from Economy Inc.
+ + Added a weight to the cooked gold nugget. (Displayed when you over the item in inventory).
+ + Added block changer.
+ + Added a recipe in block changer where you can place your card, your gold nugget and it will transform it into money directly on your card.
+ + Added a value for block changer so only one player can access the block.
+ + Added a factor in the configuration file for servers to modify the multiplier of block changer. (Weight is multiplied by the value of config file and will round the number to add it on card).
+ + Added a recipe to obtain Minecraft gold nugget thanks to gold nugget of Economy Inc. Allowing players to craft gold block.
+ + Added titles of the things added above.
+ + Added a chat message when block changer is already used by someone else.
+ * Fixed when player shutdown Minecraft while in GUI the number of user was not updated, you can now destroy the block with the wrench when you are in single player and block is stuck.
+ + Added texture for blocks and items added above.
+ 
+ 1.4 
+ 
+ + Added a new block vault, it's a 2x2x1 rectangle (WxHxD).
+ + Added a pattern for block vault , by placing two next to each other and two on top you create a bigger vault that contains 54 slots.
+ + You can now add 5 friends to your vault, and they can open it and share their stuff with you.
+ + Same for the 2x2 vault.
+ + Added a GUI settings for the block vault, usable only for the owner in the top corner right on the GUI of your vault, it allows you to see who can access the vault and you can remove them by clicking the cross next to their name.
+ + For the new feature above, the other player must be near you and in the same world or the GUI won't detect him.
+ + Added packet of every bills, 9 bills will now give you a packet.
+ + Added a new model and new texture for the block vault, if there are some stuff inside, the block change texture inside and contain some bills and gold bar. This will be a future implementation for the animation of the vault.
+ + Huge modification, money is now saved in a capabality on server side, which mean that player in multiplayer don't have the amount of money stored on client, but at every connection this data is synchronized from server to client.
+   It is a huge modification, because, first there is only one money capabality, so on every credit card that the player will create, he'll have the same amount, the amount of his capabaility stored on server. Second, this is way more secure that way, the client don't send
+   anymore packets to server to notify of the change, but that's the server who will notify the client. That way only server can modify the value, and administrators if they have the right tool to read the files and modify it. In singleplayer it works the same way but with the internal server of the game,
+   as you may know, when connecting to your client world, you launch a internal server that handle lots of stuff.
+ + Command balance will now return the capability of the player and it's not necessary for the player to have his card in the inventory to check it.
+ + You can now leave your card in your safe if you have the wireless upgrade. You can directly pay by clicking on buy. Capabilities will handle the change of amount and will synchronize it with your credit card.
+ + Added name and translation for the different languages.
+ + When you hover an item into the mod's GUI it will now display what it is and the item's NBT, which was not implemented yet.
+ * Fixed problem with the text inside GUI that were bigger than the actual GUI.
+ * Switched button in the item credit card, now + add money, and - remove money from card.
+ + When a seller is empty and you try to buy it will now notify you that it's empty.
+ * Changed the GUI changer background image.
+ * Changed texture of the block changer.
+ * Changed texture of gear.
+ * Changed texture of gear mechanism.
+ + Added a function that will show in GUI and in block seller a barrier block if the stock is sold out.
+ + Added a ATM block.
+ - Removed the fact that you can access your account directly by right clicking with the credit card except if there is the wireless technology implemented.
+ - Removed the delete GUI. (It was useless)
+ + Added a feature in the configuration file to allow players to open their inventories or not if they have the wireless technology.
+ + Added a new house in villages, called the bank you can find a chest with some stuff from the mod in it with some ATM to deposit or take cash.
+ + Added a configuration to disable bank will generation in villages, by default it generates.
+ + Added a new type of vault that generate inside bank in villages.
+ + Added a random number inside the vault.
+ + Added a digital vault cracker.
+ + Added right clicking on the bank's vault will either open the vault or explode, you can die if you are not well equipped.
+ + Added textures and lang for the new features
+ 
+ 1.4.1
+ 
+ + Added one dollar bill. 
+ + Added it on the credit craft and on the ATM GUI.
+ * Fixed lang file, bank's vault was not translated.
+ 
+ 1.4.2
+ 
+ * Fixed bugs.
+ 
+ 1.4.3
+ 
+ * Fixed vault bug when you add players to it.
+ * Fixed GUI buttons.
+ 
+ 1.4.4
+ 
+ * Fixed a problem with the seller that was not updated and you had to deconnect/reconnect to see what's inside.
+ @ I didn't say it but yes there is a large chance that with the new system of saving people will loose their money, sorry.
+ 
+ 1.4.5
+ 
+ * Fixed the crash with the seller !
+ 
+ 1.5
+ 
+ @ Cleaning code. 
+ + There is now a server configuration file different on server and client, for the configurations that are both on server/client it will take the server one.
+ + Added a configuration to remove the gold nugget from the MOD and thus the gold exchange machine.
+ + Added a new GUI for the vault in bank.
+ + Using the digital cracker will now remove durability from it (5 uses), after a try it closes the GUI if it is no the right code.
+ + Added a new villager, the informer, there is only one trade with it. For 100 dollars he will give you the code of the bank's vault, but who know what's inside..
+ + Added AI to the informer, he acts just like a villager but he is not one, he actually don't like them.
+ + Added MySQL. This is a huge add, on the server configuration file you can now allow the server to connect to your database. When the server start you will have a message saying if the database was created 
+   successfully or if there is already one it will give you an error message which is normal. 
+ + Added when a player connect to the server and if he is not registered it will do it and will put his status on ONLINE.
+ + Added when the player disconnect from the server, the money will sync up and his status will be put on OFFLINE.
+ + Added a true/false column called syncBDDtoSERV on SQL, if the value pass to 1 at the connection of the player it will sync up the new amount of money. The player needs to be disconnected FIRST (checkable via the status) and at his connection the syncBDDtoSERV will pass to 0 again.
+ @ WARNING : Use the last column with precautions, it should be used in rare case AT THE MOMENT. I'm not responsible for the damage it could cause to your database in any case.
+   A video tutorial will normally follow this update in French and English.
+ + Added the new lang file for the different additions.
+ + Added chinese language file.
+ + Changed the recipe for the digital vault cracker, change the nether star with a gear mecanism.
+ * Fixed a crash with the code inside the informer.

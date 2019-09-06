@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=down":  { "model": "economyinc:block/block_changer_vertical", "x": 180 },
+        "facing=up":    { "model": "economyinc:block/block_changer_vertical" },
+        "facing=north": { "model": "economyinc:block/block_changer" },
+        "facing=south": { "model": "economyinc:block/block_changer", "y": 180 },
+        "facing=west":  { "model": "economyinc:block/block_changer", "y": 270 },
+        "facing=east":  { "model": "economyinc:block/block_changer", "y": 90 }
+    }
+}

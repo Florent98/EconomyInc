@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "economyinc:blocks/block_changer_top",
+        "front": "economyinc:blocks/block_changer_front",
+        "side": "economyinc:blocks/block_changer_side"
+    }
+}
