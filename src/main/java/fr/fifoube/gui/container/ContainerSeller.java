@@ -5,7 +5,6 @@ import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -17,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerSeller extends Container {
 
 
-	private static TileEntityBlockSeller tile;
+	private TileEntityBlockSeller tile;
 	public ContainerSeller(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		this(windowId, playerInv, extraData.readBlockPos());
 	}
@@ -37,9 +36,6 @@ public class ContainerSeller extends Container {
 
 	}
 	
-	public TileEntityBlockSeller getTileEntity() {
-		return tile;
-	}
 
 	private void bindPlayerInventory(PlayerInventory inventoryPlayer)
 	{
@@ -95,6 +91,10 @@ public class ContainerSeller extends Container {
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
 		return true;
+	}
+
+	public TileEntityBlockSeller getTile() {
+		return this.tile;
 	}
 
 }

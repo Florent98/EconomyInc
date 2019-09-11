@@ -14,21 +14,21 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ContainerTypeRegistery {
 	
-	@ObjectHolder("economyinc:containerseller")
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":containerseller")
 	public static final ContainerType<ContainerSeller> SELLER_TYPE = null;
-	@ObjectHolder("economyinc:containersellerbuy")
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":containersellerbuy")
 	public static final ContainerType<ContainerSeller> SELLERBUY_TYPE = null;
-	@ObjectHolder("economyinc:containervault")
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":containervault")
 	public static final ContainerType<ContainerVault> VAULT_TYPE = null;
-	@ObjectHolder("economyinc:containervault2by2")
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":containervault2by2")
 	public static final ContainerType<ContainerVault2by2> VAULT2BY2_TYPE = null;
     
 	@SubscribeEvent
-	public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
-		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("container_seller"));
-		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("container_sellerbuy"));
-		event.getRegistry().register(IForgeContainerType.create(ContainerVault::new).setRegistryName("container_vault"));
-		event.getRegistry().register(IForgeContainerType.create(ContainerVault2by2::new).setRegistryName("container_vault2by2"));
+	public void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
+		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containerseller"));
+		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containersellerbuy"));
+		event.getRegistry().register(IForgeContainerType.create(ContainerVault::new).setRegistryName("containervault"));
+		event.getRegistry().register(IForgeContainerType.create(ContainerVault2by2::new).setRegistryName("containervault2by2"));
 
 
 	}

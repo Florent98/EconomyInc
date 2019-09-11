@@ -5,14 +5,14 @@ import java.util.List;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 public class ItemWireless extends Item {
@@ -22,7 +22,7 @@ public class ItemWireless extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
 		
 		ItemStack itemStackIn = player.getHeldItemOffhand();
 		ItemStack itemStackInC = player.getHeldItemMainhand();
@@ -43,9 +43,8 @@ public class ItemWireless extends Item {
 									ItemStack hasCardIS = player.inventory.getStackInSlot(i);
 									if(!(totalcount > 1))
 									{
-											if(hasCardIS.hasTag() && hasCardIS.getTag().hasKey("Owner"))
+											if(hasCardIS.hasTag() && hasCardIS.getTag().contains("Owner"))
 											{
-												
 												String nameCard = hasCardIS.getTag().getString("OwnerUUID");
 												String nameGame = player.getUniqueID().toString();
 
@@ -54,15 +53,15 @@ public class ItemWireless extends Item {
 													boolean linked = hasCardIS.getTag().getBoolean("Linked");
 													if(linked == false)
 													{
-														player.sendMessage(new TextComponentString("Card updated !"));
-														hasCardIS.getTag().setBoolean("Linked", true);
+														player.sendMessage(new StringTextComponent("Card updated !"));
+														hasCardIS.getTag().putBoolean("Linked", true);
 														player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 															data.setLinked(true);
 														});
 													}
 													else
 													{
-														player.sendMessage(new TextComponentString("Card is already linked"));
+														player.sendMessage(new StringTextComponent("Card is already linked"));
 														player.addItemStackToInventory(itemStackInC);
 													}
 													
@@ -74,23 +73,23 @@ public class ItemWireless extends Item {
 											}
 
 								}
-								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+								return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
 							}
 						}
 						else
 						{
-								player.sendMessage(new TextComponentString("You can only linked one card, please remove the uncessary cards"));
-								return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+								player.sendMessage(new StringTextComponent("You can only linked one card, please remove the uncessary cards"));
+								return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
 						}
 					}
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+		return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TextComponentString(I18n.format("title.wireless")));
+		tooltip.add(new StringTextComponent(I18n.format("title.wireless")));
 	}
 }

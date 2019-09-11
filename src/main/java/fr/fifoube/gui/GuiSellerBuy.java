@@ -2,38 +2,37 @@ package fr.fifoube.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
+import fr.fifoube.gui.container.ContainerSeller;
 import fr.fifoube.items.ItemCreditCard;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.packets.PacketCardChangeSeller;
 import fr.fifoube.packets.PacketSellerFundsTotal;
 import fr.fifoube.packets.PacketsRegistery;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-public class GuiSellerBuy extends GuiScreen
+public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 {
 	private TileEntityBlockSeller tile;
-	private EntityPlayer player;
 	
-	public GuiSellerBuy(TileEntityBlockSeller tile, World world) 
+	public GuiSellerBuy(ContainerSeller container, PlayerInventory playerInventory, ITextComponent name) 
 	{
-		this.tile = tile;
-		player = Minecraft.getInstance().player;
-		
+		super(container, playerInventory, name);
+		this.tile = container.getTile();
 	}
 	
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
@@ -42,8 +41,8 @@ public class GuiSellerBuy extends GuiScreen
 	protected int guiLeft;
 	protected int guiTop;
 	
-	private GuiButtonExt slot1;
-	private GuiButtonExt takeFunds;
+	private Button slot1;
+	private Button takeFunds;
 	private String owner = "";
 	private String itemName = "";
 	private double cost;
@@ -63,8 +62,8 @@ public class GuiSellerBuy extends GuiScreen
 	}
 	
 	@Override
-	public void initGui() 
-	{
+	protected void init() {
+		
 		this.guiLeft = (this.width - this.xSize) / 2;
 	    this.guiTop = (this.height - this.ySize) / 2;
 		if(tile != null)
@@ -72,32 +71,30 @@ public class GuiSellerBuy extends GuiScreen
 			this.owner = tile.getOwnerName();
 			this.itemName = tile.getItem();
 			this.cost = tile.getCost();
-			this.slot1 = this.addButton(new GuiButtonExt(1, width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy")) {public void onClick(double mouseX, double mouseY) {actionPerformed(slot1);}});
+			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy"), actionPerformed()));
              
 			String sellerOwner = tile.getOwner();
-			String worldPlayer = mc.player.getUniqueID().toString();
+			String worldPlayer = minecraft.player.getUniqueID().toString();
 			if(sellerOwner.equals(worldPlayer))
 			{
-				this.takeFunds = this.addButton(new GuiButtonExt(2, width / 2 + 20, height / 2 - 74, 100, 13, I18n.format("title.recover")) {public void onClick(double mouseX, double mouseY) {actionPerformed(takeFunds);}});
+				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 74, 100, 13, I18n.format("title.recover"), actionPerformed()));
 			}
 			
 		}
 	}
 	
-	
 	@Override
-	public boolean doesGuiPauseGame() 
-	{
+	public boolean isPauseScreen() {
 		return false;
 	}
 	
-	protected void actionPerformed(GuiButton button)
+	protected IPressable actionPerformed()
 	{		
-		player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
+		minecraft.player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
 			System.out.println("data présente client side");
 			if(tile != null) // WE CHECK IF TILE IS NOT NULL FOR AVOID CRASH
 			{	
-				if(button == slot1) //IF PLAYER BUY
+				if(buttons == slot1) //IF PLAYER BUY
 				{
 					if(data.getLinked())
 					{
@@ -134,18 +131,18 @@ public class GuiSellerBuy extends GuiScreen
 						}
 						else
 						{
-							player.sendMessage(new TextComponentString(I18n.format("title.noEnoughFunds")));
+							minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")));
 						}
 					}
 					else
 					{
-						for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+						for(int i = 0; i < minecraft.player.inventory.getSizeInventory(); i++)
 						{
-							if(player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard)
+							if(minecraft.player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard)
 							{
-								ItemStack creditCard = player.inventory.getStackInSlot(i);
+								ItemStack creditCard = minecraft.player.inventory.getStackInSlot(i);
 								if(creditCard.hasTag())
-								if(player.getUniqueID().toString().equals(creditCard.getTag().getString("OwnerUUID")))
+								if(minecraft.player.getUniqueID().toString().equals(creditCard.getTag().getString("OwnerUUID")))
 								{
 									if(data.getMoney() >= tile.getCost())
 									{
@@ -184,30 +181,30 @@ public class GuiSellerBuy extends GuiScreen
 									}
 									else
 									{
-										player.sendMessage(new TextComponentString(I18n.format("title.noEnoughFunds")));
+										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")));
 									}
 								}
 								else
 								{
-									player.sendMessage(new TextComponentString(I18n.format("title.noSameOwner")));
+									minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noSameOwner")));
 								}
 							}
-							else if(!(player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard))
+							else if(!(minecraft.player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard))
 							{
 								this.sizeInventoryCheckCard = this.sizeInventoryCheckCard + 1;
-								if(this.sizeInventoryCheckCard == player.inventory.getSizeInventory())
+								if(this.sizeInventoryCheckCard == minecraft.player.inventory.getSizeInventory())
 								{
 									if(!(tile.getAmount() == 0))
 									{
-										player.sendMessage(new TextComponentString(I18n.format("title.noCardFoundAndNoLink")));
+										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noCardFoundAndNoLink")));
 									}
 									else if(tile.getAmount() == 0)
 									{
-										player.sendMessage(new TextComponentString(I18n.format("title.noMoreQuantity")));
+										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noMoreQuantity")));
 									}
 									this.sizeInventoryCheckCard = 0;
 								}
-								if(i == player.inventory.getSizeInventory())
+								if(i == minecraft.player.inventory.getSizeInventory())
 								{
 									this.sizeInventoryCheckCard = 0;
 								}
@@ -215,7 +212,7 @@ public class GuiSellerBuy extends GuiScreen
 						}
 					}	
 				}
-				else if(button == takeFunds)
+				else if(buttons == takeFunds)
 				{
 					final int x = tile.getPos().getX(); // GET X COORDINATES
 					final int y = tile.getPos().getY(); // GET Y COORDINATES
@@ -228,23 +225,24 @@ public class GuiSellerBuy extends GuiScreen
 			}
 			
 		});
+		return null;
 		
 	}
 	 
 		@Override
 		public void render(int mouseX, int mouseY, float partialTicks)
 		{
-			this.drawDefaultBackground();
+			this.renderBackground();
 			// added
-	        this.mc.getTextureManager().bindTexture(background);
+	        this.getMinecraft().getTextureManager().bindTexture(background);
 	        int i = this.guiLeft;
 	        int j = this.guiTop;
-	        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
-			this.fontRenderer.drawString(TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2 - 120), (this.height / 2 - 50), 0x000);
-			this.fontRenderer.drawString(TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2 - 120), (this.height / 2 - 40), 0x000);
-			this.fontRenderer.drawString(TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2 - 120), (this.height / 2 - 30), 0x000);
-			this.fontRenderer.drawString(TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2 - 120), (this.height / 2 - 20), 0x000);
-			this.fontRenderer.drawString(TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2 - 120), (this.height / 2 - 10), 0x000);
+	        this.blit(i, j, 0, 0, this.xSize, this.ySize);
+			this.drawString(font, TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2 - 120), (this.height / 2 - 50), 0x000);
+			this.drawString(font, TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2 - 120), (this.height / 2 - 40), 0x000);
+			this.drawString(font, TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2 - 120), (this.height / 2 - 30), 0x000);
+			this.drawString(font, TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2 - 120), (this.height / 2 - 20), 0x000);
+			this.drawString(font, TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2 - 120), (this.height / 2 - 10), 0x000);
 			super.render(mouseX, mouseY, partialTicks);
 	        drawImageInGui();
 
@@ -263,10 +261,16 @@ public class GuiSellerBuy extends GuiScreen
 		    {
 			    stack = new ItemStack(tile.getStackInSlot(0).getItem(), 1);
 		    }
-		    this.itemRender.renderItemIntoGUI(stack, (i / 2) + 105 , (j /2) + 5);
+		    this.itemRenderer.renderItemIntoGUI(stack, (i / 2) + 105 , (j /2) + 5);
 		    RenderHelper.disableStandardItemLighting();
 		    GlStateManager.disableRescaleNormal();
 		    GL11.glPopMatrix();   
+		}
+
+		@Override
+		protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+			// TODO Auto-generated method stub
+			
 		}
 
 }

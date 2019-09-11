@@ -3,7 +3,7 @@ package fr.fifoube.packets;
 import java.util.function.Supplier;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class PacketSellerCreated {
 
 		ctx.get().enqueueWork(() -> {
 			
-				EntityPlayer player = ctx.get().getSender(); // GET PLAYER
+				PlayerEntity player = ctx.get().getSender(); // GET PLAYER
 	  			World world = player.world;  
 				BlockPos pos = new BlockPos(packet.x, packet.y, packet.z);
 				TileEntityBlockSeller te = (TileEntityBlockSeller)world.getTileEntity(pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO

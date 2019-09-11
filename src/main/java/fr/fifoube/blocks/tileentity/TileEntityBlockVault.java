@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.fifoube.gui.container.ContainerVault;
-import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -189,7 +188,7 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 
 	@Override
 	public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-		return new ContainerVault(playerInventory, this);
+		return new ContainerVault(id, playerInventory, getPos());
 	}
 
 	@Override

@@ -15,14 +15,11 @@ import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 
 public class GuiSeller extends ContainerScreen<ContainerSeller> {
 
@@ -31,7 +28,7 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 	public GuiSeller(ContainerSeller container, PlayerInventory playerInventory, ITextComponent name) 
 	{
 		super(container, playerInventory, name);
-		this.tile = getContainer().getTileEntity();
+		this.tile = getContainer().getTile();
 	}
 	
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_seller.png");

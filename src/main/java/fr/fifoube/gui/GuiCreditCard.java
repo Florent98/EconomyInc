@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class GuiCreditCard extends Screen {
 
-	protected GuiCreditCard(ITextComponent titleIn) {
+	public GuiCreditCard(ITextComponent titleIn) {
 		super(titleIn);
 	}
 
@@ -112,7 +112,6 @@ public class GuiCreditCard extends Screen {
 	
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
         // added
 		int i = this.guiLeft;
 		int j = this.guiTop;

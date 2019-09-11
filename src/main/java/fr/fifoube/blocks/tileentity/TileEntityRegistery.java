@@ -63,7 +63,7 @@ public class TileEntityRegistery {
 	
 	@OnlyIn(Dist.CLIENT)
 	public static void registerTileRenderer() {
-        ItemStackTileEntityRenderer.instance = new TileEntityInventoryRenderHelper();
+        //ItemStackTileEntityRenderer.instance = new TileEntityInventoryRenderHelper();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockVault.class, new TileEntityVaultSpecialRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockVault2by2.class, new TileEntityVault2by2SpecialRenderer());	
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockBills.class, new TileEntityBlockBillsSpecialRenderer());

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.fifoube.gui.container.ContainerVault2by2;
-import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -72,7 +71,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
         return this.ownerS;
     }
     
-    public void setAllowedPlayers(String allowed)
+    public void addAllowedPlayers(String allowed)
     {
     	this.allowedPlayers.add(allowed);
     }
@@ -177,7 +176,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 
 	@Override
 	public Container createMenu(int id, PlayerInventory inventoryPlayer, PlayerEntity player) {
-		return new ContainerVault2by2(inventoryPlayer, this);
+		return new ContainerVault2by2(id, inventoryPlayer, getPos());
 	}
 
 	@Override

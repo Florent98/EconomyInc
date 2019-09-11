@@ -1,7 +1,6 @@
 package fr.fifoube.blocks.tileentity;
 
 import fr.fifoube.gui.container.ContainerSeller;
-import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -212,7 +211,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 
 		 @Override
 		public Container createMenu(int id, PlayerInventory inventoryPlayer, PlayerEntity playerEntity) {
-			return new ContainerSeller(id, inventoryPlayer, pos);
+			return new ContainerSeller(id, inventoryPlayer, getPos());
 		}
 
 		@Override

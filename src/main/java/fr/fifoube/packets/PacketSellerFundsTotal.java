@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -65,7 +65,7 @@ public class PacketSellerFundsTotal {
 	{
 			ctx.get().enqueueWork(() -> {
 				
-				EntityPlayer player = ctx.get().getSender(); // GET PLAYER
+				PlayerEntity player = ctx.get().getSender(); // GET PLAYER
 				World worldIn = player.world; // GET WORLD
 				BlockPos pos = new BlockPos(packet.x, packet.y, packet.z); // NEW BLOCK POS FOR TILE ENTITY COORDINATES
 				TileEntity tileentity = worldIn.getTileEntity(pos); // GET THE TILE ENTITY IN WORLD THANKS TO COORDINATES

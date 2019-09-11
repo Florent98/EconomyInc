@@ -11,9 +11,9 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.StringTextComponent;
 
 public class CommandBalance {
 
@@ -25,7 +25,7 @@ public class CommandBalance {
 				.then(
 						Commands.literal("add")
 						.then(
-							  Commands.argument("players", EntityArgument.multiplePlayers())
+							  Commands.argument("players", EntityArgument.players())
 							  .then(
 								    Commands.argument("money", DoubleArgumentType.doubleArg(0))
 								    .executes(ctx -> addToBalance(ctx.getSource(), EntityArgument.getEntitiesAllowingNone(ctx, "players"), DoubleArgumentType.getDouble(ctx, "money")))
@@ -35,7 +35,7 @@ public class CommandBalance {
 				.then(
 						Commands.literal("remove")
 						.then(
-							  Commands.argument("players", EntityArgument.multiplePlayers())
+							  Commands.argument("players", EntityArgument.players())
 							  .then(
 								    Commands.argument("money", DoubleArgumentType.doubleArg(0))
 								    .executes(ctx -> removeFromBalance(ctx.getSource(), EntityArgument.getEntitiesAllowingNone(ctx, "players"), DoubleArgumentType.getDouble(ctx, "money")))
@@ -45,7 +45,7 @@ public class CommandBalance {
 				.then(
 					    Commands.literal("check")
 					    .then(
-						    Commands.argument("players", EntityArgument.multiplePlayers())
+						    Commands.argument("players", EntityArgument.players())
 							.executes(ctx -> checkFromBalance(ctx.getSource(), EntityArgument.getEntitiesAllowingNone(ctx, "players")))  
 						)
 				)
@@ -55,13 +55,13 @@ public class CommandBalance {
 	private static int addToBalance(CommandSource src, Collection<? extends Entity> targets, double money)
 	{
 		targets.forEach(e -> {
-			if(e instanceof EntityPlayer)
+			if(e instanceof PlayerEntity)
 			{
-				EntityPlayerMP playerMP = (EntityPlayerMP)e;
+				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendFeedback(new TextComponentString(money + " were added to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
+				src.sendFeedback(new StringTextComponent(money + " were added to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
 			}	
 		});
 
@@ -71,13 +71,13 @@ public class CommandBalance {
 	private static int removeFromBalance(CommandSource src, Collection<? extends Entity> targets, double money)
 	{
 		targets.forEach(e -> {
-			if(e instanceof EntityPlayer)
+			if(e instanceof PlayerEntity)
 			{
-				EntityPlayerMP playerMP = (EntityPlayerMP)e;
+				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendFeedback(new TextComponentString(money + " were withdrawn to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
+				src.sendFeedback(new StringTextComponent(money + " were withdrawn to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
 			}	
 		});
 	 	return 0;
@@ -86,11 +86,11 @@ public class CommandBalance {
 	private static int checkFromBalance(CommandSource src, Collection<? extends Entity> targets)
 	{
 		targets.forEach(e -> {
-			if(e instanceof EntityPlayer)
+			if(e instanceof PlayerEntity)
 			{
-				EntityPlayerMP playerMP = (EntityPlayerMP)e;
+				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendFeedback(new TextComponentString(data.getName() + " funds are " + data.getMoney()), false);
+					src.sendFeedback(new StringTextComponent(data.getName() + " funds are " + data.getMoney()), false);
 				});
 			}	
 		});

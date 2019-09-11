@@ -2,7 +2,6 @@ package fr.fifoube.items;
 
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,8 +32,6 @@ public class ItemsRegistery {
 	public static final Item ITEM_TWOHUNDREEDB = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":item_fivehundreedb")
 	public static final Item ITEM_FIVEHUNDREEDB = null;
-	@ObjectHolder(ModEconomyInc.MOD_ID + ":item_effectsword")
-	public static final Item ITEM_SWORDEFFECT = null;
 
 	@SubscribeEvent
 	public static void registerItems(final RegistryEvent.Register<Item> event) {
@@ -50,7 +47,6 @@ public class ItemsRegistery {
 		event.getRegistry().register(new ItemHundreedB(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(64)).setRegistryName("item_hundreedb"));
 		event.getRegistry().register(new ItemTwoHundreedB(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(64)).setRegistryName("item_twohundreedb"));
 		event.getRegistry().register(new ItemFiveHundreedB(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(64)).setRegistryName("item_fivehundreedb"));
-		event.getRegistry().register(new ItemSwordEffect(ItemTier.WOOD, 1, 1, new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(1)).setRegistryName("item_effectsword"));
 
 
 

@@ -1,30 +1,44 @@
 package fr.fifoube.gui.container;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
+import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerVault2by2 extends Container
 {
-	protected TileEntityBlockVault2by2 te;
+	protected TileEntityBlockVault2by2 tile;
 	
-	public ContainerVault2by2(PlayerInventory inventoryPlayer, TileEntityBlockVault2by2 tile)
+	public ContainerVault2by2(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		this(windowId, playerInv, extraData.readBlockPos());
+	}
+	
+	public ContainerVault2by2(int windowId, PlayerInventory playerInv, BlockPos pos)
 	{
-		this.te = tile;
-		IItemHandler inventory = tile.getHandler();
-		for(int i = 0; i < 6; i++)
+		super(ContainerTypeRegistery.VAULT2BY2_TYPE, windowId);
+		TileEntity entity = playerInv.player.world.getTileEntity(pos);
+		if(entity instanceof TileEntityBlockVault2by2)
 		{
-			for(int j = 0; j < 9; j++)
+			TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)entity;
+			this.tile = te;
+			IItemHandler inventory = te.getHandler();
+			for(int i = 0; i < 3; i++)
 			{
-				this.addSlot(new SlotItemHandler(inventory, j + i * 9, 8 + j * 18, -10 + i * 18));
+				for(int j = 0; j < 9; j++)
+				{
+					this.addSlot(new SlotItemHandler(inventory, j + i * 9, 8 + j * 18, 17 + i * 18));
+				}
 			}
 		}
-		this.bindPlayerInventory(inventoryPlayer);		
+		this.bindPlayerInventory(playerInv);
 	}
 	
 	private void bindPlayerInventory(PlayerInventory inventoryPlayer)
@@ -80,6 +94,10 @@ public class ContainerVault2by2 extends Container
 
 	        }
 	        return stack;
+	}
+
+	public TileEntityBlockVault2by2 getTile() {
+		return this.tile;
 	}
 	
 

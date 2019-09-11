@@ -8,68 +8,60 @@ import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.gui.container.ContainerVault2by2;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiVault2by2 extends GuiContainer
+public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 {
 
 	protected TileEntityBlockVault2by2 tile_getter;
-	protected InventoryPlayer playerInventory_getter;
-	
-	public GuiVault2by2(InventoryPlayer playerInventory, TileEntityBlockVault2by2 tile, World worldIn) 
-	{
-		super(new ContainerVault2by2(playerInventory, tile));
-		this.tile_getter = tile;
-		this.playerInventory_getter = playerInventory;
-	}
-	
+	protected PlayerInventory playerInventory_getter;
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_vault2by2.png");
 	protected int xSize = 176;
 	protected int ySize = 222;
 	protected int guiLeft;
 	protected int guiTop;
-	
-	@Override
-	public void initGui() {
-		
-		super.initGui();
-	    this.mc.keyboardListener.enableRepeatEvents(true);
-		int i = (this.width - this.xSize) / 2;
-		int j = (this.height - this.ySize) / 2;
-		if(tile_getter.getOwnerS().equals(mc.player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
-        {
-		    this.addButton(new GuiButtonExt(0, i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙") {
+	private Button settings;
 
-                public void onClick(double mouseX, double mouseY) {
-                	GuiVault2by2.this.mc.displayGuiScreen(new GuiVaultSettings2by2(tile_getter));
-                }
-             });
-        }
+	
+	public GuiVault2by2(ContainerVault2by2 container, PlayerInventory playerInventory, ITextComponent name) 
+	{
+		super(container, playerInventory, name);
+		this.tile_getter = getContainer().getTile();
+		this.playerInventory_getter = playerInventory;	
 	}
 	
+	@Override
+	protected void init() {
+		super.init();
+		this.minecraft.keyboardListener.enableRepeatEvents(true);
+			int i = (this.width - this.xSize) / 2;
+			int j = (this.height - this.ySize) / 2;
+			if(tile_getter.getOwnerS().equals(this.minecraft.player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
+	        {
+	        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙", actionPerformed()));
+	        }
+	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) 
 	{
-		fontRenderer.drawString(new TextComponentTranslation(I18n.format("title.block_vault")).getFormattedText(), 7, -22, Color.DARK_GRAY.getRGB());
-		fontRenderer.drawString(new TextComponentTranslation("Inventory").getFormattedText(), 7, 101, Color.DARK_GRAY.getRGB());
+		this.drawString(font, new TranslationTextComponent(I18n.format("title.block_vault")).getFormattedText(), 7, -22, Color.DARK_GRAY.getRGB());
+		this.drawString(font, new TranslationTextComponent("Inventory").getFormattedText(), 7, 101, Color.DARK_GRAY.getRGB());
 		
 	}
-
-
-	
 				
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) 
 	{
-		this.drawDefaultBackground();
+		this.renderBackground();
 	    super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -78,16 +70,19 @@ public class GuiVault2by2 extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) 
 	{
 	       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
-	       this.mc.getTextureManager().bindTexture(background); 
+	       this.minecraft.getTextureManager().bindTexture(background); 
 	       int k = (this.width - this.xSize) / 2; 
 	       int l = (this.height - this.ySize) / 2;
-	       this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize); 
+	       this.blit(k, l, 0, 0, this.xSize, this.ySize); 
 	}
 	
-	@Override
-	public void onGuiClosed() 
+	protected IPressable actionPerformed()
 	{
-		super.onGuiClosed();
+		if(buttons == this.settings)
+		{	
+			//NetworkHooks.openGui((ServerPlayerEntity)getMinecraft().player, containerSupplier);
+		}
+		return null;
 	}
 	
 }

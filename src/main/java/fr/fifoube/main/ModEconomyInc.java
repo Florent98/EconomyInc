@@ -17,6 +17,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import fr.fifoube.blocks.tileentity.TileEntityRegistery;
+import fr.fifoube.gui.GuiRegistery;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.commands.CommandBalance;
 import fr.fifoube.main.events.client.ClientEvents;
@@ -51,6 +52,7 @@ public class ModEconomyInc {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigFile.CLIENT_SPEC);
 						
 		}
+	
 		
 		//CONFIG EVENT
 		public void loadConfig(ModConfig.ModConfigEvent event)
@@ -72,8 +74,10 @@ public class ModEconomyInc {
 		}
 		//CLIENT
 		private void clientSetup(final FMLClientSetupEvent event) {
+			GuiRegistery.register();
 			TileEntityRegistery.registerTileRenderer();
 			MinecraftForge.EVENT_BUS.register(new ClientEvents());
+			
 		}
 		
 		

@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class PacketListNBT {
 
 		ctx.get().enqueueWork(() -> {
 			
-			EntityPlayer player = ctx.get().getSender(); // GET PLAYER
+			PlayerEntity player = ctx.get().getSender(); // GET PLAYER
 			World worldIn = player.world; // GET WORLD
 				if(packet.addrem.equals("add"))
 				{
@@ -76,7 +76,7 @@ public class PacketListNBT {
 						TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
-							te.setAllowedPlayers(packet.names);
+							te.addAllowedPlayers(packet.names);
 							te.addToMax();
 							te.markDirty();
 							

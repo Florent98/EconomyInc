@@ -3,7 +3,7 @@ package fr.fifoube.packets;
 import java.util.function.Supplier;
 
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -40,7 +40,7 @@ public class PacketCardChangeSeller {
 
 		ctx.get().enqueueWork(() -> {
 			
-			EntityPlayer player = ctx.get().getSender(); // GET PLAYER
+			PlayerEntity player = ctx.get().getSender(); // GET PLAYER
 			player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
 				.ifPresent(data -> {
 					data.setMoney(data.getMoney() - packet.cost);
