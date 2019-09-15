@@ -22,7 +22,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class GuiCreditCard extends Screen {
 
 	public GuiCreditCard(ITextComponent titleIn) {
@@ -101,29 +100,19 @@ public class GuiCreditCard extends Screen {
 
 	public IPressable actionPerformed(int buttonId)
 	{
-		int listNumber[] = {-1,-5,-10,-20,-50,-100,-200,-500,1,5,10,20,50,100,200,500};
+		/*int listNumber[] = {-1,-5,-10,-20,-50,-100,-200,-500,1,5,10,20,50,100,200,500};
 		for(int i = 0; i < 15; i++)
 		{
 			PacketsRegistery.CHANNEL.sendToServer(new PacketCardChange(listNumber[i]));
-		}
+		}*/
 		return null;
 	}
 	
-	
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-        // added
-		int i = this.guiLeft;
-		int j = this.guiTop;
-        this.minecraft.getTextureManager().bindTexture(background);
-        this.blit(i, j, 0, 0, this.xSize, this.ySize);
-        drawEntityOnScreen(i + 51, j + 75, 30, (float)(i + 51) - mouseX, (float)(j + 75 - 50) - mouseY, this.minecraft.player);
-		this.drawString(font, TextFormatting.BOLD + I18n.format("title.ownerCard")+ ": " + owner, (this.width / 2) - 75, (this.height / 2)- 55, 0x000);
-		this.drawString(font, TextFormatting.BOLD + I18n.format("title.fundsCard")+ ": " + String.valueOf(funds_s), (this.width / 2) - 75, (this.height / 2)- 45, 0x000);
-		this.drawString(font, TextFormatting.BOLD + I18n.format("title.linked")+ ": " + String.valueOf(linked), (this.width / 2) - 75, (this.height / 2)- 35, 0x000);
-
-		super.render(mouseX, mouseY, partialTicks);
+		 this.renderBackground();
 	}
+	
 	
 	 /**
      * Draws an entity on the screen looking forward.

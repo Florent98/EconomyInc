@@ -80,8 +80,8 @@ public class GuiVault extends ContainerScreen<ContainerVault>
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) 
 	{
-		this.drawString(font, new TranslationTextComponent(I18n.format("title.block_vault")).getFormattedText(), 8, 5, Color.DARK_GRAY.getRGB());
-		this.drawString(font, new TranslationTextComponent("Inventory").getFormattedText(), 8, 73, Color.DARK_GRAY.getRGB());
+		this.font.drawString(new TranslationTextComponent(I18n.format("title.block_vault")).getFormattedText(), 8.0F, 5, 4210752);
+	    this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 94), 4210752);
 		
 	}
 				

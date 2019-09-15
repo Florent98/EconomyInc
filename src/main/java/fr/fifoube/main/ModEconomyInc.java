@@ -18,14 +18,22 @@ import java.util.logging.Logger;
 
 import fr.fifoube.blocks.tileentity.TileEntityRegistery;
 import fr.fifoube.gui.GuiRegistery;
+import fr.fifoube.gui.container.ContainerSeller;
+import fr.fifoube.gui.container.ContainerVault;
+import fr.fifoube.gui.container.ContainerVault2by2;
+import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.commands.CommandBalance;
 import fr.fifoube.main.events.client.ClientEvents;
 import fr.fifoube.main.events.common.CommonEvents;
 import fr.fifoube.main.events.server.ServerEvents;
 import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -45,6 +53,7 @@ public class ModEconomyInc {
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadConfig);
+			FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ContainerTypeRegistery::registerContainers);
 			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
 
 
@@ -52,7 +61,7 @@ public class ModEconomyInc {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigFile.CLIENT_SPEC);
 						
 		}
-	
+		
 		
 		//CONFIG EVENT
 		public void loadConfig(ModConfig.ModConfigEvent event)

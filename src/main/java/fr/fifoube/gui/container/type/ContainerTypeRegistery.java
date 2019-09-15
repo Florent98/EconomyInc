@@ -23,14 +23,11 @@ public class ContainerTypeRegistery {
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":containervault2by2")
 	public static final ContainerType<ContainerVault2by2> VAULT2BY2_TYPE = null;
     
-	@SubscribeEvent
-	public void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
+	public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
 		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containerseller"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containersellerbuy"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerVault::new).setRegistryName("containervault"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerVault2by2::new).setRegistryName("containervault2by2"));
-
-
 	}
-	
+
 }

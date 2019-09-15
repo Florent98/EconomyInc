@@ -1,6 +1,6 @@
 {
      "textures": {
-        "0": "minecraft:block/stone_slab_top",
+        "0": "minecraft:block/smooth_stone",
         "1": "economyinc:blocks/insertcardscreen",
         "2": "economyinc:blocks/redstone_lamp_on",
         "3": "minecraft:block/anvil",
@@ -20,7 +20,7 @@
         "17": "economyinc:blocks/validate_border",
         "18": "economyinc:blocks/validate_button",
         "19": "economyinc:blocks/cash_output",
-        "particle" : "minecraft:block/stone_slab_top"
+        "particle" : "minecraft:block/smooth_stone"
     },
      "display": {
         "gui": {

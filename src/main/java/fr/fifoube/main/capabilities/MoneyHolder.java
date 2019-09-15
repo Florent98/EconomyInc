@@ -11,7 +11,6 @@ public class MoneyHolder implements IMoney {
     
 	@Override
 	public double getMoney() {
-		// TODO Auto-generated method stub
 		return this.money;
 	}
 
@@ -34,7 +33,6 @@ public class MoneyHolder implements IMoney {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 
@@ -45,7 +43,6 @@ public class MoneyHolder implements IMoney {
 
 	@Override
 	public String getOnlineUUID() {
-		// TODO Auto-generated method stub
 		return this.onlineUUID;
 	}
 

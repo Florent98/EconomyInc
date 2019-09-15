@@ -9,6 +9,9 @@ import fr.fifoube.gui.container.ContainerSeller;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketSellerCreated;
 import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.CustomizeSkinScreen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.Button.IPressable;
@@ -16,6 +19,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -65,88 +69,85 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 		PlayerEntity player = minecraft.player;
 		if(tile.getCreated() == false)
 		{
-			this.validate = this.addButton(new Button(width / 2 + 26, height / 2 + 83, 55, 20, I18n.format("title.validate"), actionPerformed()));
-			this.one = this.addButton(new Button(width / 2 - 122, height / 2 - 75, 35, 20, "1", actionPerformed()));
-			this.five = this.addButton(new Button(width / 2 - 122, height / 2 - 56, 35, 20, "5", actionPerformed()));
-			this.ten = this.addButton(new Button(width / 2- 122, height / 2 - 37, 35, 20, "10", actionPerformed()));
-			this.twenty = this.addButton(new Button(width / 2 - 122, height / 2 - 18, 35, 20, "20", actionPerformed()));
-			this.fifty = this.addButton(new Button(width / 2 - 122, height / 2 + 1, 35, 20, "50", actionPerformed()));
-			this.hundreed = this.addButton(new Button(width / 2 - 122, height / 2 + 20, 35, 20, "100", actionPerformed()));
-			this.twoHundreed = this.addButton(new Button(width / 2 - 122, height / 2 + 39, 35, 20, "200", actionPerformed()));
-			this.fiveHundreed = this.addButton(new Button(width / 2 - 122, height / 2 + 58, 35, 20, "500", actionPerformed()));
+			this.validate = this.addButton(new Button(width / 2 + 26, height / 2 + 83, 55, 20, I18n.format("title.validate"), (onPress) -> { actionPerformed(this.validate); }));
+			this.one = this.addButton(new Button(width / 2 - 121, height / 2 - 75, 35, 20, "1", (onPress) -> { actionPerformed(this.one); }));
+			this.five = this.addButton(new Button(width / 2 - 121, height / 2 - 56, 35, 20, "5", (onPress) -> { actionPerformed(this.five); }));
+			this.ten = this.addButton(new Button(width / 2- 121, height / 2 - 37, 35, 20, "10", (onPress) -> { actionPerformed(this.ten); }));
+			this.twenty = this.addButton(new Button(width / 2 - 121, height / 2 - 18, 35, 20, "20", (onPress) -> { actionPerformed(this.twenty); }));
+			this.fifty = this.addButton(new Button(width / 2 - 121, height / 2 + 1, 35, 20, "50", (onPress) -> { actionPerformed(this.fifty); }));
+			this.hundreed = this.addButton(new Button(width / 2 - 121, height / 2 + 20, 35, 20, "100", (onPress) -> { actionPerformed(this.hundreed); }));
+			this.twoHundreed = this.addButton(new Button(width / 2 - 121, height / 2 + 39, 35, 20, "200", (onPress) -> { actionPerformed(this.twoHundreed); }));
+			this.fiveHundreed = this.addButton(new Button(width / 2 - 121, height / 2 + 58, 35, 20, "500", (onPress) -> { actionPerformed(this.fiveHundreed); }));
 			if(player.isCreative() == true)
 			{
-				this.unlimitedStack = this.addButton(new Button(width /2 + 2, height / 2 - 96, 80, 13, I18n.format("title.unlimited"), actionPerformed()));
+				this.unlimitedStack = this.addButton(new Button(width /2 + 2, height / 2 - 96, 80, 13, I18n.format("title.unlimited"), (onPress) -> { actionPerformed(this.unlimitedStack); }));
 			}
 		}
 	}
 	
-	
-	protected IPressable actionPerformed()
+	protected void actionPerformed(Button button)
 	{
 		PlayerEntity playerIn = minecraft.player;
 		if(tile != null)
 		{
-			if(buttons == this.unlimitedStack)
+			if(button == this.unlimitedStack)
 			{
 				if(this.admin == false)
 				{
 					this.admin = true;
 					tile.setAdmin(true);
-					playerIn.sendMessage(new StringTextComponent(I18n.format("title.unlimitedStack")));
 				}
 				else if(this.admin == true)
 				{
 					this.admin = false;
 					tile.setAdmin(false);
-					playerIn.sendMessage(new StringTextComponent(I18n.format("title.limitedStack")));
 				}
 			}
-			if(buttons == this.one)
+			if(button == this.one)
 			{
 				tile.setCost(1);
 				this.cost = 1;
 			}
-			else if(buttons == this.five)
+			else if(button == this.five)
 			{
 				tile.setCost(5);
 				this.cost = 5;
 			}
-			else if(buttons == this.ten)
+			else if(button == this.ten)
 			{
 				tile.setCost(10);
 				this.cost = 10;
 			}
-			else if(buttons == this.twenty)
+			else if(button == this.twenty)
 			{
 				tile.setCost(20);
 				this.cost = 20;
 			}
-			else if(buttons == this.fifty)
+			else if(button == this.fifty)
 			{
 				tile.setCost(50);
 				this.cost = 50;
 			}
-			else if(buttons == this.hundreed)
+			else if(button == this.hundreed)
 			{
 				tile.setCost(100);
 				this.cost = 100;
 			}
-			else if(buttons == this.twoHundreed)
+			else if(button == this.twoHundreed)
 			{
 				tile.setCost(200);
 				this.cost = 200;
 			}
-			else if(buttons == this.fiveHundreed)
+			else if(button == this.fiveHundreed)
 			{
 				tile.setCost(500);
 				this.cost = 500;
 			}
-			else if(buttons == this.validate)
+			else if(button == this.validate)
 			{
 				if(!(tile.getCost() == 0)) // IF TILE HAS NOT A COST OF 0 THEN WE PASS TO THE OTHER
 				{
-					if(tile.getStackInSlot(0) != ItemStack.EMPTY) // IF SLOT 0 IS NOT BLOCKS.AIR, WE PASS
+					if(tile.getStackInSlot(0).getItem() != Items.AIR) // IF SLOT 0 IS NOT BLOCKS.AIR, WE PASS
 					{
 						if(!this.admin) //ADMIN HASN'T SET : UNLIMITED STACK
 						{
@@ -191,14 +192,6 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 				}
 			}
 		}
-		return new IPressable() {
-			
-			@Override
-			public void onPress(Button button) {
-				
-			}
-		};
-		
 	}
 	
 	@Override
@@ -209,8 +202,17 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) 
 	{
-		this.drawString(font, new TranslationTextComponent(I18n.format("title.block_seller")).getFormattedText(), 8, 5, Color.DARK_GRAY.getRGB());
-		this.drawString(font, new TranslationTextComponent("Inventory").getFormattedText(), 8, 73, Color.DARK_GRAY.getRGB());
+		String s = "";
+		if(this.admin){ 
+			s = "unlimited";
+		} 
+		else { 
+			s = "limited";
+		} 
+		this.font.drawString(new TranslationTextComponent("Cost : " + cost).getFormattedText(), 98, 34, Color.DARK_GRAY.getRGB());
+		this.font.drawString(new TranslationTextComponent("Mode : " + s).getFormattedText(), 98, 44, Color.DARK_GRAY.getRGB());
+		this.font.drawString(new TranslationTextComponent(I18n.format("title.block_seller")).getFormattedText(), 8.0F, 5, Color.DARK_GRAY.getRGB());
+	    this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 94), 4210752);
 	}
 	
 	@Override
