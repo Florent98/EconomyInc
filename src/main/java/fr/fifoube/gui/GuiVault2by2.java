@@ -1,6 +1,5 @@
 package fr.fifoube.gui;
 
-import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 

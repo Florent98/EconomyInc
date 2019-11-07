@@ -1,5 +1,7 @@
 package fr.fifoube.gui;
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -13,6 +15,7 @@ import fr.fifoube.packets.PacketCardChangeSeller;
 import fr.fifoube.packets.PacketSellerFundsTotal;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.Button.IPressable;
@@ -24,15 +27,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
+public class GuiSellerBuy extends Screen
 {
 	private TileEntityBlockSeller tile;
 	
-	public GuiSellerBuy(ContainerSeller container, PlayerInventory playerInventory, ITextComponent name) 
-	{
-		super(container, playerInventory, name);
-		this.tile = container.getTile();
+	public GuiSellerBuy(TileEntityBlockSeller te) {
+		super(new TranslationTextComponent("gui.sellerbuy"));
+		this.tile = te;
 	}
 	
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
@@ -71,16 +74,17 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 			this.owner = tile.getOwnerName();
 			this.itemName = tile.getItem();
 			this.cost = tile.getCost();
-			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy"), actionPerformed()));
+			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy"),(press) -> actionPerformed(0))); 
              
 			String sellerOwner = tile.getOwner();
 			String worldPlayer = minecraft.player.getUniqueID().toString();
 			if(sellerOwner.equals(worldPlayer))
 			{
-				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 74, 100, 13, I18n.format("title.recover"), actionPerformed()));
+				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, I18n.format("title.recover"),(press) -> actionPerformed(1))); 
 			}
 			
 		}
+		super.init();
 	}
 	
 	@Override
@@ -88,13 +92,12 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 		return false;
 	}
 	
-	protected IPressable actionPerformed()
+	protected void actionPerformed(int buttonId)
 	{		
 		minecraft.player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
-			System.out.println("data présente client side");
-			if(tile != null) // WE CHECK IF TILE IS NOT NULL FOR AVOID CRASH
+			if(tile != null) // WE CHECK IF TILE IS NOT NULL TO AVOID CRASH
 			{	
-				if(buttons == slot1) //IF PLAYER BUY
+				if(buttonId == 0) //IF PLAYER BUY
 				{
 					if(data.getLinked())
 					{
@@ -212,7 +215,7 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 						}
 					}	
 				}
-				else if(buttons == takeFunds)
+				else if(buttonId == 1)
 				{
 					final int x = tile.getPos().getX(); // GET X COORDINATES
 					final int y = tile.getPos().getY(); // GET Y COORDINATES
@@ -225,7 +228,6 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 			}
 			
 		});
-		return null;
 		
 	}
 	 
@@ -238,11 +240,14 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 	        int i = this.guiLeft;
 	        int j = this.guiTop;
 	        this.blit(i, j, 0, 0, this.xSize, this.ySize);
-			this.drawString(font, TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2 - 120), (this.height / 2 - 50), 0x000);
-			this.drawString(font, TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2 - 120), (this.height / 2 - 40), 0x000);
-			this.drawString(font, TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2 - 120), (this.height / 2 - 30), 0x000);
-			this.drawString(font, TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2 - 120), (this.height / 2 - 20), 0x000);
-			this.drawString(font, TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2 - 120), (this.height / 2 - 10), 0x000);
+			this.font.drawString(TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+			this.font.drawString(TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+			this.font.drawString(TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+			this.font.drawString(TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
+			this.font.drawString(TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+
+
+			
 			super.render(mouseX, mouseY, partialTicks);
 	        drawImageInGui();
 
@@ -265,12 +270,6 @@ public class GuiSellerBuy extends ContainerScreen<ContainerSeller>
 		    RenderHelper.disableStandardItemLighting();
 		    GlStateManager.disableRescaleNormal();
 		    GL11.glPopMatrix();   
-		}
-
-		@Override
-		protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-			// TODO Auto-generated method stub
-			
 		}
 
 }

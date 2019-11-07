@@ -1,9 +1,12 @@
 package fr.fifoube.blocks;
 
+import fr.fifoube.gui.GuiCreditCard;
 import fr.fifoube.items.ItemCreditCard;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -21,6 +24,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockATM extends Block implements INamedContainerProvider {
@@ -47,7 +52,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 						ItemStack stackIn = player.inventory.getStackInSlot(i);
 						if(stackIn.hasTag() && stackIn.getTag().getBoolean("Owned"))
 						{
-							NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)this, buf -> buf.writeBlockPos(player.getPosition()));	
+							openGui(new GuiCreditCard());											
 							return true;
 						}
 					}
@@ -55,6 +60,11 @@ public class BlockATM extends Block implements INamedContainerProvider {
 			}
 		}
 		return false;
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	private void openGui(Screen screen) {
+		Minecraft.getInstance().displayGuiScreen(screen);
 	}
 	
 	@Override

@@ -1,19 +1,20 @@
 package fr.fifoube.blocks;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
+import fr.fifoube.gui.GuiCreditCard;
+import fr.fifoube.gui.GuiSeller;
+import fr.fifoube.gui.GuiSellerBuy;
 import fr.fifoube.items.ItemsRegistery;
-import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -24,13 +25,14 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockSeller extends ContainerBlock implements INamedContainerProvider {
+public class BlockSeller extends ContainerBlock {
 
 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.seller_buy");
@@ -67,7 +69,7 @@ public class BlockSeller extends ContainerBlock implements INamedContainerProvid
 						{
 							if(te.getCreated())
 							{
-								NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)this, buf -> buf.writeBlockPos(pos));				
+								openGui(new GuiSellerBuy(te));									
 							}
 							else
 							{
@@ -78,6 +80,11 @@ public class BlockSeller extends ContainerBlock implements INamedContainerProvid
 			}
 		}
 		return true;
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	private void openGui(Screen screen) {
+		Minecraft.getInstance().displayGuiScreen(screen);
 	}
 	
 	@Override
@@ -199,24 +206,5 @@ public class BlockSeller extends ContainerBlock implements INamedContainerProvid
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
-
-	@Override
-	public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-		return new Container(ContainerType.FURNACE /** TO CHANGE **/, id) {
-			
-			@Override
-			public boolean canInteractWith(PlayerEntity playerIn) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		// TODO Auto-generated method stub
-		return NAME;
-	}
-	
 	 
 }

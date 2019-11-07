@@ -1,7 +1,5 @@
 package fr.fifoube.blocks;
 
-import java.util.List;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.items.ItemsRegistery;
@@ -10,19 +8,18 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext.Builder;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 
@@ -386,7 +383,8 @@ public class BlockVault extends ContainerBlock {
 					
 					if(checkONBT.equals(checkOBA))
 					{
-						worldIn.destroyBlock(pos, true);
+						worldIn.destroyBlock(pos, false);
+						dropBlocks(te, worldIn, pos);
 						worldIn.removeTileEntity(pos);
 					}
 				}
@@ -394,45 +392,51 @@ public class BlockVault extends ContainerBlock {
 		}
 	}
 
-	@Override
-	public List<ItemStack> getDrops(BlockState state, Builder builder) {
+	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
 		
-		/*TileEntity tileentity = builder.getWorld().getTileEntity(builder.b);
+		
 		if(tileentity instanceof TileEntityBlockVault)
 		{
 			TileEntityBlockVault te = (TileEntityBlockVault)tileentity;
 			IItemHandler inventory = te.getHandler();
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_VAULT));
+			world.addEntity(itemBase);
 			if(inventory != null)
 			{
 				for(int i=0; i < inventory.getSlots(); i++)
 				{
 					if(inventory.getStackInSlot(i) != ItemStack.EMPTY)
 					{
-						EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, inventory.getStackInSlot(i));
+						ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, inventory.getStackInSlot(i));
 						
 						float multiplier = 0.1f;
 						float motionX = world.rand.nextFloat() - 0.5F;
 						float motionY = world.rand.nextFloat() - 0.5F;
 						float motionZ = world.rand.nextFloat() - 0.5F;
 						
-						item.motionX = motionX * multiplier;
-						item.motionY = motionY * multiplier;
-						item.motionZ = motionZ * multiplier;
+						item.lastTickPosX = motionX * multiplier;
+						item.lastTickPosY = motionY * multiplier;
+						item.lastTickPosZ = motionZ * multiplier;
 						
-						world.spawnEntity(item);
+						world.addEntity(item);
 					}
 				}
 			}
-		}	*/
-		return null;
+		}	
 	}
 	
 
 	
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
+		return BlockRenderType.INVISIBLE;
+	}	
+	
+    @Override
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return false;
+    }
+	
 	
 	@Override
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {

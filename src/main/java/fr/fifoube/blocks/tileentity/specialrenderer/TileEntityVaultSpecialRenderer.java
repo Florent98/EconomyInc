@@ -17,11 +17,11 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 	@Override
 	public void render(TileEntityBlockVault te, double x, double y, double z, float partialTicks, int destroyStage) {
 		
-		checkTextures(te);
+		//checkTextures(te);
 		GlStateManager.pushMatrix();
-        GlStateManager.translated(x + 0.5, y + 0.25, z + 0.5);
-        GlStateManager.scaled(0.5, 0.5, 0.5);
-		switch (te.getDirection()) {
+	    GlStateManager.translated(x + 0.5F, y + 1.5F, z + 0.5F);
+        GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
+		/*switch (te.getDirection()) {
 		case 0:
 			GlStateManager.rotatef(90.0F, 0.0F, 1.0F, 0.0F);
 			break;
@@ -37,7 +37,7 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 		default:
 			GlStateManager.rotatef(0.0F, 0.0F, 1.0F, 0.0F);
 			break;
-		}
+		}*/
         bindTexture(texture);
         modelBlock.renderAll();
         GlStateManager.popMatrix();

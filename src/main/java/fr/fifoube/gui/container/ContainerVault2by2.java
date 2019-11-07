@@ -30,11 +30,11 @@ public class ContainerVault2by2 extends Container
 			TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)entity;
 			this.tile = te;
 			IItemHandler inventory = te.getHandler();
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 6; i++)
 			{
 				for(int j = 0; j < 9; j++)
 				{
-					this.addSlot(new SlotItemHandler(inventory, j + i * 9, 8 + j * 18, 17 + i * 18));
+					this.addSlot(new SlotItemHandler(inventory, j + i * 9, 8 + j * 18, i * 18 - 10));
 				}
 			}
 		}

@@ -61,7 +61,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendFeedback(new StringTextComponent(money + " were added to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
+				src.sendFeedback(new StringTextComponent(money + " were added to " + playerMP.getDisplayName().getFormattedText() + "'s account."), false);
 			}	
 		});
 
@@ -77,7 +77,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendFeedback(new StringTextComponent(money + " were withdrawn to " + playerMP.getDisplayName().getFormattedText() + " account."), false);
+				src.sendFeedback(new StringTextComponent(money + " were withdrawn to " + playerMP.getDisplayName().getFormattedText() + "'s account."), false);
 			}	
 		});
 	 	return 0;
@@ -90,7 +90,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendFeedback(new StringTextComponent(data.getName() + " funds are " + data.getMoney()), false);
+					src.sendFeedback(new StringTextComponent(playerMP.getDisplayName().getFormattedText() + " funds are " + data.getMoney()), false);
 				});
 			}	
 		});

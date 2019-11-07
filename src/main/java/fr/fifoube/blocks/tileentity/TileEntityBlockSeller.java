@@ -213,7 +213,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 		public Container createMenu(int id, PlayerInventory inventoryPlayer, PlayerEntity playerEntity) {
 			return new ContainerSeller(id, inventoryPlayer, getPos());
 		}
-
+		 
 		@Override
 		public ITextComponent getDisplayName() {
 			return NAME;

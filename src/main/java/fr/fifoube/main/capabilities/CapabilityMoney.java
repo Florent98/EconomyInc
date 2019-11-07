@@ -85,7 +85,7 @@ public class CapabilityMoney {
 	{
 	    if(event.isWasDeath())
 	    {
-	        event.getEntityPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(newCapa -> {
+	        event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(newCapa -> {
 	            if(CapabilityMoney.INVALIDATED_CAPS.containsKey(event.getOriginal()))
 	            {
 	                INBT nbt = MONEY_CAPABILITY.writeNBT(CapabilityMoney.INVALIDATED_CAPS.get(event.getOriginal()), null);

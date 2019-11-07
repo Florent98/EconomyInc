@@ -55,7 +55,7 @@ public class ItemCreditCard extends Item{
 									playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 										if(data.getLinked())
 										{
-											openGui(new GuiCreditCard(new StringTextComponent("gui.creditcard")));											
+											openGui(new GuiCreditCard());											
 										}
 										else
 										{
