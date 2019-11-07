@@ -2,15 +2,14 @@ package fr.fifoube.blocks;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.items.ItemsRegistery;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -19,12 +18,21 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public class BlockBills extends Block {
+public class BlockBills extends ContainerBlock {
 
 	public ItemEntity item;
 
 	public BlockBills(Properties properties) {
 		super(properties);
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+		return new TileEntityBlockBills();
+	}
+	@Override
+	public boolean hasTileEntity() {
+		return true;
 	}
 	
 	@Override
@@ -163,15 +171,6 @@ public class BlockBills extends Block {
 	//TILE ENTITY
 	
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileEntityBlockBills();
-	}
-	@Override
-	public boolean hasTileEntity() {
-		return true;
-	}
-	
-	@Override
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);	     
@@ -183,12 +182,14 @@ public class BlockBills extends Block {
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
 		return BlockRenderType.MODEL;
-	}
+	}	
 	
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
+    @Override
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return false;
+    }
+
+
 	
 }
 

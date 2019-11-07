@@ -23,6 +23,7 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
         translateFromDirection(te, x, y, z);
         GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 		GlStateManager.rotatef(-90F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.enableLighting();
 		switch (te.getDirection()) {
 		case 0:
 			GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);

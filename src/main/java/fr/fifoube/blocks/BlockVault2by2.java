@@ -40,8 +40,13 @@ public class BlockVault2by2 extends ContainerBlock {
 	
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
-	}
+		return BlockRenderType.INVISIBLE;
+	}	
+	
+    @Override
+    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return false;
+    }
 	
 	
 	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {

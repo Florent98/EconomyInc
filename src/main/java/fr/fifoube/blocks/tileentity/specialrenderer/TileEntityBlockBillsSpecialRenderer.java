@@ -15,33 +15,14 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 	
 	public void renderTileEntityBillsAt(TileEntityBlockBills tile, double posX, double posY, double posZ, float partialTicks, int damageCount) 
 	{
-		GlStateManager.pushMatrix();
-		if(tile != null)
-		{
-			switch (tile.getDirection()) {
-			case 0:
-				GlStateManager.translated(posX + 0.125d, posY + 0.53d, posZ + 0.25d);
-				break;
-			case 1:
-				GlStateManager.translated(posX + 0.75d, posY + 0.53d, posZ + 0.125d);
-				break;
-			case 2:
-				GlStateManager.translated(posX + 0.875d, posY + 0.53d, posZ + 0.75d);
-				break;
-			case 3:
-				GlStateManager.translated(posX + 0.25d, posY + 0.53d, posZ + 0.875d);
-				break;
-			default:
-				break;
-			}
-		}
-		GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
-		GlStateManager.rotatef(90F * tile.getDirection(), 0.0F, 1.0F, 0.0F);
-		GlStateManager.scalef(0.333F, 0.333F, 0.333F);
 		checkBillRef(tile);
-		this.bindTexture(texture);
-		modelBlock.renderAll(tile);
-		GlStateManager.popMatrix();
+		GlStateManager.pushMatrix();
+		GlStateManager.translated(posX + 0.125F, posY + 0.531F, posZ + 0.250F);
+        GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.scaled(0.333, 0.333, 0.333);   
+        bindTexture(texture);
+        modelBlock.renderAll(tile);;
+        GlStateManager.popMatrix();
 	}
 	
 	@Override
@@ -50,8 +31,7 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 	}
 	
 	public void checkBillRef(TileEntityBlockBills tile)
-	{
-		
+	{		
 		switch (tile.getBillRef()) {
 		case "item.economyinc.item_oneb":
 			texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_bills_1.png");

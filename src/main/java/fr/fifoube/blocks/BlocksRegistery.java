@@ -1,5 +1,6 @@
 package fr.fifoube.blocks;
 
+import fr.fifoube.blocks.tileentity.specialrenderer.inventory.TileEntityInventoryRenderHelper;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -48,13 +49,13 @@ public class BlocksRegistery{
 	@SubscribeEvent
 	public static void registerItemsBlocks(final RegistryEvent.Register<Item> event) {
 		
-		event.getRegistry().register(new BlockItem(BLOCK_VAULT, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_VAULT.getRegistryName()));
-		event.getRegistry().register(new BlockItem(BLOCK_VAULT_2BY2, new Item.Properties()).setRegistryName(BLOCK_VAULT_2BY2.getRegistryName()));
-		event.getRegistry().register(new BlockItem(BLOCK_VAULT_VILLAGE, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_VAULT_VILLAGE.getRegistryName()));
+		event.getRegistry().register(new BlockItem(BLOCK_VAULT, new Item.Properties().group(ModEconomyInc.EIC).setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT.getRegistryName()));
+		event.getRegistry().register(new BlockItem(BLOCK_VAULT_2BY2, new Item.Properties().setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT_2BY2.getRegistryName()));
+		event.getRegistry().register(new BlockItem(BLOCK_VAULT_VILLAGE, new Item.Properties().group(ModEconomyInc.EIC).setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT_VILLAGE.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_ATM, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_ATM.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_CHANGER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_CHANGER.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_SELLER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_SELLER.getRegistryName()));
-		event.getRegistry().register(new BlockItem(BLOCK_BILLS, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_BILLS.getRegistryName()));
+		event.getRegistry().register(new BlockItem(BLOCK_BILLS, new Item.Properties().group(ModEconomyInc.EIC).setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_BILLS.getRegistryName()));
 
 
 	}
