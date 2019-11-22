@@ -1,17 +1,13 @@
 package fr.fifoube.blocks;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.gui.GuiCreditCard;
-import fr.fifoube.gui.GuiSeller;
-import fr.fifoube.gui.GuiSellerBuy;
+import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -28,8 +24,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockSeller extends ContainerBlock {
@@ -67,11 +61,7 @@ public class BlockSeller extends ContainerBlock {
 						
 						if(checkONBT.equals(checkOBA))
 						{
-							if(te.getCreated())
-							{
-								openGui(new GuiSellerBuy(te));									
-							}
-							else
+							if(!te.getCreated())
 							{
 								NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
 							}
@@ -79,12 +69,28 @@ public class BlockSeller extends ContainerBlock {
 				}
 			}
 		}
+		else if(worldIn.isRemote)
+		{
+			TileEntity tileentity = worldIn.getTileEntity(pos);		
+			if(tileentity instanceof TileEntityBlockSeller)
+			{
+				TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
+				if(te.getOwner() != null)
+				{
+					String checkONBT = te.getOwner();
+					String checkOBA = player.getUniqueID().toString();
+						
+						if(checkONBT.equals(checkOBA))
+						{
+							if(te.getCreated())
+							{
+								ClientGuiScreen.openGui(1, te);	
+							}
+						}
+				}
+			}		
+		}
 		return true;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	private void openGui(Screen screen) {
-		Minecraft.getInstance().displayGuiScreen(screen);
 	}
 	
 	@Override

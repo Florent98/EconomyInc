@@ -1,0 +1,14 @@
+{
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+   {
+     "type": "minecraft:item",
+     "item": "economyinc:item_packetten"
+   }
+ ],
+ "result": {
+   "type": "minecraft:item",
+   "item": "economyinc:item_tenb",
+   "count": 9
+ }
+}

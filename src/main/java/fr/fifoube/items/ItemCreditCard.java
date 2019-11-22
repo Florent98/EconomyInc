@@ -3,7 +3,7 @@ package fr.fifoube.items;
 import java.util.List;
 import java.util.UUID;
 
-import fr.fifoube.gui.GuiCreditCard;
+import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.main.ConfigFile;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.client.Minecraft;
@@ -48,14 +48,14 @@ public class ItemCreditCard extends Item{
 						String nameGame = playerIn.getUniqueID().toString();
 						if(nameCard.equals(nameGame))
 						{
-							if(!worldIn.isRemote)
+							if(worldIn.isRemote)
 							{
 								if(ConfigFile.canAccessCardWithoutWT)
 								{
 									playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 										if(data.getLinked())
 										{
-											openGui(new GuiCreditCard());											
+											ClientGuiScreen.openGui(0, null);											
 										}
 										else
 										{

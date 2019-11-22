@@ -1,0 +1,19 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XYX",
+   "YXY",
+   "XYX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:stick"
+    },
+   "Y": {
+    "item": "minecraft:iron_ingot"
+    }
+   },
+   "result": {
+    "item": "economyinc:item_gear"
+   }
+}

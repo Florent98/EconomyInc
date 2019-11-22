@@ -1,20 +1,12 @@
 package fr.fifoube.blocks.tileentity.specialrenderer;
 
-import java.nio.FloatBuffer;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import fr.fifoube.blocks.models.ModelVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.main.ModEconomyInc;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntityBlockVault>
@@ -28,6 +20,7 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 		
 		checkTextures(te);
 		GlStateManager.pushMatrix();
+		setLightmapDisabled(true);
 	    GlStateManager.translated(x + 0.5F, y + 0.75F, z + 0.5F);
         GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scaled(0.5, 0.5, 0.5);   
@@ -66,7 +59,7 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 		}
 		else
 		{
-			texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_vault_withoutgold.png");	
+			texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_vault_nogold.png");	
 		}	
 	}
 }

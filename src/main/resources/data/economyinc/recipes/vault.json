@@ -1,0 +1,19 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XXX",
+   "XYX",
+   "XXX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:iron_block"
+    },
+   "Y": {
+    "item": "economyinc:item_gearmechanism"
+    }
+   },
+   "result": {
+    "item": "economyinc:block_vault"
+   }
+}

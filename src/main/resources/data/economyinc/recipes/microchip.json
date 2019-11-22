@@ -1,0 +1,22 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XXX",
+   "WYW",
+   "XXX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:iron_ingot"
+    },
+   "Y": {
+    "item": "economyinc:item_gear"
+    },
+   "W": {
+    "item": "minecraft:gold_nugget"
+    }
+   },
+   "result": {
+    "item": "economyinc:item_wireless"
+   }
+}

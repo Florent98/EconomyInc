@@ -51,7 +51,7 @@ public class BlocksRegistery{
 		
 		event.getRegistry().register(new BlockItem(BLOCK_VAULT, new Item.Properties().group(ModEconomyInc.EIC).setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_VAULT_2BY2, new Item.Properties().setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT_2BY2.getRegistryName()));
-		event.getRegistry().register(new BlockItem(BLOCK_VAULT_VILLAGE, new Item.Properties().group(ModEconomyInc.EIC).setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT_VILLAGE.getRegistryName()));
+		event.getRegistry().register(new BlockItem(BLOCK_VAULT_VILLAGE, new Item.Properties().setTEISR(() -> TileEntityInventoryRenderHelper::new)).setRegistryName(BLOCK_VAULT_VILLAGE.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_ATM, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_ATM.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_CHANGER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_CHANGER.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_SELLER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_SELLER.getRegistryName()));

@@ -1,0 +1,25 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "pattern": [
+   "XWX",
+   "XYX",
+   "XZX"
+ ],
+ "key": {
+   "X": {
+    "item": "minecraft:oak_planks"
+    },
+   "Y": {
+    "item": "economyinc:item_gear"
+    },
+   "Z": {
+    "item": "minecraft:glass_pane"
+    },
+   "W": {
+    "item": "minecraft:redstone"
+    }
+   },
+   "result": {
+    "item": "economyinc:block_seller"
+   }
+}

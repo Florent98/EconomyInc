@@ -19,11 +19,10 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
 		
 		checkTextures(te);
         GlStateManager.pushMatrix();
-        GlStateManager.enableLighting();
+        setLightmapDisabled(true);
         translateFromDirection(te, x, y, z);
         GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 		GlStateManager.rotatef(-90F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.enableLighting();
 		switch (te.getDirection()) {
 		case 0:
 			GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
@@ -59,7 +58,7 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
 		}
 		else
 		{
-			texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_vault_withoutgold.png");	
+			texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_vault_nogold.png");	
 		}	
 	}
 	

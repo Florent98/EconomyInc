@@ -13,21 +13,40 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 	private static ModelBills modelBlock = new ModelBills();
 	public static ResourceLocation texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_bills_0.png");
 	
-	public void renderTileEntityBillsAt(TileEntityBlockBills tile, double posX, double posY, double posZ, float partialTicks, int damageCount) 
-	{
-		checkBillRef(tile);
+	
+	@Override
+	public void render(TileEntityBlockBills te, double posX, double posY, double posZ, float partialTicks, int destroyStage) {
+		
+		checkBillRef(te);
 		GlStateManager.pushMatrix();
-		GlStateManager.translated(posX + 0.125F, posY + 0.531F, posZ + 0.250F);
+		setLightmapDisabled(true);
+        switch (te.getDirection()) {
+		case 0:
+			GlStateManager.translated(posX + 0.125F, posY + 0.530F, posZ + 0.250F);
+			break;
+		case 1:
+			GlStateManager.translated(posX + 0.750F, posY + 0.530F, posZ + 0.125F);
+			break;
+		case 2:
+			GlStateManager.translated(posX + 0.875F, posY + 0.530F, posZ + 0.750F);
+			break;
+		case 3:
+			GlStateManager.translated(posX + 0.250F, posY + 0.530F, posZ + 0.875F);
+			break;
+		default:
+			break;
+		}
+		GlStateManager.scaled(0.3330, 0.3330, 0.3330);   
         GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.scaled(0.333, 0.333, 0.333);   
+        GlStateManager.rotatef(90F * te.getDirection(), 0.0F, 1.0F, 0.0F);
         bindTexture(texture);
-        modelBlock.renderAll(tile);;
+        modelBlock.renderAll(te);
         GlStateManager.popMatrix();
 	}
 	
 	@Override
-	public void render(TileEntityBlockBills tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
-		this.renderTileEntityBillsAt(((TileEntityBlockBills) tileEntityIn), x, y, z, partialTicks, destroyStage);
+	public boolean isGlobalRenderer(TileEntityBlockBills te) {
+		return true;
 	}
 	
 	public void checkBillRef(TileEntityBlockBills tile)
@@ -61,4 +80,6 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 			break;
 		}
 	}
+	
+	
 }

@@ -9,11 +9,11 @@ import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -45,8 +45,20 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 			int j = (this.height - this.ySize) / 2;
 			if(tile_getter.getOwnerS().equals(this.minecraft.player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
 	        {
-	        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙", actionPerformed()));
+	        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙",(press) -> actionPerformed(0)));
 	        }
+	}
+	
+	protected void actionPerformed(int buttonId)
+	{		
+		switch (buttonId) {
+		case 0:
+			Minecraft.getInstance().player.sendMessage(new StringTextComponent("Not available right now."));
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -74,13 +86,5 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 	       this.blit(k, l, 0, 0, this.xSize, this.ySize); 
 	}
 	
-	protected IPressable actionPerformed()
-	{
-		if(buttons == this.settings)
-		{	
-			//NetworkHooks.openGui((ServerPlayerEntity)getMinecraft().player, containerSupplier);
-		}
-		return null;
-	}
 	
 }

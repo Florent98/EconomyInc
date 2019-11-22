@@ -1,16 +1,13 @@
 package fr.fifoube.blocks;
 
-import fr.fifoube.gui.GuiCreditCard;
+import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemCreditCard;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -24,9 +21,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockATM extends Block implements INamedContainerProvider {
 
@@ -41,7 +35,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	
 	@Override
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!worldIn.isRemote)
+		if(worldIn.isRemote)
 		{
 			for(int i = 0; i <= player.inventory.getSizeInventory(); i++)
 			{
@@ -52,7 +46,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 						ItemStack stackIn = player.inventory.getStackInSlot(i);
 						if(stackIn.hasTag() && stackIn.getTag().getBoolean("Owned"))
 						{
-							openGui(new GuiCreditCard());											
+							ClientGuiScreen.openGui(0, null);											
 							return true;
 						}
 					}
@@ -60,11 +54,6 @@ public class BlockATM extends Block implements INamedContainerProvider {
 			}
 		}
 		return false;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	private void openGui(Screen screen) {
-		Minecraft.getInstance().displayGuiScreen(screen);
 	}
 	
 	@Override

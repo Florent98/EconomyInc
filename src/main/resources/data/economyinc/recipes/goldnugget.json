@@ -1,0 +1,13 @@
+{
+ "type": "minecraft:crafting_shapeless",
+ "ingredients": [
+   {
+     "type": "minecraft:item",
+     "item": "economyinc:item_goldnuggetsubs"
+   }
+ ],
+ "result": {
+   "type": "minecraft:item",
+   "item": "minecraft:gold_nugget"
+ }
+}

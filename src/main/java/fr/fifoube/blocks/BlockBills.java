@@ -181,7 +181,7 @@ public class BlockBills extends ContainerBlock {
 	
 	@Override
 	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
+		return BlockRenderType.INVISIBLE;
 	}	
 	
     @Override
