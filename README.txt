@@ -11,9 +11,9 @@ RoadMap
 [✔] BLOCK SELLER DISPLAYING ITEM 3D (Fixed but currently is glitching out for some reason)
 [✔] GOLD NUGGET WEIGHT + REMOVE RECIPE (Fixed partially, still thinking about a fair method for gold exchanging into money)
 [✔] GOLD CHANGER WORKING Fixed
-[] BLOCK SAFE VAULT FOR VILLAGES
-[] VILLAGES IMPLEMENTATION OF BANK + TABLE LIST
 [✔] COMMAND PLOTS Fixed
 [✔] PLOTS SAVING (WORLD SAVED DATA) Fixed
-[] CREATE INFORMER VILLAGER
+[] BLOCK SAFE VAULT FOR VILLAGES - Suspended
+[] VILLAGES IMPLEMENTATION OF BANK + TABLE LIST - Suspended
+[] CREATE INFORMER VILLAGER - Suspended
 [] MYSQL
