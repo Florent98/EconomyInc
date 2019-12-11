@@ -4,6 +4,7 @@ package fr.fifoube.blocks.tileentity.specialrenderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import fr.fifoube.blocks.models.ModelVault;
+import fr.fifoube.blocks.models.ModelVaultPad;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -13,6 +14,7 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 {
 	
 	private static ModelVault modelBlock = new ModelVault();
+	private static ModelVaultPad modelPad = new ModelVaultPad();
 	public static ResourceLocation texture;
 	
 	@Override
@@ -43,6 +45,9 @@ public class TileEntityVaultSpecialRenderer extends TileEntityRenderer<TileEntit
 		}
         bindTexture(texture);
         modelBlock.renderAll();
+        GlStateManager.scaled(0.5, 0.5, 0.35);
+        GlStateManager.translated(-0.93, 0.8, 0.8);
+        modelPad.renderAll();
         GlStateManager.popMatrix();
 	}
 	

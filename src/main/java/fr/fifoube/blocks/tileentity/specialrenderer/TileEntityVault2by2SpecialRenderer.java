@@ -3,6 +3,7 @@ package fr.fifoube.blocks.tileentity.specialrenderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import fr.fifoube.blocks.models.ModelVault2by2;
+import fr.fifoube.blocks.models.ModelVaultPad;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -12,6 +13,7 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
 {
 	
 	private static ModelVault2by2 modelBlock = new ModelVault2by2();
+	private static ModelVaultPad modelPad = new ModelVaultPad();
 	public static ResourceLocation texture;
 	
 	@Override
@@ -21,17 +23,18 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
         GlStateManager.pushMatrix();
         setLightmapDisabled(true);
         translateFromDirection(te, x, y, z);
+        GlStateManager.rotatef(180F, 1.0F, 0.0F, 0.0F);
         GlStateManager.color3f(1.0F, 1.0F, 1.0F);
 		GlStateManager.rotatef(-90F, 0.0F, 1.0F, 0.0F);
 		switch (te.getDirection()) {
 		case 0:
-			GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotatef(0.0F, 0.0F, 1.0F, 0.0F);
 			break;
 		case 1:
 			GlStateManager.rotatef(90.0F, 0.0F, 1.0F, 0.0F);
 			break;
 		case 2:
-			GlStateManager.rotatef(0.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
 			break;
 		case 3:
 			GlStateManager.rotatef(-90.0F, 0.0F, 1.0F, 0.0F);
@@ -42,6 +45,9 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
 		}
         bindTexture(texture);
         modelBlock.renderAll();
+        GlStateManager.scaled(0.5, 0.5, 0.35);
+        GlStateManager.translated(-0.93, 0.8, 0.8);
+        modelPad.renderAll();
         GlStateManager.popMatrix();
 	}
 	
@@ -66,16 +72,16 @@ public class TileEntityVault2by2SpecialRenderer extends TileEntityRenderer<TileE
 	{
        switch (te.getDirection()) {
 		case 0:
-	        GlStateManager.translated(x, y + 0.5, z);
+	        GlStateManager.translated(x, y + 1.5, z);
 			break;
 		case 1:
-	        GlStateManager.translated(x + 1, y + 0.5, z);
+	        GlStateManager.translated(x + 1, y + 1.5, z);
 			break;
 		case 2:
-	        GlStateManager.translated(x + 1, y + 0.5, z + 1);
+	        GlStateManager.translated(x + 1, y + 1.5, z + 1);
 			break;
 		case 3:
-	        GlStateManager.translated(x, y + 0.5, z + 1);
+	        GlStateManager.translated(x, y + 1.5, z + 1);
 			break;
 	
 		default:

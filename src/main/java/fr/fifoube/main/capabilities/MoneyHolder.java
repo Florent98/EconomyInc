@@ -1,5 +1,7 @@
 package fr.fifoube.main.capabilities;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MoneyHolder implements IMoney {
 
@@ -16,8 +18,16 @@ public class MoneyHolder implements IMoney {
 
 	@Override
 	public void setMoney(double money) {
-		this.money = money;
+		this.money = round(money, 2);
 		
+	}
+	
+	private double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = BigDecimal.valueOf(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
 	}
 
 	@Override

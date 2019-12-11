@@ -32,6 +32,8 @@ public class TileEntityRegistery {
 	public static final TileEntityType<?> TILE_BILLS = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_seller_te")
 	public static final TileEntityType<?> TILE_SELLER = null;
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_changer_te")
+	public static final TileEntityType<?> TILE_CHANGER = null;
 
 	@SubscribeEvent
 	public static void registerTileEntity(final RegistryEvent.Register<TileEntityType<?>> event) 
@@ -40,6 +42,7 @@ public class TileEntityRegistery {
 		event.getRegistry().register(buildTileType(ModEconomyInc.MOD_ID + ":block_vault2by2_te", TileEntityType.Builder.create(TileEntityBlockVault2by2::new, BlocksRegistery.BLOCK_VAULT_2BY2)).setRegistryName("block_vault2by2_te"));
 		event.getRegistry().register(buildTileType(ModEconomyInc.MOD_ID + ":block_bills_te", TileEntityType.Builder.create(TileEntityBlockBills::new, BlocksRegistery.BLOCK_BILLS)).setRegistryName("block_bills_te"));
 		event.getRegistry().register(buildTileType(ModEconomyInc.MOD_ID + ":block_seller_te", TileEntityType.Builder.create(TileEntityBlockSeller::new, BlocksRegistery.BLOCK_SELLER)).setRegistryName("block_seller_te"));
+		event.getRegistry().register(buildTileType(ModEconomyInc.MOD_ID + ":block_changer_te", TileEntityType.Builder.create(TileEntityBlockChanger::new, BlocksRegistery.BLOCK_CHANGER)).setRegistryName("block_changer_te"));
 
 	}
 	

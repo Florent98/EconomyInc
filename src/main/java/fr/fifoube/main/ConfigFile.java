@@ -97,7 +97,7 @@ public class ConfigFile {
                     .translation("text.economyinc.config.bankvillage")
 					.define("doesBankGenerateInVillages", true);
 			goldNuggetRecipe = builder
-					.comment("Allow the mod to replace the furnace recipe for the gold ore and give instead the EconomyInc's nugget.")
+					.comment("Allow the mod to add a recipe from Gold Ingot to gold nugget (EIC)")
                     .translation("text.economyinc.config.nuggetrecipe")
 					.define("goldNuggetRecipe", true);
 			canPreviewItemInBlock = builder

@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -19,6 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -28,12 +31,12 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockSeller extends ContainerBlock {
 
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+ 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.seller_buy");
 
 	public BlockSeller(Properties properties) {
 		super(properties);
-	    this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
+		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
 	}
 	
 	@Override
@@ -122,6 +125,7 @@ public class BlockSeller extends ContainerBlock {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -129,18 +133,18 @@ public class BlockSeller extends ContainerBlock {
 		{
 			TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
 			te.setOwner(placer.getUniqueID().toString());
-			te.setFacing(state.toString().substring(28, 33));
+			te.setFacing(state.toString().substring(38, 43));
 			te.setOwnerName(placer.getName().getString());   
 		}
 	}
 	
 	@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-	   	 this.setDefaultFacing(worldIn, pos, state);	 
+		
+		this.setDefaultFacing(worldIn, pos, state);
 	}
 	
-	 private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state)
-	    {
+	 private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state) {
 	        if (!worldIn.isRemote)
 	        {
 	            BlockState blockstate = worldIn.getBlockState(pos.north());
@@ -149,57 +153,46 @@ public class BlockSeller extends ContainerBlock {
 	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
 	            Direction dir = (Direction)state.get(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isSolid() && !blockstate1.isSolid())
+	            if (dir == Direction.NORTH && blockstate.isSolid() && blockstate1.isSolid())
 	            {
-	            	dir = Direction.SOUTH;
+	                dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && !blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && blockstate.isSolid())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isSolid() && !blockstate3.isSolid())
+	            else if (dir == Direction.WEST && blockstate2.isSolid() && blockstate3.isSolid())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isSolid() && !blockstate2.isSolid())
+	            else if (dir == Direction.EAST && blockstate3.isSolid() && blockstate2.isSolid())
 	            {
 	            	dir = Direction.WEST;
 	            }
-
 	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
 	        }
 	    }
-	
-	/**
-	* Convert the given metadata into a BlockState for this Block
-	*/
-	public BlockState getStateFromMeta(int meta)
-	{
-		Direction dir = Direction.byIndex(meta);
-	 
-	    if (dir.getAxis() == Direction.Axis.Y)
-	    {
-	        dir = Direction.NORTH;
-	    }
-	 
-	    return this.getDefaultState().with(FACING, dir);
-	}
-	 
-	/**
-	* Convert the BlockState into the correct metadata value
-	*/
-	public int getMetaFromState(BlockState state)
-	{
-	    return ((Direction)state.get(FACING)).getIndex();
+		
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
 	}
 	
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate((Direction)state.get(FACING)));
+	}
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.rotate(mirrorIn.toRotation((Direction)state.get(FACING)));
+	}
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
-
+    
 	@Override
 	public BlockRenderType getRenderType(BlockState state)
 	{
@@ -209,8 +202,12 @@ public class BlockSeller extends ContainerBlock {
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 
-		return BlockRenderLayer.CUTOUT_MIPPED;
+		return BlockRenderLayer.CUTOUT;
 	}
 
+	@Override
+	public boolean isSolid(BlockState state) {
+		return true;
+	}
 	 
 }

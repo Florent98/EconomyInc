@@ -1,0 +1,9 @@
+{
+	"type": "smelting",
+	"ingredient": {
+		"item": "minecraft:gold_ingot"
+	},
+	"result": "economyinc:item_goldnuggetsubs",
+	"experience": 1,
+	"cookingTime": 600
+}

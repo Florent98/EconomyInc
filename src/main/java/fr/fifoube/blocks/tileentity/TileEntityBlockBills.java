@@ -1,6 +1,8 @@
 package fr.fifoube.blocks.tileentity;
 
+import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -98,5 +100,29 @@ public class TileEntityBlockBills extends TileEntity {
 	{
 		BlockState state = this.world.getBlockState(getPos());
 		this.world.notifyBlockUpdate(getPos(), state, state, 3);
+	}
+	
+	public Item getItemBill()
+	{
+		switch (getBillRef()) {
+		case "item.economyinc.item_oneb":
+			return ItemsRegistery.ITEM_ONEB;
+		case "item.economyinc.item_fiveb":
+			return ItemsRegistery.ITEM_FIVEB;
+		case "item.economyinc.item_tenb":
+			return ItemsRegistery.ITEM_TENB;
+		case "item.economyinc.item_twentyb":
+			return ItemsRegistery.ITEM_TWENTYB;
+		case "item.economyinc.item_fiftybe":
+			return ItemsRegistery.ITEM_FIFTYB;
+		case "item.economyinc.item_hundreedb":
+			return ItemsRegistery.ITEM_HUNDREEDB;
+		case "item.economyinc.item_twohundreedb":
+			return ItemsRegistery.ITEM_TWOHUNDREEDB;
+		case "item.economyinc.item_fivehundreedb":
+			return ItemsRegistery.ITEM_FIVEHUNDREEDB;
+		default:
+			return null;
+		}
 	}
 }

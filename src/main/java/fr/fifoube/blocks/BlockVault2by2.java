@@ -168,4 +168,5 @@ public class BlockVault2by2 extends ContainerBlock {
 	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
 	}
 	
+	
 }

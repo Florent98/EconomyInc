@@ -1,0 +1,290 @@
+package fr.fifoube.main.commands;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.realmsclient.dto.PlayerInfo;
+
+import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.world.saveddata.ChunksWorldSavedData;
+import fr.fifoube.world.saveddata.PlotsChunkData;
+import fr.fifoube.world.saveddata.PlotsData;
+import fr.fifoube.world.saveddata.PlotsWorldSavedData;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.BlockPosArgument;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.SignTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.DimensionSavedDataManager;
+
+public class CommandsPlots {
+
+	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+			
+			dispatcher.register(
+					LiteralArgumentBuilder.<CommandSource>literal("plot")
+					.requires(src -> src.hasPermissionLevel(4))
+					.then(
+							Commands.literal("create")
+							.then(
+								Commands.argument("from", BlockPosArgument.blockPos())
+								  .then(
+									Commands.argument("to", BlockPosArgument.blockPos())
+										.then(
+											Commands.argument("name", StringArgumentType.string())
+											.then(
+												Commands.argument("price", DoubleArgumentType.doubleArg(1.0))
+												.executes(ctx -> createPlot(ctx.getSource(), BlockPosArgument.getLoadedBlockPos(ctx, "from"), BlockPosArgument.getLoadedBlockPos(ctx, "to"), StringArgumentType.getString(ctx, "name") ,DoubleArgumentType.getDouble(ctx, "price")))
+													)
+											 )
+									   )
+								 )
+						 )
+					.then(
+							Commands.literal("remove")
+							.then(
+								Commands.argument("name", StringArgumentType.string())
+								.executes(ctx -> removePlot(ctx.getSource(), StringArgumentType.getString(ctx, "name")))
+								)
+						)
+					);
+	}
+
+	
+	@SuppressWarnings("static-access")
+	public static int createPlot(CommandSource src, BlockPos from, BlockPos to, String name,double price)
+    {
+    	boolean canProceed = true;
+    	ServerPlayerEntity player = null;
+    	
+		try {
+			player = src.asPlayer();
+			} catch (CommandSyntaxException e) {
+			e.printStackTrace();
+			}
+		
+		
+		if(player != null)
+		{
+					if(Math.abs(to.getX() - from.getX()) < 26 && Math.abs(to.getZ() - from.getZ()) < 26)
+					{
+						DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
+						ServerWorld worldIn = player.getServerWorld();
+						PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+						if(data != null)
+						{
+							for (int i = 0; i < data.getListContainer().size(); i++) 
+							{
+								PlotsData plotsData = data.getListContainer().get(i);
+								if(plotsData != null)
+								if(plotsData.getList().get(0).equals(name))
+								{
+									canProceed = false;
+									src.sendFeedback(new TranslationTextComponent("commands.plot.samename"), false);
+								}
+							}
+						}
+						if(canProceed)
+						{
+							createData(worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
+							src.sendFeedback(new TranslationTextComponent("commands.plot.success"), false);
+							saveAll(src, false);
+						}
+
+					}
+					else
+					{
+						src.sendFeedback(new TranslationTextComponent("commands.plot.sizeexceed"), false);
+					}
+		}
+		else
+		{
+			src.sendFeedback(new TranslationTextComponent("commands.plot.noplayer"), false);
+		}
+		return 0;
+    }
+	
+	@SuppressWarnings("static-access")
+	public static int removePlot(CommandSource src, String namePlot)
+    {
+    	boolean canProceedRemove = false;
+    	int indexToProceed = -1;
+    	ServerPlayerEntity player = null;
+    	
+		try {
+			player = src.asPlayer();
+			} catch (CommandSyntaxException e) {
+			e.printStackTrace();
+			}
+		
+		DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
+		PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+    	if(player != null)
+		if(data != null)
+		{
+
+			for (int i = 0; i < data.getListContainer().size(); i++) 
+			{
+				PlotsData plotsData = data.getListContainer().get(i);
+				if(plotsData != null)
+				if(plotsData.getList().get(0).equals(namePlot))
+				{
+					indexToProceed = i;
+					canProceedRemove = true;
+					src.sendFeedback(new TranslationTextComponent("commands.plot.removed"), false);
+					saveAll(src, false);
+				}
+				else
+				{
+					src.sendFeedback(new TranslationTextComponent("commands.plot.nomatch"), false);
+				}
+			}
+		}
+		if(canProceedRemove && indexToProceed != -1)
+		{
+			data.getListContainer().remove(indexToProceed);
+			data.markDirty();
+		}
+		return 0;
+    }
+	
+	
+	public static void createData(ServerWorld worldIn, String name, ServerPlayerEntity playerIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn) throws CommandException 
+	{
+		/** WORLD/DIMENSION DATA SAVING **/
+		List<ChunkPos> listChunk = calculatingChunks(worldIn, xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos);
+		PlotsData plotsData = new PlotsData(name, playerIn.getUniqueID().toString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn, false);
+		PlotsChunkData chunkData = new PlotsChunkData(listChunk);
+		PlotsWorldSavedData storagePlots = worldIn.getSavedData().getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+		storagePlots.getListContainer().add(plotsData);
+		storagePlots.markDirty();
+		ChunksWorldSavedData storageChunk = worldIn.getSavedData().getOrCreate(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
+		storageChunk.getListContainer().add(chunkData);
+		storageChunk.markDirty();
+		createBorders(worldIn, name, playerIn.getDisplayName().getString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn);
+	}
+	
+	public static List<ChunkPos> calculatingChunks(World worldIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos) 
+	{
+		List<ChunkPos> listChunk = new ArrayList<ChunkPos>();
+		int minusXToTake;
+		int minusZToTake;
+		int maxXToTake;
+		int maxZToTake;
+		if(xPosFirst < xPosSecond)
+		{
+			minusXToTake = Math.floorDiv(xPosFirst, 16);
+			maxXToTake = Math.floorDiv(xPosSecond, 16);
+		}
+		else
+		{
+			minusXToTake = Math.floorDiv(xPosSecond, 16);
+			maxXToTake = Math.floorDiv(xPosFirst, 16);
+			
+		}
+		if(zPosFirst < zPosSecond)
+		{
+			minusZToTake = Math.floorDiv(zPosFirst, 16);
+			maxZToTake = Math.floorDiv(zPosSecond, 16);
+		}
+		else
+		{
+			minusZToTake = Math.floorDiv(zPosSecond, 16);
+			maxZToTake = Math.floorDiv(zPosFirst, 16);
+		}
+		for(int x = minusXToTake; x <= maxXToTake; x++) 
+		{
+			for(int z = minusZToTake; z <= maxZToTake; z++)
+			{
+				Chunk chunkIn = worldIn.getChunk(x, z);
+				listChunk.add(chunkIn.getPos());
+			}
+		}
+		return listChunk;
+	}
+	
+	public static void createBorders(ServerWorld worldIn, String name, String senderName, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn)
+	{
+		AxisAlignedBB area = new AxisAlignedBB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
+		AxisAlignedBB areaGrown = area.grow(1.0D, 0.0D, 1.0D);
+		Vec3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
+		BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
+		
+		worldIn.setBlockState(posSign, Blocks.AIR.getDefaultState());
+		
+		Iterable<BlockPos> posToPlace = BlockPos.getAllInBoxMutable(new BlockPos(areaGrown.minX, yPos, areaGrown.minZ), new BlockPos(areaGrown.maxX, yPos, areaGrown.maxZ));
+		Iterable<BlockPos> posToRemove = BlockPos.getAllInBoxMutable(new BlockPos(area.minX, yPos, area.minZ), new BlockPos(area.maxX, yPos, area.maxZ));
+		for(BlockPos posNew : posToPlace)
+		{
+			worldIn.setBlockState(posNew, Blocks.SMOOTH_STONE_SLAB.getDefaultState());
+		}
+		for(BlockPos posNew : posToRemove)
+		{
+			worldIn.setBlockState(posNew, Blocks.AIR.getDefaultState());
+		}
+		
+		worldIn.setBlockState(posSign, Blocks.OAK_SIGN.getDefaultState(), 2);
+		
+		TileEntity tileEntityIn = new SignTileEntity();
+		tileEntityIn.validate();
+		
+		worldIn.setTileEntity(posSign, tileEntityIn);
+		
+		SignTileEntity signTe = (SignTileEntity)worldIn.getTileEntity(posSign);
+		
+		if(signTe != null)
+		{
+			signTe.signText[0] = new StringTextComponent("[" + name + "]").setStyle(new Style().setBold(true).setColor(TextFormatting.BLUE));
+			signTe.signText[1] = new StringTextComponent(senderName).setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
+			signTe.signText[2] = new StringTextComponent(String.valueOf(priceIn) + "$").setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
+			signTe.signText[3] = new StringTextComponent("[BUY]").setStyle(new Style().setBold(true).setColor(TextFormatting.GREEN));
+			signTe.markDirty();
+		}
+		
+	}
+	
+	public static Vec3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
+	{
+		return new Vec3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
+	}
+	
+	 private static int saveAll(CommandSource source, boolean flush) {
+	      MinecraftServer minecraftserver = source.getServer();
+	      minecraftserver.getPlayerList().saveAllPlayerData();
+	      boolean flag = minecraftserver.save(true, flush, true);
+	      if(flag)
+	      {
+	    	  source.sendFeedback(new TranslationTextComponent("commands.plot.saved"), false);
+	    	  return 1;
+	      }
+	      else
+	      {
+	    	  source.sendFeedback(new TranslationTextComponent("commands.plot.errorsaved"), false);
+	    	  return 0;
+	      }
+	   }
+}

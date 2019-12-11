@@ -218,6 +218,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 		public ITextComponent getDisplayName() {
 			return NAME;
 		}
+		
 
 
 }

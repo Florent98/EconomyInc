@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -14,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class CommandBalance {
 
@@ -61,7 +63,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendFeedback(new StringTextComponent(money + " were added to " + playerMP.getDisplayName().getFormattedText() + "'s account."), false);
+				src.sendFeedback(new TranslationTextComponent(money + I18n.format("commands.balance.added") + playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.account")), false);
 			}	
 		});
 
@@ -77,7 +79,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendFeedback(new StringTextComponent(money + " were withdrawn to " + playerMP.getDisplayName().getFormattedText() + "'s account."), false);
+				src.sendFeedback(new TranslationTextComponent(money + I18n.format("commands.balance.withdraw") + playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.account")), false);
 			}	
 		});
 	 	return 0;
@@ -90,7 +92,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendFeedback(new StringTextComponent(playerMP.getDisplayName().getFormattedText() + " funds are " + data.getMoney()), false);
+					src.sendFeedback(new TranslationTextComponent(playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.funds") + data.getMoney()), false);
 				});
 			}	
 		});

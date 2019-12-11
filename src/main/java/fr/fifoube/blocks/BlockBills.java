@@ -1,6 +1,10 @@
 package fr.fifoube.blocks;
 
+import java.util.List;
+
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
+import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
+import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -8,6 +12,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -17,6 +22,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext.Builder;
+import net.minecraftforge.items.IItemHandler;
 
 public class BlockBills extends ContainerBlock {
 
@@ -87,6 +94,42 @@ public class BlockBills extends ContainerBlock {
 		}
 		return true;
 		
+	}
+	
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBlockHarvested(worldIn, pos, state, player);
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		dropBlocks(tileentity, worldIn, pos);
+	}
+	
+	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
+				
+		if(tileentity instanceof TileEntityBlockBills)
+		{
+			TileEntityBlockBills te = (TileEntityBlockBills)tileentity;
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_BILLS));
+			world.addEntity(itemBase);
+				for(int i=0; i < te.getNumbBills(); i++)
+				{
+					Item bill = te.getItemBill();
+					if(bill != null)
+					{
+						ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(bill));
+						
+						float multiplier = 0.1f;
+						float motionX = world.rand.nextFloat() - 0.5F;
+						float motionY = world.rand.nextFloat() - 0.5F;
+						float motionZ = world.rand.nextFloat() - 0.5F;
+						
+						item.lastTickPosX = motionX * multiplier;
+						item.lastTickPosY = motionY * multiplier;
+						item.lastTickPosZ = motionZ * multiplier;
+						
+						world.addEntity(item);
+					}
+				}
+			}
 	}
 
 	public void checkBillRef(TileEntityBlockBills te, IWorld worldIn, PlayerEntity playerIn, Hand hand)

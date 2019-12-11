@@ -1,5 +1,6 @@
 package fr.fifoube.gui.container.type;
 
+import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.gui.container.ContainerSeller;
 import fr.fifoube.gui.container.ContainerVault;
 import fr.fifoube.gui.container.ContainerVault2by2;
@@ -21,12 +22,16 @@ public class ContainerTypeRegistery {
 	public static final ContainerType<ContainerVault> VAULT_TYPE = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":containervault2by2")
 	public static final ContainerType<ContainerVault2by2> VAULT2BY2_TYPE = null;
-    
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":containerchanger")
+	public static final ContainerType<ContainerChanger> CHANGER_TYPE = null;
+	
 	public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event) {
 		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containerseller"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerSeller::new).setRegistryName("containersellerbuy"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerVault::new).setRegistryName("containervault"));
 		event.getRegistry().register(IForgeContainerType.create(ContainerVault2by2::new).setRegistryName("containervault2by2"));
-	}
+		event.getRegistry().register(IForgeContainerType.create(ContainerChanger::new).setRegistryName("containerchanger"));
+
+	} 
 
 }

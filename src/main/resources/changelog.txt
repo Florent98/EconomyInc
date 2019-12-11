@@ -1,3 +1,5 @@
+MINECRAFT 1.14 VERSION OF ECONOMY INC.
+
 Keys : + Added
        - Removed
        * Fixed
@@ -154,3 +156,33 @@ Keys : + Added
  + Added chinese language file.
  + Changed the recipe for the digital vault cracker, change the nether star with a gear mecanism.
  * Fixed a crash with the code inside the informer.
+ 
+ 1.6/1.6.1
+ 
+ @ Upgrading from 1.12.2 to Minecraft 1.14.X.
+ @ Villages are not done yet, so there is no bank yet.
+ * Fixed config file.
+ + Added a command plot, that allows operators of server to create plots with a certain price that players can buy with their money. Plots are protected and can only be modified by the owner of the plot.
+ + Added a command plot buy, that allows players to buy with wireless technology to buy plots.
+ * Fixed bill storage rotation.
+ * Fixed lighting of TESR models.
+ * Fixed recipes.
+ * Fixed block seller not displaying the selling item.
+ * Fixed gold changer machine.
+ * Fixed seller machine.
+ * Fixed the block vault not displaying the model of the pad on it.
+ - Removed provisionally the digital vault cracker.
+ + Added light value to the ATM block.
+ * Fixed chunk pos being miscalculated when creating a plot with negative coordinates.
+ * Fixed money having a lot of decimals, it will now only take 2.
+ * Fixed block bills will now drop its content when destroy.
+ + Added translations for new commands. Still need traditional chinese.
+ 
+ Known bugs : 
+ 
+ TESR lighting has no darkness.
+ Block seller is acting weird for display what item it's selling, looking at certain faces of the block won't display what's inside.
+ Plots does not write the right chunk coord.
+ Pure gold nugget will have no weight when taken from furnace with hopper,minecart hopper, shift click.
+ 
+ 

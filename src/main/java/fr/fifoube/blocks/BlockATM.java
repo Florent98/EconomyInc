@@ -34,6 +34,11 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	}
 	
 	@Override
+	public int getLightValue(BlockState state) {
+		return 5;
+	}
+	
+	@Override
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(worldIn.isRemote)
 		{
