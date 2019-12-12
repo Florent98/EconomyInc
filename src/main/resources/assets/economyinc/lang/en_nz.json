@@ -66,10 +66,10 @@
 "commands.plotbuy.alreadybought": "This plot was already bought by someone else.",
 "commands.plotbuy.success": "Plot successfully bought. Please wait few minutes while map is updating.",
 
-"commands.balance.added" : " were added to ",
-"commands.balance.withdraw" :" were withdrawn from ",
+"commands.balance.added" : "%s were added to %s",
+"commands.balance.withdraw" :"%s were withdrawn from %s",
 "commands.balance.account" : "'s account.",
-"commands.balance.funds" : " funds are ",
+"commands.balance.funds" : "%s funds are %s",
 
 "title.validate":"Validate",
 "title.sellAir":"You can't sell air buddy ;)",

@@ -67,10 +67,10 @@
 "commands.plotbuy.alreadybought": "Ce plot à déjà été acheté.",
 "commands.plotbuy.success": "Plot acheté avec succès. Merci d'attendre quelques minutes pour l'actualisation de la map.",
 
-"commands.balance.added" : " on été ajouté au compte de ",
-"commands.balance.withdraw" :"on été retiré du compte de ",
+"commands.balance.added" : "%s on été ajouté au compte de %s",
+"commands.balance.withdraw" :"%s on été retiré du compte de %s",
 "commands.balance.account" : ".",
-"commands.balance.funds" : " possède ",
+"commands.balance.funds" : "%s possède %s",
 
 "title.validate":"Valider",
 "title.sellAir":"Tu ne peux pas vendre de l'air ;)",

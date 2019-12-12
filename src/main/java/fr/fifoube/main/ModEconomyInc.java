@@ -19,6 +19,7 @@ import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.commands.CommandBalance;
 import fr.fifoube.main.commands.CommandsPlots;
+import fr.fifoube.main.commands.CommandsPlotsBuy;
 import fr.fifoube.main.events.client.ClientEvents;
 import fr.fifoube.main.events.server.ServerEvents;
 import fr.fifoube.packets.PacketsRegistery;
@@ -82,6 +83,7 @@ public class ModEconomyInc {
 		{
 			CommandBalance.register(event.getCommandDispatcher());
 			CommandsPlots.register(event.getCommandDispatcher());
+			CommandsPlotsBuy.register(event.getCommandDispatcher());
 			MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
 		}

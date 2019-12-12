@@ -177,11 +177,12 @@ Keys : + Added
  * Fixed money having a lot of decimals, it will now only take 2.
  * Fixed block bills will now drop its content when destroy.
  + Added translations for new commands. Still need traditional chinese.
+ * Fixed language file for server side.
  
  Known bugs : 
  
  TESR lighting has no darkness.
- Block seller is acting weird for display what item it's selling, looking at certain faces of the block won't display what's inside.
+ Block seller is acting weird when displaying what item it's selling, looking at certain faces of the block won't display what's inside.
  Plots does not write the right chunk coord.
  Pure gold nugget will have no weight when taken from furnace with hopper,minecart hopper, shift click.
  

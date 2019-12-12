@@ -67,10 +67,10 @@
 "commands.plotbuy.alreadybought": "La parcela ya fue comprada por otra persona.",
 "commands.plotbuy.success": "Parcela comprado con éxito. Por favor espere pocos minutos durante la gurado del archivo.",
 
-"commands.balance.added" : " fueron agregados a ",
-"commands.balance.withdraw" :" fueron retirados de ",
+"commands.balance.added" : "%s fueron agregados a %s",
+"commands.balance.withdraw" :"%s fueron retirados de %s",
 "commands.balance.account" : ".",
-"commands.balance.funds" : " fondos son ",
+"commands.balance.funds" : "%s fondos son %s",
 
 "title.validate":"Validar",
 "title.sellAir":"No pudes vender aire ;)",

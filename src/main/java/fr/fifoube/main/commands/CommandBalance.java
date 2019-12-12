@@ -63,7 +63,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendFeedback(new TranslationTextComponent(money + I18n.format("commands.balance.added") + playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.account")), false);
+				src.sendFeedback(new TranslationTextComponent("commands.balance.added", money, playerMP.getDisplayName().getFormattedText()), false);
 			}	
 		});
 
@@ -79,7 +79,7 @@ public class CommandBalance {
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendFeedback(new TranslationTextComponent(money + I18n.format("commands.balance.withdraw") + playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.account")), false);
+				src.sendFeedback(new TranslationTextComponent("commands.balance.withdraw", money, playerMP.getDisplayName().getFormattedText()), false);
 			}	
 		});
 	 	return 0;
@@ -92,7 +92,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendFeedback(new TranslationTextComponent(playerMP.getDisplayName().getFormattedText() + I18n.format("commands.balance.funds") + data.getMoney()), false);
+					src.sendFeedback(new TranslationTextComponent("commands.balance.funds", playerMP.getDisplayName().getFormattedText(), data.getMoney()), false);
 				});
 			}	
 		});
