@@ -41,7 +41,6 @@ public class PlotsWorldSavedData extends WorldSavedData {
 		 int yPos = 0;
 		 float price = 0;
 		 boolean bought = false;
-		 List<ChunkPos> listChunk = new ArrayList<ChunkPos>();
 		 for(int i = 0; i < tagListContainer.size(); i++)
 		 {
 			ListNBT tagList = (ListNBT)tagListContainer.get(i);
@@ -54,15 +53,6 @@ public class PlotsWorldSavedData extends WorldSavedData {
 		    yPos = Integer.valueOf(tagList.getString(6));
 		    price = Float.valueOf(tagList.getString(7));
 		    bought = Boolean.getBoolean(tagList.getString(8));
-		    //CHUNK
-		    for (int j = 8; j < tagList.size(); j++)
-		    {
-				 String pos = tagList.getString(j);
-				 int xPos = Integer.valueOf(pos.substring(pos.indexOf("[") + 1, pos.indexOf(",")));
-				 int zPos = Integer.valueOf(pos.substring(pos.indexOf(",") + 2, pos.indexOf("]")));
-				 ChunkPos chunkPos = new ChunkPos(xPos, zPos);
-				 listChunk.add(chunkPos);
-			 }
 		    PlotsData plotsData = new PlotsData(name, owner, xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, price, bought);
 			this.listContainer.add(plotsData);
 		 }

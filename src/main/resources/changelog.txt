@@ -157,7 +157,7 @@ Keys : + Added
  + Changed the recipe for the digital vault cracker, change the nether star with a gear mecanism.
  * Fixed a crash with the code inside the informer.
  
- 1.6/1.6.1
+ 1.6/1.6.1/1.6.2
  
  @ Upgrading from 1.12.2 to Minecraft 1.14.X.
  @ Villages are not done yet, so there is no bank yet.
@@ -179,11 +179,18 @@ Keys : + Added
  + Added translations for new commands. Still need traditional chinese.
  * Fixed language file for server side.
  
+ 1.6.3
+ 
+ * Fixed vending machine not being accessible to others after creation.
  Known bugs : 
  
  TESR lighting has no darkness.
  Block seller is acting weird when displaying what item it's selling, looking at certain faces of the block won't display what's inside.
  Plots does not write the right chunk coord.
  Pure gold nugget will have no weight when taken from furnace with hopper,minecart hopper, shift click.
+ Infinite loop leading to crash after block is placed (vending machine, block changer). 
+ 
+ Please let me know if you know step to reproduce bugs here -> https://github.com/FifouBE/EconomyInc/issues/
+ 
  
  

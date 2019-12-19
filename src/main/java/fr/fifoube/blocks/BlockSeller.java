@@ -77,19 +77,14 @@ public class BlockSeller extends ContainerBlock {
 			TileEntity tileentity = worldIn.getTileEntity(pos);		
 			if(tileentity instanceof TileEntityBlockSeller)
 			{
+
 				TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
 				if(te.getOwner() != null)
-				{
-					String checkONBT = te.getOwner();
-					String checkOBA = player.getUniqueID().toString();
-						
-						if(checkONBT.equals(checkOBA))
-						{
-							if(te.getCreated())
-							{
-								ClientGuiScreen.openGui(1, te);	
-							}
-						}
+				{					
+					if(te.getCreated())
+					{			
+						ClientGuiScreen.openGui(1, te);	
+					}
 				}
 			}		
 		}
