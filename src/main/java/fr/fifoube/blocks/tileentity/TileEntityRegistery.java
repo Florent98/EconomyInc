@@ -5,8 +5,6 @@ import com.mojang.datafixers.types.Type;
 
 import fr.fifoube.blocks.BlocksRegistery;
 import fr.fifoube.blocks.tileentity.specialrenderer.TileEntityBlockBillsSpecialRenderer;
-import fr.fifoube.blocks.tileentity.specialrenderer.TileEntityVault2by2SpecialRenderer;
-import fr.fifoube.blocks.tileentity.specialrenderer.TileEntityVaultSpecialRenderer;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -65,8 +63,6 @@ public class TileEntityRegistery {
 	
 	@OnlyIn(Dist.CLIENT)
 	public static void registerTileRenderer() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockVault.class, new TileEntityVaultSpecialRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockVault2by2.class, new TileEntityVault2by2SpecialRenderer());	
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlockBills.class, new TileEntityBlockBillsSpecialRenderer());
+      //ClientRegistry.bindTileEntityRenderer(TILE_BILLS, TileEntityBlockBillsSpecialRenderer::new);
     }
 }

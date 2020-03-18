@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -59,7 +60,7 @@ public class BlockBills extends ContainerBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		if(!worldIn.isRemote)
 		{
 	    	TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -77,6 +78,7 @@ public class BlockBills extends ContainerBlock {
 					    	te.addBill();
 					    	player.getHeldItem(hand).setCount(player.getHeldItemMainhand().getCount() - 1);
 					    	te.markDirty();
+					    	return ActionResultType.SUCCESS;
 			    		}
 		    		}
 		    		else
@@ -86,13 +88,14 @@ public class BlockBills extends ContainerBlock {
 		    				te.addBill();
 		    				player.getHeldItem(hand).setCount(player.getHeldItemMainhand().getCount() - 1);
 					    	te.markDirty();
+					    	return ActionResultType.SUCCESS;
 		    			}
 		    		}
 	
 		    	}
 	    	}
 		}
-		return true;
+		return ActionResultType.FAIL;
 		
 	}
 	

@@ -1,5 +1,6 @@
 package fr.fifoube.blocks;
 
+import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
@@ -9,15 +10,17 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
@@ -50,7 +53,7 @@ public class BlockSeller extends ContainerBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!worldIn.isRemote)
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);		
@@ -67,6 +70,7 @@ public class BlockSeller extends ContainerBlock {
 							if(!te.getCreated())
 							{
 								NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
+								return ActionResultType.SUCCESS;
 							}
 						}
 				}
@@ -84,11 +88,12 @@ public class BlockSeller extends ContainerBlock {
 					if(te.getCreated())
 					{			
 						ClientGuiScreen.openGui(1, te);	
+						return ActionResultType.SUCCESS;
 					}
 				}
 			}		
 		}
-		return true;
+		return ActionResultType.FAIL;
 	}
 	
 	@Override
@@ -112,12 +117,28 @@ public class BlockSeller extends ContainerBlock {
 					{
 						worldIn.destroyBlock(pos, true);
 						worldIn.removeTileEntity(pos);
+						dropBlocks(tileentity, worldIn, pos);
 					}
 				}
 			}
 		}
 	}
 
+	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
+		
+		if(tileentity instanceof TileEntityBlockSeller)
+		{
+			TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_SELLER));
+			world.addEntity(itemBase);
+			if(te.getStackInSlot(0) != null)
+			{
+				ItemEntity itemContainer = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, te.getStackInSlot(0));
+				world.addEntity(itemContainer);
+			}
+		}
+	}
+	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		
@@ -194,15 +215,8 @@ public class BlockSeller extends ContainerBlock {
 		return BlockRenderType.MODEL;
 	}
 	
-	@Override
-	public BlockRenderLayer getRenderLayer() {
-
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public boolean isSolid(BlockState state) {
-		return true;
-	}
+	
+	
+	
 	 
 }

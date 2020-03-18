@@ -46,6 +46,8 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 		return inventory_seller;	
 	}
 	
+	
+	
 	  public SUpdateTileEntityPacket getUpdatePacket()
 	    {
 	        return new SUpdateTileEntityPacket(this.pos, 1, this.getUpdateTag());

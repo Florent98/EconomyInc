@@ -41,7 +41,7 @@ public class ServerEvents {
 			double valeur = rand.nextDouble();
         	String valeur2 = Double.toString(valeur);
         	String valeur3 = valeur2.substring(0,4);
-        	event.getSmelting().setTagInfo("weight", new StringNBT(valeur3));
+        	event.getSmelting().setTagInfo("weight", StringNBT.valueOf(valeur3));
 		}
 	}
 	

@@ -254,7 +254,7 @@ public class GuiSellerBuy extends Screen
 	        int j = this.guiTop;
 	        GL11.glPushMatrix();
 			GlStateManager.enableRescaleNormal();
-		    RenderHelper.enableGUIStandardItemLighting();
+		    RenderHelper.enableStandardItemLighting();
 		    GL11.glScaled(2, 2, 2);
 		    ItemStack stack = new ItemStack(Blocks.BARRIER,1);
 		    if(!(tile.getAmount() == 0))

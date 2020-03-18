@@ -14,6 +14,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
 		if(worldIn.isRemote)
 		{
 			for(int i = 0; i <= player.inventory.getSizeInventory(); i++)
@@ -52,14 +53,16 @@ public class BlockATM extends Block implements INamedContainerProvider {
 						if(stackIn.hasTag() && stackIn.getTag().getBoolean("Owned"))
 						{
 							ClientGuiScreen.openGui(0, null);											
-							return true;
+							return ActionResultType.SUCCESS;
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return ActionResultType.FAIL;
 	}
+	
+	
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {

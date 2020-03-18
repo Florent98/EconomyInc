@@ -63,7 +63,7 @@ public class ChunksWorldSavedData extends WorldSavedData {
 		        String s = listContainer.get(i).getList().get(j);
 		        if(s != null)
 		        {
-	                tagList.add(new StringNBT(s));
+	                tagList.add(StringNBT.valueOf(s));
 		        }
 			}
 	        tagListContainer.add(tagList);

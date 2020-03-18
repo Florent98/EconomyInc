@@ -17,13 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -51,7 +52,7 @@ public class BlockChanger extends ContainerBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
 		
 		if(!worldIn.isRemote)
 		{
@@ -67,16 +68,18 @@ public class BlockChanger extends ContainerBlock {
 						te.setNumbUse(1);
 						te.setEntityPlayer(playerIn);
 						te.markDirty();
+						return ActionResultType.SUCCESS;
 	
 					}
 					else
 					{
 						playerIn.sendMessage(new StringTextComponent(I18n.format("title.alreadyUsed")));
+						return ActionResultType.SUCCESS;
 					}
 				}
 			}
 		}
-         return true;
+         return ActionResultType.FAIL;
 	}
 	
 	@Override
@@ -169,15 +172,8 @@ public class BlockChanger extends ContainerBlock {
 		}
 		
 		@Override
-		public BlockRenderLayer getRenderLayer() {
-
-			return BlockRenderLayer.SOLID;
+		public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+			return false;
 		}
-
-		@Override
-		public boolean isSolid(BlockState state) {
-			return true;
-		}
-		 
-
+		
 }

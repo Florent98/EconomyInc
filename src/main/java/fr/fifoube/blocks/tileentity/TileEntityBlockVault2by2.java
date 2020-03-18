@@ -1,5 +1,7 @@
 package fr.fifoube.blocks.tileentity;
 
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundNBT;import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.INBTType;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.NetworkManager;
@@ -119,7 +122,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
           String s = allowedPlayers.get(i);
           if(s != null)
           {
-              tagList.add(new StringNBT(s));
+              tagList.add(StringNBT.valueOf(s));
           }
          }
          compound.put("allowedList", tagList);

@@ -147,7 +147,7 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
           String s = allowedPlayers.get(i);
           if(s != null)
           {
-              tagList.add(new StringNBT(s));
+              tagList.add(StringNBT.valueOf(s));
           }
          }
          compound.put("allowedList", tagList);

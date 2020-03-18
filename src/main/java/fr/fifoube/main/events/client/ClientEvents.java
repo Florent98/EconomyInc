@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -31,7 +31,7 @@ public class ClientEvents {
 	@SuppressWarnings("static-access")
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public void onDrawBlockHighlightEvent(DrawBlockHighlightEvent event)
+	public void onDrawBlockHighlightEvent(DrawHighlightEvent event)
 	{	
 		if(ConfigFile.canPreviewItemInBlock)
 			if(event.getTarget().getType() ==  event.getTarget().getType().BLOCK)
@@ -78,7 +78,7 @@ public class ClientEvents {
 							} catch (Exception e) {
 								System.out.println("Could not find the field hoverStart also known as field_70290_d.");
 							}
-							renderM.renderEntityStatic(entItem, 1.0F * j, false);
+							renderM.renderEntityStatic(entItem, x, y, z, 1.0F * j, event.getPartialTicks(), event.getMatrix(), event.getBuffers(), 0);
 							RenderHelper.disableStandardItemLighting();
 							GlStateManager.disableRescaleNormal();
 							GL11.glPopMatrix();		

@@ -6,8 +6,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 
 @Mod.EventBusSubscriber
 public class ConfigFile {
@@ -129,13 +129,16 @@ public class ConfigFile {
 	 
 	 //ON CONFIG CHANGE EVENT TO REFRESH
 	 @SubscribeEvent
-	 public static void onConfigChange(ConfigChangedEvent.OnConfigChangedEvent event)
+	 public static void onConfigChange(final ModConfig.ModConfigEvent event)
 	 {
-	     if (ModEconomyInc.MOD_ID.equals(event.getModID()))
-	     {
-	         refreshClient();
-	         refreshServer();
-	     }
+		 if (event.getConfig().getSpec() == CLIENT_SPEC) 
+		 {
+			 refreshClient();
+		 }
+		 else if(event.getConfig().getSpec() == SERVER_SPEC)
+		 {
+			 refreshServer();
+		 }
 	 }
 
 	 

@@ -40,7 +40,7 @@ public class ItemCreditCard extends Item{
 	 	}
 	 	else
 	 	{
-	 		if(!playerIn.isSneaking())
+	 		if(!playerIn.isCrouching())
 	        {	
 			        if(itemStackIn.hasTag()) 
 				    {
