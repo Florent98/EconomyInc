@@ -32,18 +32,18 @@ public class ConfigFile {
     
     //GLOBAL VARIABLES
     public static boolean canPreviewItemInBlock = true; //CLIENT
-    public static int multiplierGoldNuggetWeight = 2; //SERVER
-    public static boolean  canAccessCardWithoutWT = true; //SERVER
-    public static boolean  doesBankGenerateInVillages = true; //SERVER
-    public static boolean goldNuggetRecipe = true; //SERVER
+    public static int multiplierGoldNuggetWeight = 2; //SERVER & CLIENT
+    public static boolean  canAccessCardWithoutWT = true; //SERVER & CLIENT
+    public static boolean  doesBankGenerateInVillages = true; //SERVER & CLIENT
+    public static boolean goldNuggetRecipe = true; //SERVER & CLIENT
     
     //PROPER FILE
 	public static class ServerConfig {
 		
-		public  IntValue multiplierGoldNuggetWeight; //SERVER
-		public  BooleanValue canAccessCardWithoutWT; //SERVER
-		public  BooleanValue doesBankGenerateInVillages; //SERVER
-		public  BooleanValue goldNuggetRecipe; //SERVER
+		public IntValue multiplierGoldNuggetWeight; //SERVER & CLIENT
+		public BooleanValue canAccessCardWithoutWT; //SERVER & CLIENT
+		public BooleanValue doesBankGenerateInVillages; //SERVER & CLIENT
+		public BooleanValue goldNuggetRecipe; //SERVER & CLIENT
 	 
 		/*public final String dbName; //SERVER
 		public final String urlDB; //SERVER
@@ -77,10 +77,10 @@ public class ConfigFile {
 	 public static class ClientConfig {
 		 
 		public BooleanValue canPreviewItemInBlock; //CLIENT
-		public  IntValue multiplierGoldNuggetWeight; //SERVER
-		public  BooleanValue canAccessCardWithoutWT; //SERVER
-		public  BooleanValue doesBankGenerateInVillages; //SERVER
-		public  BooleanValue goldNuggetRecipe; //SERVER
+		public  IntValue multiplierGoldNuggetWeight; //SERVER & CLIENT
+		public  BooleanValue canAccessCardWithoutWT; //SERVER & CLIENT
+		public  BooleanValue doesBankGenerateInVillages; //SERVER & CLIENT
+		public  BooleanValue goldNuggetRecipe; //SERVER & CLIENT
 		
 		ClientConfig(ForgeConfigSpec.Builder builder) {
             builder.push("display");
