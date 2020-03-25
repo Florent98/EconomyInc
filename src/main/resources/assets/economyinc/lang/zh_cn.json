@@ -24,7 +24,7 @@
 "item.economyinc.item_vault_cracker": "数字密码盘",
 
 "block.economyinc.block_vault":"私人保险柜",
-"block.economyinc.block_seller":"自动售货机",
+"block.economyinc.block_seller":"自动售卖机",
 "block.economyinc.block_changer":"黄金存储器",
 "block.economyinc.block_atm":"ATM",
 "block.economyinc.block_village":"银行金库",
@@ -74,7 +74,7 @@
 "title.validate":"验证 ",
 "title.sellAir":"你不能出售空气 ;)",
 "title.noCost":"你需要为物品设置一个价格.",
-"title.block_seller":"自动售货机",
+"title.block_seller":"自动售卖机",
 "title.buy":"购买",
 "title.recover":"恢复资金",
 "title.noUpgrade":"你需要通过购买升级机器.",
