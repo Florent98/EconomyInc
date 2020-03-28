@@ -59,7 +59,7 @@ public class ItemCreditCard extends Item{
 										}
 										else
 										{
-											playerIn.sendMessage(new StringTextComponent("You don't have the wireless technology to access your card."));
+											playerIn.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
 										}
 										
 									});
@@ -86,7 +86,7 @@ public class ItemCreditCard extends Item{
 											playerCardO.sendMessage(new TextComponentString(TextFormatting.RED + "WARNING: " + nameGameNotOwner + " is using your card, maybe without permission!"));
 							            }
 							       }
-							} */System.out.println("Will be fix in another version of the mod. Quite bugged for the moment. Fifou_BE - Author");
+							} */System.out.println("Will be fix in another version of the mod. Quite bugged for the moment.");
 						}
 			        }
 	        		

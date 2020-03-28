@@ -12,5 +12,5 @@ public interface IMoney {
 	String getOnlineUUID();
 	void setOnlineUUID(String onUUID);
 	
-	void setSyncValues(double money, boolean linked, String name, String onUUID);
+	void forceSync(double money, boolean linked, String name, String onUUID);
 }

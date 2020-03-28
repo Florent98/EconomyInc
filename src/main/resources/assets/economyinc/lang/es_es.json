@@ -72,6 +72,10 @@
 "commands.balance.account" : ".",
 "commands.balance.funds" : "%s fondos son %s",
 
+"title.notLinked" : "No tienes la tecnología microchip.",
+"title.cardAlreadyLinked" : "Tarjeta ya vinculada.",
+"title.cardUpdated" : "Tarjeta actualizada!",
+"title.cardTooMuch" : "Tienes otras tarjetas en tu inventario, por fa vor reetire la tarjeta innecesaria",
 "title.validate":"Validar",
 "title.sellAir":"No pudes vender aire ;)",
 "title.noCost":"Debe estableced un coste.",
@@ -83,6 +87,7 @@
 "title.noSameCardBuy":"No te puede comprar cosas con la tarjeta de una otra personna.",
 "title.seller":"Vendedor : ",
 "title.cost":"Costo : ",
+"title.mode":"Modo : ",
 "title.amount":"Cantidad : ",
 "title.fundsToRecover":"Fondos par recuperar : ",
 "title.item":"Item : ",

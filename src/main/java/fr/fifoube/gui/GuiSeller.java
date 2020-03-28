@@ -204,8 +204,8 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 		else { 
 			s = "limited";
 		} 
-		this.font.drawString(new TranslationTextComponent("Cost : " + cost).getFormattedText(), 98, 34, Color.DARK_GRAY.getRGB());
-		this.font.drawString(new TranslationTextComponent("Mode : " + s).getFormattedText(), 98, 44, Color.DARK_GRAY.getRGB());
+		this.font.drawString(new TranslationTextComponent(I18n.format("title.cost") + cost).getFormattedText(), 98, 34, Color.DARK_GRAY.getRGB());
+		this.font.drawString(new TranslationTextComponent(I18n.format("title.mode") + s).getFormattedText(), 98, 44, Color.DARK_GRAY.getRGB());
 		this.font.drawString(new TranslationTextComponent(I18n.format("title.block_seller")).getFormattedText(), 8.0F, 5, Color.DARK_GRAY.getRGB());
 	    this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 94), 4210752);
 	}

@@ -215,6 +215,13 @@ public class BlockSeller extends ContainerBlock {
 		return BlockRenderType.MODEL;
 	}
 	
+	@Override
+	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return false;
+	}
+	
+	
+		
 	
 	
 	

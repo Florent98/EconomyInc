@@ -72,6 +72,10 @@
 "commands.balance.account" : ".",
 "commands.balance.funds" : "%s possède %s",
 
+"title.notLinked" : "Tu ne possèdes pas la technologie sans fil.",
+"title.cardAlreadyLinked" : "Carte de crédit déjà améliorée.",
+"title.cardUpdated" : "Carte de crédit améliorée!",
+"title.cardTooMuch" : "Autres cartes trouvée dans l'inventaire, merci d'enlever la carte inutile.",
 "title.validate":"Valider",
 "title.sellAir":"Tu ne peux pas vendre de l'air ;)",
 "title.noCost":"Il faut un coût pour l'item",
@@ -83,6 +87,7 @@
 "title.noSameCardBuy":"Vous ne pouvez pas acheter avec la carte de quelqu'un d'autre",
 "title.seller":"Vendeur : ",
 "title.cost":"Coût : ",
+"title.mode":"Mode : ",
 "title.amount":"Quantité : ",
 "title.fundsToRecover":"Fonds à récuperer : ",
 "title.item":"Objet : ",

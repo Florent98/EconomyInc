@@ -63,6 +63,5 @@ public class PlayerMoneyHolder extends MoneyHolder {
     				);
     	}
     }
-
     
 }

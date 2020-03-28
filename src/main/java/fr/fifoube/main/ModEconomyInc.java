@@ -13,6 +13,7 @@ package fr.fifoube.main;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import fr.fifoube.blocks.BlocksRegistery;
 import fr.fifoube.blocks.tileentity.TileEntityRegistery;
 import fr.fifoube.gui.GuiRegistery;
 import fr.fifoube.gui.container.type.ContainerTypeRegistery;
@@ -23,6 +24,8 @@ import fr.fifoube.main.commands.CommandsPlotsBuy;
 import fr.fifoube.main.events.client.ClientEvents;
 import fr.fifoube.main.events.server.ServerEvents;
 import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
@@ -75,7 +78,7 @@ public class ModEconomyInc {
 			GuiRegistery.register();
 			TileEntityRegistery.registerTileRenderer();
 			MinecraftForge.EVENT_BUS.register(new ClientEvents());
-			
+			RenderTypeLookup.setRenderLayer(BlocksRegistery.BLOCK_SELLER, RenderType.getCutoutMipped());
 		}
 		
 		

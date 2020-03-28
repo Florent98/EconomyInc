@@ -63,7 +63,7 @@ public class MoneyHolder implements IMoney {
 	}
 	
 	@Override 
-	public void setSyncValues(double money, boolean linked, String name, String onUUID)
+	public void forceSync(double money, boolean linked, String name, String onUUID)
 	{
 		this.money = money;
 		this.linked = linked;

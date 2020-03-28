@@ -53,7 +53,7 @@ public class ItemWireless extends Item {
 													boolean linked = hasCardIS.getTag().getBoolean("Linked");
 													if(linked == false)
 													{
-														player.sendMessage(new StringTextComponent("Card updated !"));
+														player.sendMessage(new StringTextComponent(I18n.format("title.cardUpdated")));
 														hasCardIS.getTag().putBoolean("Linked", true);
 														player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 															data.setLinked(true);
@@ -61,7 +61,7 @@ public class ItemWireless extends Item {
 													}
 													else
 													{
-														player.sendMessage(new StringTextComponent("Card is already linked"));
+														player.sendMessage(new StringTextComponent(I18n.format("title.cardAlreadyLinked")));
 														player.addItemStackToInventory(itemStackInC);
 													}
 													
@@ -78,7 +78,7 @@ public class ItemWireless extends Item {
 						}
 						else
 						{
-								player.sendMessage(new StringTextComponent("You can only linked one card, please remove the uncessary cards"));
+								player.sendMessage(new StringTextComponent(I18n.format("title.cardTooMuch")));
 								return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
 						}
 					}

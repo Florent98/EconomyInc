@@ -3,10 +3,13 @@ package fr.fifoube.main.capabilities;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import fr.fifoube.items.ItemCreditCard;
+import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -18,17 +21,24 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID)
 public class CapabilityMoney {
 	
+	private static final Map<Entity, IMoney> INVALIDATED_CAPS = new WeakHashMap<>();
+	public static final ResourceLocation CAP_KEY = new ResourceLocation(ModEconomyInc.MOD_ID, "money");
+	
 	@CapabilityInject(IMoney.class)
 	public static final Capability<IMoney> MONEY_CAPABILITY = null;
-	public static final ResourceLocation CAP_KEY = new ResourceLocation(ModEconomyInc.MOD_ID, "money");
-	private static final Map<Entity, IMoney> INVALIDATED_CAPS = new WeakHashMap<>();
 
+	public static void register() {
+		
+		CapabilityManager.INSTANCE.register(IMoney.class, new DefaultMoneyStorage(), MoneyHolder::new);
+	}
+	
 	public static class DefaultMoneyStorage implements IStorage<IMoney> {
 		 
 	    @Override
@@ -53,10 +63,6 @@ public class CapabilityMoney {
 	    }
 	}
 	
-	public static void register() {
-		
-		CapabilityManager.INSTANCE.register(IMoney.class, new DefaultMoneyStorage(), MoneyHolder::new);
-	}
 
 	
 	@SubscribeEvent
@@ -100,7 +106,28 @@ public class CapabilityMoney {
 	{
 		if(!event.getPlayer().world.isRemote)
 		{
-			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { data.setMoney(data.getMoney());});
+			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
+				
+				data.setMoney(data.getMoney());
+				data.setLinked(data.getLinked());
+				data.setName(data.getName());
+				data.setOnlineUUID(data.getOnlineUUID());
+			});
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerRespawn(PlayerRespawnEvent event)
+	{
+		if(!event.getPlayer().world.isRemote)
+		{
+			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
+				
+				data.setMoney(data.getMoney());
+				data.setLinked(data.getLinked());
+				data.setName(data.getName());
+				data.setOnlineUUID(data.getOnlineUUID());
+			});
 		}
 	}
 }
