@@ -1,6 +1,5 @@
 package fr.fifoube.main.config;
 
-
 import org.apache.commons.lang3.tuple.Pair;
 
 import fr.fifoube.main.ModEconomyInc;
