@@ -1,6 +1,5 @@
 package fr.fifoube.blocks;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
@@ -15,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -219,11 +217,5 @@ public class BlockSeller extends ContainerBlock {
 	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
 		return false;
 	}
-	
-	
-		
-	
-	
-	
 	 
 }

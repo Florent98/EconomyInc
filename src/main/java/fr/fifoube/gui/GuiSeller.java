@@ -199,10 +199,10 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 	{
 		String s = "";
 		if(this.admin){ 
-			s = "unlimited";
+			s = I18n.format("title.unlimitedStack");
 		} 
 		else { 
-			s = "limited";
+			s = I18n.format("title.limitedStack");
 		} 
 		this.font.drawString(new TranslationTextComponent(I18n.format("title.cost") + cost).getFormattedText(), 98, 34, Color.DARK_GRAY.getRGB());
 		this.font.drawString(new TranslationTextComponent(I18n.format("title.mode") + s).getFormattedText(), 98, 44, Color.DARK_GRAY.getRGB());

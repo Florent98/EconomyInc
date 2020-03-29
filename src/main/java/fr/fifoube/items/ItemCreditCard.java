@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import fr.fifoube.gui.ClientGuiScreen;
-import fr.fifoube.main.ConfigFile;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
