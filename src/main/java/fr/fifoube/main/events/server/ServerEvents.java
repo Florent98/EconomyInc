@@ -7,8 +7,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import fr.fifoube.items.ItemsRegistery;
-import fr.fifoube.main.ConfigFile;
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.world.saveddata.ChunksWorldSavedData;
 import fr.fifoube.world.saveddata.PlotsChunkData;
 import fr.fifoube.world.saveddata.PlotsData;

@@ -5,8 +5,8 @@ import java.math.RoundingMode;
 
 import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.items.ItemsRegistery;
-import fr.fifoube.main.ConfigFile;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

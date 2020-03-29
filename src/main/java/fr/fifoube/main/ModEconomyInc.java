@@ -21,6 +21,8 @@ import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.commands.CommandBalance;
 import fr.fifoube.main.commands.CommandsPlots;
 import fr.fifoube.main.commands.CommandsPlotsBuy;
+import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.main.config.ConfigHolder;
 import fr.fifoube.main.events.client.ClientEvents;
 import fr.fifoube.main.events.server.ServerEvents;
 import fr.fifoube.packets.PacketsRegistery;
@@ -45,28 +47,19 @@ public class ModEconomyInc {
 		public static final ItemGroup EIC = new ItemGroupEIC("eic");
 		
 		public ModEconomyInc() {
+
+			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
+			ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);	
+			
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadConfig);
 			FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ContainerTypeRegistery::registerContainers);
 			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigFile.SERVER_SPEC);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigFile.CLIENT_SPEC);
-						
+			
+
 		}
 		
 		
-		//CONFIG EVENT
-		public void loadConfig(ModConfig.ModConfigEvent event)
-		{
-			ModConfig config = event.getConfig();
-			if (!ModEconomyInc.MOD_ID.equals(config.getModId()))
-				return;
-			if (config.getSpec() == ConfigFile.CLIENT_SPEC)
-				ConfigFile.refreshClient();
-			else if (config.getSpec() == ConfigFile.SERVER_SPEC)
-				ConfigFile.refreshServer();
-		}
 		//SETUP COMMON
 		private void setup(final FMLCommonSetupEvent event) {
 			PacketsRegistery.registerNetworkPackets();
@@ -89,7 +82,5 @@ public class ModEconomyInc {
 			CommandsPlotsBuy.register(event.getCommandDispatcher());
 			MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
-		}
-	
-		
+		}	
 }
