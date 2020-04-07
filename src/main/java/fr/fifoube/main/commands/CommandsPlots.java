@@ -2,22 +2,21 @@ package fr.fifoube.main.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.realmsclient.dto.PlayerInfo;
 
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.world.saveddata.ChunksWorldSavedData;
 import fr.fifoube.world.saveddata.PlotsChunkData;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -26,10 +25,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
@@ -37,9 +36,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class CommandsPlots {
 
@@ -75,7 +74,6 @@ public class CommandsPlots {
 	}
 
 	
-	@SuppressWarnings("static-access")
 	public static int createPlot(CommandSource src, BlockPos from, BlockPos to, String name,double price)
     {
     	boolean canProceed = true;
@@ -110,7 +108,7 @@ public class CommandsPlots {
 						}
 						if(canProceed)
 						{
-							createData(worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
+							createData(src, worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
 							src.sendFeedback(new TranslationTextComponent("commands.plot.success"), false);
 							saveAll(src, false);
 						}
@@ -128,7 +126,6 @@ public class CommandsPlots {
 		return 0;
     }
 	
-	@SuppressWarnings("static-access")
 	public static int removePlot(CommandSource src, String namePlot)
     {
     	boolean canProceedRemove = false;
@@ -173,7 +170,7 @@ public class CommandsPlots {
     }
 	
 	
-	public static void createData(ServerWorld worldIn, String name, ServerPlayerEntity playerIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn) throws CommandException 
+	private static void createData(CommandSource src, ServerWorld worldIn, String name, ServerPlayerEntity playerIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn) throws CommandException 
 	{
 		/** WORLD/DIMENSION DATA SAVING **/
 		List<ChunkPos> listChunk = calculatingChunks(worldIn, xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos);
@@ -185,10 +182,10 @@ public class CommandsPlots {
 		ChunksWorldSavedData storageChunk = worldIn.getSavedData().getOrCreate(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
 		storageChunk.getListContainer().add(chunkData);
 		storageChunk.markDirty();
-		createBorders(worldIn, name, playerIn.getDisplayName().getString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn);
+		createBorders(src, worldIn, name, playerIn.getDisplayName().getString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn);
 	}
 	
-	public static List<ChunkPos> calculatingChunks(World worldIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos) 
+	private static List<ChunkPos> calculatingChunks(World worldIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos) 
 	{
 		List<ChunkPos> listChunk = new ArrayList<ChunkPos>();
 		int minusXToTake;
@@ -227,12 +224,25 @@ public class CommandsPlots {
 		return listChunk;
 	}
 	
-	public static void createBorders(ServerWorld worldIn, String name, String senderName, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn)
+	private static void createBorders(CommandSource src, ServerWorld worldIn, String name, String senderName, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn)
 	{
 		AxisAlignedBB area = new AxisAlignedBB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
 		AxisAlignedBB areaGrown = area.grow(1.0D, 0.0D, 1.0D);
 		Vec3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
 		BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
+		
+		Block block = Blocks.SMOOTH_STONE_SLAB;
+		String rl = ConfigFile.plotBorderBlock; 
+		ResourceLocation location = new ResourceLocation(rl.substring(0, rl.indexOf(":")), rl.substring(rl.indexOf(":") + 1));
+		if(ForgeRegistries.BLOCKS.getValue(location) != Blocks.AIR)
+		{
+			block = ForgeRegistries.BLOCKS.getValue(location);	
+		}
+		else
+		{
+			block = Blocks.SMOOTH_STONE_SLAB;
+			src.sendFeedback(new TranslationTextComponent("commands.plot.wrongPlotBorder"), false);
+		}
 		
 		worldIn.setBlockState(posSign, Blocks.AIR.getDefaultState());
 		
@@ -240,7 +250,7 @@ public class CommandsPlots {
 		Iterable<BlockPos> posToRemove = BlockPos.getAllInBoxMutable(new BlockPos(area.minX, yPos, area.minZ), new BlockPos(area.maxX, yPos, area.maxZ));
 		for(BlockPos posNew : posToPlace)
 		{
-			worldIn.setBlockState(posNew, Blocks.SMOOTH_STONE_SLAB.getDefaultState());
+			worldIn.setBlockState(posNew, block.getDefaultState());
 		}
 		for(BlockPos posNew : posToRemove)
 		{

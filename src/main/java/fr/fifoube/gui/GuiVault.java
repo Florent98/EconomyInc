@@ -13,6 +13,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -37,13 +38,12 @@ public class GuiVault extends ContainerScreen<ContainerVault>
    
 	@Override
 	protected void init() {
-		// TODO Auto-generated method stub
 		super.init();
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         if(tile_getter.getOwnerS().equals(getMinecraft().player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
         {
-        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙", actionPerformed()));
+        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙",(press) -> actionPerformed(0)));
         }
 	}
 
@@ -60,13 +60,16 @@ public class GuiVault extends ContainerScreen<ContainerVault>
     }
     
 	
-	protected IPressable actionPerformed()
-	{
-		if(buttons == this.settings)
-		{	
-			//NetworkHooks.openGui((ServerPlayerEntity)getMinecraft().player, containerSupplier);
+    protected void actionPerformed(int buttonId)
+	{		
+		switch (buttonId) {
+		case 0:
+			Minecraft.getInstance().player.sendMessage(new StringTextComponent("Not available right now."));
+			break;
+
+		default:
+			break;
 		}
-		return null;
 	}
 	
 	@Override

@@ -63,6 +63,7 @@
 "commands.plot.nomatch": "No se encontro una parcela con este nombre.",
 "commands.plot.saved": "La parcela se guardó con éxito.",
 "commands.plot.errorsaved": "Problema durante el guardado de la parcela.",
+"commands.plot.wrongPlotBorder" : "The borders referenced in the server config file is wrong. Replaced by default. ",//TRANSLATION NEEDED
 
 "commands.plotbuy.alreadybought": "La parcela ya fue comprada por otra persona.",
 "commands.plotbuy.success": "Parcela comprada con éxito. Por favor espere unos minutos durante el gurado de la parcela.",

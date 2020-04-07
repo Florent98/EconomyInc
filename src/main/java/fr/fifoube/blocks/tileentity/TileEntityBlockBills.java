@@ -21,7 +21,7 @@ public class TileEntityBlockBills extends TileEntity {
 	
     public TileEntityBlockBills() 
     {
-		this(TileEntityRegistery.TILE_BILLS);
+		this(TileEntityRegistery.tile_bills);
 	}
     
     public SUpdateTileEntityPacket getUpdatePacket()

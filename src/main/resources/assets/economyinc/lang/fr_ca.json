@@ -63,6 +63,7 @@
 "commands.plot.nomatch": "Aucun plot n'a été trouvé avec ce nom",
 "commands.plot.saved": "Fichiers de jeux actualisé avec succès.",
 "commands.plot.errorsaved": "Problème rencontré lors de l'actualisation des fichiers.",
+"commands.plot.wrongPlotBorder" : "Les bordures de la parcelle référencé dans le fichier config serveur est erroné. Remplacé par défaut.",
 
 "commands.plotbuy.alreadybought": "Ce plot à déjà été acheté.",
 "commands.plotbuy.success": "Plot acheté avec succès. Merci d'attendre quelques minutes pour l'actualisation de la map.",

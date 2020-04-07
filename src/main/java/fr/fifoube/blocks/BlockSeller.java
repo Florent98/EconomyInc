@@ -70,6 +70,13 @@ public class BlockSeller extends ContainerBlock {
 								NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
 								return ActionResultType.SUCCESS;
 							}
+							else if (te.getCreated())
+							{
+								if(player.getHeldItemMainhand().isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
+								{
+									NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
+								}
+							}
 						}
 				}
 			}
@@ -127,7 +134,7 @@ public class BlockSeller extends ContainerBlock {
 		if(tileentity instanceof TileEntityBlockSeller)
 		{
 			TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
-			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_SELLER));
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_SELLER));
 			world.addEntity(itemBase);
 			if(te.getStackInSlot(0) != null)
 			{
@@ -167,19 +174,19 @@ public class BlockSeller extends ContainerBlock {
 	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
 	            Direction dir = (Direction)state.get(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isSolid() && blockstate1.isSolid())
+	            if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock())
 	            {
 	                dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.isCollisionShapeLargerThanFullBlock() && !blockstate.isSolid())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isSolid() && blockstate3.isSolid())
+	            else if (dir == Direction.WEST && blockstate2.isCollisionShapeLargerThanFullBlock() && !blockstate3.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isSolid() && blockstate2.isSolid())
+	            else if (dir == Direction.EAST && blockstate3.isCollisionShapeLargerThanFullBlock() && !blockstate2.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.WEST;
 	            }
@@ -206,16 +213,9 @@ public class BlockSeller extends ContainerBlock {
 		builder.add(FACING);
 	}
 	
-    
 	@Override
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.MODEL;
-	}
-	
-	@Override
-	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return false;
-	}
-	 
+	} 
 }

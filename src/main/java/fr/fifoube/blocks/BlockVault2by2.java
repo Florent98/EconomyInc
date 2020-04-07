@@ -65,7 +65,7 @@ public class BlockVault2by2 extends ContainerBlock {
 		{
 			TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
 			IItemHandler inventory = te.getHandler();
-			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_VAULT, 4));
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_VAULT, 4));
 			world.addEntity(itemBase);
 			if(inventory != null)
 			{

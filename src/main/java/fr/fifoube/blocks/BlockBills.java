@@ -1,10 +1,6 @@
 package fr.fifoube.blocks;
 
-import java.util.List;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -17,21 +13,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext.Builder;
-import net.minecraftforge.items.IItemHandler;
 
 public class BlockBills extends ContainerBlock {
 
 	public ItemEntity item;
-
+	public static VoxelShape shapeMain;
+	
+	public static final AxisAlignedBB platform = new AxisAlignedBB(0, 0, 0, 1D, 1/16D, 1D);
+	
 	public BlockBills(Properties properties) {
 		super(properties);
+		VoxelShape shape = VoxelShapes.create(platform);
+		shapeMain = shape;
 	}
 	
 	@Override
@@ -111,7 +114,7 @@ public class BlockBills extends ContainerBlock {
 		if(tileentity instanceof TileEntityBlockBills)
 		{
 			TileEntityBlockBills te = (TileEntityBlockBills)tileentity;
-			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistery.BLOCK_BILLS));
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_BILLS));
 			world.addEntity(itemBase);
 				for(int i=0; i < te.getNumbBills(); i++)
 				{
@@ -225,17 +228,32 @@ public class BlockBills extends ContainerBlock {
 	
 	//RENDER
 	
+    
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.INVISIBLE;
-	}	
-	
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return false;
-    }
+	public BlockRenderType getRenderType(BlockState state)
+	{
+		return BlockRenderType.MODEL;
+	}
 
+	@Override
+	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return false;
+	}
 
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+		return shapeMain;
+	}
 	
+	@Override
+	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return shapeMain;
+	}
+	
+	@Override
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos,
+			ISelectionContext context) {
+		return shapeMain;
+	}
 }
 

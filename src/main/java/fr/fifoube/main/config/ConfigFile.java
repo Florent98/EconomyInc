@@ -9,5 +9,6 @@ public class ConfigFile {
 	public static boolean canAccessCardWithoutWT; //SERVER
 	public static boolean doesBankGenerateInVillages; //SERVER
 	public static boolean goldNuggetRecipe; //SERVER
+	public static String plotBorderBlock; //SERVER
 
 }

@@ -1,52 +1,44 @@
 package fr.fifoube.blocks.tileentity.specialrenderer;
 
+import java.util.function.Function;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import fr.fifoube.blocks.models.ModelBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.main.ModEconomyInc;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Material;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<TileEntityBlockBills> {
 
-
 	private static ResourceLocation texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_bills_0.png");
-	private static ModelBills modelBlock;
+	private static ModelBills modelBlock = new ModelBills(RenderType::getEntitySolid);
 	
 	public TileEntityBlockBillsSpecialRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
 	}
 	
 	@Override
-	public void render(TileEntityBlockBills tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(TileEntityBlockBills te, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
-        World world = tileEntityIn.getWorld();
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-		checkBillRef(tileEntityIn);
-		modelBlock = new ModelBills(RenderType::getEntitySolid);
-		Material material = new Material(texture, texture);
+		checkBillRef(te);
 		matrixStackIn.push();
-        switch (tileEntityIn.getDirection()) {
+        switch (te.getDirection()) {
 		case 0:
-			matrixStackIn.translate(0.125F, 0.530F, 0.250F);
+			matrixStackIn.translate(0.875F, 0.530F, 0.750F);
 			break;
 		case 1:
 			matrixStackIn.translate(0.750F, 0.530F, 0.125F);
 			break;
 		case 2:
-			matrixStackIn.translate(0.875F, 0.530F, 0.750F);
+			matrixStackIn.translate(0.125F, 0.530F, 0.250F);
 			break;
 		case 3:
 			matrixStackIn.translate(0.250F, 0.530F, 0.875F);
@@ -54,10 +46,11 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 		default:
 			break;
 		}
-        matrixStackIn.scale(0.3330f, 0.3330f, 0.3330f);   
-        matrixStackIn.rotate(new Quaternion(1.0F, 0F, 0F, 180F));
-        matrixStackIn.rotate(new Quaternion(0F, 1.0F, 0F, 90F * tileEntityIn.getDirection()));
-        //modelBlock.renderAll(tileEntityIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+		matrixStackIn.scale(0.3335f, 0.3335f, 0.3335f);
+		matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), te.getDirection() * 90f, true));
+		matrixStackIn.rotate(new Quaternion(new Vector3f(0, 0, 1.0f), 180f, true));
+        IVertexBuilder renderBuffer = bufferIn.getBuffer(modelBlock.getRenderType(texture));
+        modelBlock.renderAll(te, matrixStackIn, renderBuffer, combinedLightIn, combinedOverlayIn, 1.0f, 1.0f, 1.0f, 1.0f);
         matrixStackIn.pop();		
 	}
 	
@@ -92,6 +85,13 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 			break;
 		}
 	}
+	
+	@Override
+	public boolean isGlobalRenderer(TileEntityBlockBills te) {
+		
+		return false;
+	}
+
 	
 	
 }

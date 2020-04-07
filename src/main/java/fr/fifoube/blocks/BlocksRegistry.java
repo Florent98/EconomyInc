@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BlocksRegistery{
+public class BlocksRegistry{
 	
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_vault")
 	public static final Block BLOCK_VAULT = null;

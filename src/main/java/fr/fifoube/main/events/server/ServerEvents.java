@@ -14,6 +14,7 @@ import fr.fifoube.world.saveddata.PlotsChunkData;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
@@ -36,12 +37,16 @@ public class ServerEvents {
 	public void onSmelting(PlayerEvent.ItemSmeltedEvent event)
 	{
 		if(ConfigFile.goldNuggetRecipe)
-		if(event.getSmelting().getItem().equals(ItemsRegistery.ITEM_GOLDNUGGET))
 		{
-			double valeur = rand.nextDouble();
-        	String valeur2 = Double.toString(valeur);
-        	String valeur3 = valeur2.substring(0,4);
-        	event.getSmelting().setTagInfo("weight", StringNBT.valueOf(valeur3));
+			if(!event.getSmelting().isEmpty() && event.getSmelting() != null)
+			{
+				ItemStack stack = event.getSmelting();
+				if(stack.getItem().equals(ItemsRegistery.ITEM_GOLDNUGGET))
+				{
+					String valeur = Double.toString(rand.nextDouble()).substring(0, 4);
+					stack.setTagInfo("weight", StringNBT.valueOf(valeur));
+				}
+			}
 		}
 	}
 	

@@ -16,5 +16,6 @@ public class ConfigHelper {
 		ConfigFile.canAccessCardWithoutWT = ConfigHolder.SERVER.canAccessCardWithoutWT.get();
 		ConfigFile.doesBankGenerateInVillages = ConfigHolder.SERVER.doesBankGenerateInVillages.get(); //SERVER
 		ConfigFile.goldNuggetRecipe = ConfigHolder.SERVER.goldNuggetRecipe.get();
+		ConfigFile.plotBorderBlock = ConfigHolder.SERVER.plotBorderBlock.get();
 	}
 }

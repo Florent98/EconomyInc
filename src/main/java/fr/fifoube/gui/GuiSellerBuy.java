@@ -18,11 +18,14 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class GuiSellerBuy extends Screen
 {
@@ -46,7 +49,6 @@ public class GuiSellerBuy extends Screen
 	private double cost;
 	private int amount;
 	private double fundsTotalRecovery;
-	private int sizeInventoryCheckCard;
 	
 	@Override
 	public void tick() 
@@ -89,6 +91,9 @@ public class GuiSellerBuy extends Screen
 	
 	protected void actionPerformed(int buttonId)
 	{		
+		final int x = tile.getPos().getX(); // GET X COORDINATES
+		final int y = tile.getPos().getY(); // GET Y COORDINATES
+		final int z = tile.getPos().getZ(); // GET Z COORDINATES
 		minecraft.player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
 			if(tile != null) // WE CHECK IF TILE IS NOT NULL TO AVOID CRASH
 			{	
@@ -102,9 +107,6 @@ public class GuiSellerBuy extends Screen
 							{
 								double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
 								tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-								final int x = tile.getPos().getX(); // GET X COORDINATES
-								final int y = tile.getPos().getY(); // GET Y COORDINATES
-								final int z = tile.getPos().getZ(); // GET Z COORDINATES
 								final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
 								int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 								tile.setAmount(amount -1); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
@@ -116,9 +118,6 @@ public class GuiSellerBuy extends Screen
 							{
 								double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
 								tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-								final int x = tile.getPos().getX(); // GET X COORDINATES
-								final int y = tile.getPos().getY(); // GET Y COORDINATES
-								final int z = tile.getPos().getZ(); // GET Z COORDINATES
 								final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
 								int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 								tile.setAmount(amount); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
@@ -151,9 +150,6 @@ public class GuiSellerBuy extends Screen
 											{
 												double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
 												tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-												final int x = tile.getPos().getX(); // GET X COORDINATES
-												final int y = tile.getPos().getY(); // GET Y COORDINATES
-												final int z = tile.getPos().getZ(); // GET Z COORDINATES
 												final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
 												int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 												tile.setAmount(amount -1); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
@@ -165,9 +161,6 @@ public class GuiSellerBuy extends Screen
 											{
 												double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
 												tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-												final int x = tile.getPos().getX(); // GET X COORDINATES
-												final int y = tile.getPos().getY(); // GET Y COORDINATES
-												final int z = tile.getPos().getZ(); // GET Z COORDINATES
 												final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
 												int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 												tile.setAmount(amount); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
@@ -187,39 +180,15 @@ public class GuiSellerBuy extends Screen
 									minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noSameOwner")));
 								}
 							}
-							else if(!(minecraft.player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard))
-							{
-								this.sizeInventoryCheckCard = this.sizeInventoryCheckCard + 1;
-								if(this.sizeInventoryCheckCard == minecraft.player.inventory.getSizeInventory())
-								{
-									if(!(tile.getAmount() == 0))
-									{
-										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noCardFoundAndNoLink")));
-									}
-									else if(tile.getAmount() == 0)
-									{
-										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noMoreQuantity")));
-									}
-									this.sizeInventoryCheckCard = 0;
-								}
-								if(i == minecraft.player.inventory.getSizeInventory())
-								{
-									this.sizeInventoryCheckCard = 0;
-								}
-							}
 						}
 					}	
 				}
 				else if(buttonId == 1)
 				{
-					final int x = tile.getPos().getX(); // GET X COORDINATES
-					final int y = tile.getPos().getY(); // GET Y COORDINATES
-					final int z = tile.getPos().getZ(); // GET Z COORDINATES
 					tile.setFundsTotal(0);
 					tile.markDirty();
 					PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundsTotalRecovery, x,y,z, amount, true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-				}
-						
+				}			
 			}
 			
 		});

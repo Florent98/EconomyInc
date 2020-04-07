@@ -2,7 +2,7 @@ package fr.fifoube.blocks.tileentity.specialrenderer.inventory;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import fr.fifoube.blocks.BlocksRegistery;
+import fr.fifoube.blocks.BlocksRegistry;
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
@@ -18,13 +18,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TileEntityInventoryRenderHelper extends ItemStackTileEntityRenderer {
 
     private TileEntityBlockBills teBills = new TileEntityBlockBills();
-    private static ItemStackTileEntityRenderer instanceF = instance;
        
     @Override
     public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
     	
-	      Block block = Block.getBlockFromItem(itemStackIn.getItem());   	  
-	  	  if(block == BlocksRegistery.BLOCK_BILLS)
+	      Block block = Block.getBlockFromItem(itemStackIn.getItem());   	
+	  	  if(block == BlocksRegistry.BLOCK_BILLS)
 	  	  {
 	  		  TileEntityRendererDispatcher.instance.renderItem(this.teBills, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 	  	  }

@@ -8,6 +8,7 @@ public class ServerConfig {
 	public ForgeConfigSpec.BooleanValue canAccessCardWithoutWT;
 	public ForgeConfigSpec.BooleanValue doesBankGenerateInVillages; 
 	public ForgeConfigSpec.BooleanValue goldNuggetRecipe;
+	public ForgeConfigSpec.ConfigValue<String> plotBorderBlock;
 
 	ServerConfig(final ForgeConfigSpec.Builder builder) {
 		builder.push("general");
@@ -27,6 +28,10 @@ public class ServerConfig {
 				.comment("Allow or not the bank to generate in villages, by default it generates turn it to false to disable its generation.")
                 .translation("text.economyinc.config.bankvillage")
 				.define("doesBankGenerateInVillages", true);
+		plotBorderBlock = builder
+				.comment("Define the block use to create the edges of the plot.")
+                .translation("text.economyinc.config.edgeplot")
+				.define("plotBorderBlock", "minecraft:smooth_stone_slab");
 		builder.pop();
 	}
 }
