@@ -1,5 +1,7 @@
 package fr.fifoube.blocks;
 
+import java.util.Random;
+
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
@@ -15,8 +17,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -27,17 +31,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockSeller extends ContainerBlock {
 
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
  	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.seller_buy");
 
 	public BlockSeller(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(POWERED, false));
+		
 	}
 	
 	@Override
@@ -163,9 +172,23 @@ public class BlockSeller extends ContainerBlock {
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
 		
 		this.setDefaultFacing(worldIn, pos, state);
+	    for(Direction direction : Direction.values()) {
+	    	worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+	    }
 	}
 	
-	 private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state) {
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		
+		 if (!isMoving) {
+	         for(Direction direction : Direction.values()) {
+	            worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+	         }
+
+	      }
+	}
+	
+	private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state) {
 	        if (!worldIn.isRemote)
 	        {
 	            BlockState blockstate = worldIn.getBlockState(pos.north());
@@ -210,7 +233,7 @@ public class BlockSeller extends ContainerBlock {
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(FACING);
+		builder.add(FACING, POWERED);
 	}
 	
 	@Override
@@ -218,4 +241,58 @@ public class BlockSeller extends ContainerBlock {
 	{
 		return BlockRenderType.MODEL;
 	} 
+	
+	//REDSTONE HANDLING
+	
+	@Override
+	public boolean canProvidePower(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	public int getWeakPower(BlockState state, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		
+		return state.get(POWERED) ? 15 : 0;
+	}
+	
+	@Override
+	public void updateNeighbors(BlockState stateIn, IWorld world, BlockPos pos, int flags) {
+		
+		World worldIn = world.getWorld();
+	    worldIn.notifyNeighborsOfStateChange(pos, this);
+
+	}
+	
+	@Override
+	public int tickRate(IWorldReader worldIn) {
+		return 1;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+		
+		super.tick(state, worldIn, pos, rand);
+			if (state.get(POWERED)) {
+				
+		          worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(false)), 3);
+		          this.updateNeighbors(state, worldIn, pos, 2);
+
+		      }
+	}
+	
+	public void scheduleTick(BlockState state, World worldIn, BlockPos pos)
+	{
+		  worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 3);
+	      this.updateNeighbors(state, worldIn, pos);
+	      worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
+	}
+
+	private void updateNeighbors(BlockState state, World worldIn, BlockPos pos) {
+		  worldIn.notifyNeighborsOfStateChange(pos, this);
+		  worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), this);
+	}	
+	
+
 }
+

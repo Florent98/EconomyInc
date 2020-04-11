@@ -1,7 +1,5 @@
 package fr.fifoube.blocks.tileentity.specialrenderer;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -32,22 +30,25 @@ public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<Tile
 		matrixStackIn.push();
         switch (te.getDirection()) {
 		case 0:
-			matrixStackIn.translate(0.875F, 0.530F, 0.750F);
+			matrixStackIn.translate(0.125F, 0.530F, 0.250F);
+			matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 180f, true));
 			break;
 		case 1:
 			matrixStackIn.translate(0.750F, 0.530F, 0.125F);
+			matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 90f, true));
 			break;
 		case 2:
-			matrixStackIn.translate(0.125F, 0.530F, 0.250F);
+			matrixStackIn.translate(0.875F, 0.530F, 0.750F);
+			matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 360f, true));
 			break;
 		case 3:
 			matrixStackIn.translate(0.250F, 0.530F, 0.875F);
+			matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 270f, true));
 			break;
 		default:
 			break;
 		}
 		matrixStackIn.scale(0.3335f, 0.3335f, 0.3335f);
-		matrixStackIn.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), te.getDirection() * 90f, true));
 		matrixStackIn.rotate(new Quaternion(new Vector3f(0, 0, 1.0f), 180f, true));
         IVertexBuilder renderBuffer = bufferIn.getBuffer(modelBlock.getRenderType(texture));
         modelBlock.renderAll(te, matrixStackIn, renderBuffer, combinedLightIn, combinedOverlayIn, 1.0f, 1.0f, 1.0f, 1.0f);

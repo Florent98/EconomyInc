@@ -56,8 +56,6 @@ public class ItemsRegistery {
 	public static final Item ITEM_GEAR = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":item_gearmechanism")
 	public static final Item ITEM_GEARSMECHANISM = null;
-	@ObjectHolder(ModEconomyInc.MOD_ID + ":item_vault_cracker")
-	public static final Item ITEM_VAULT_CRACKER = null;
 	
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":item_goldnuggetsubs")
 	public static final Item ITEM_GOLDNUGGET = null;
@@ -90,7 +88,6 @@ public class ItemsRegistery {
 		
 		event.getRegistry().register(new ItemGear(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(64)).setRegistryName("item_gear"));
 		event.getRegistry().register(new ItemGearMechanism(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(64)).setRegistryName("item_gearmechanism"));
-		//event.getRegistry().register(new ItemVaultCracker(new Item.Properties().maxStackSize(1)).setRegistryName("item_vault_cracker"));
 
 		event.getRegistry().register(new ItemGoldNuggetSubs(new Item.Properties().group(ModEconomyInc.EIC).maxStackSize(1)).setRegistryName("item_goldnuggetsubs"));
 

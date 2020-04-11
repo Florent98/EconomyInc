@@ -8,6 +8,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,9 +24,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -37,9 +42,17 @@ public class BlockVault2by2 extends ContainerBlock {
  	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault2by2");
 	
+	public static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0, 0, 0, 2D, 2, 1D);
+	public static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(-1D, 0, 0, 1D, 2, 1D);
+	public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0, 0, 0, 1D, 2, 2D);
+	public static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0, 0, -1D, 1D, 2, 1D);
+	public static VoxelShape shapeMain;
+
+	
 	public BlockVault2by2(Properties properties) {
 		super(properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+		shapeMain = VoxelShapes.create(NORTH_AABB);
 	}
 	
 	@Override
@@ -105,6 +118,7 @@ public class BlockVault2by2 extends ContainerBlock {
     		int direction = MathHelper.floor((double) (placer.rotationYaw * 4.0F / 360.0F) + 2.5D) & 3;
     		te.setDirection((byte) direction);
     	}
+    	
 	}
 	
 	@Override
@@ -240,6 +254,47 @@ public class BlockVault2by2 extends ContainerBlock {
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+	}
+	
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+		
+		return getShapeMainFromDir(state);
+	}
+	
+	@Override
+	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return getShapeMainFromDir(state);
+	}
+	
+	@Override
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos,
+			ISelectionContext context) {
+		return getShapeMainFromDir(state);
+	}
+	
+	
+	public VoxelShape getShapeMainFromDir(BlockState state)
+	{
+    	Direction dir = (Direction)state.get(FACING);
+		switch (dir) {
+		case NORTH:
+			shapeMain = VoxelShapes.create(NORTH_AABB);
+			break;
+		case SOUTH:
+			shapeMain = VoxelShapes.create(SOUTH_AABB);
+			break;
+		case WEST:
+			shapeMain = VoxelShapes.create(WEST_AABB);
+			break;
+		case EAST:
+			shapeMain = VoxelShapes.create(EAST_AABB);
+			break;
+		default:
+			shapeMain = VoxelShapes.create(NORTH_AABB);
+			break;
+		}
+		return shapeMain;
 	}
 	
 	

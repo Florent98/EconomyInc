@@ -10,11 +10,18 @@ import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,11 +40,10 @@ public class ClientEvents {
 		if(ConfigFile.canPreviewItemInBlock)
 		{
 			World world = Minecraft.getInstance().world;
-			BlockPos pos = new BlockPos(event.getTarget().getPos()); 
+			BlockPos pos = event.getTarget().getPos();
 			Block block = world.getBlockState(pos).getBlock();
 				if(block == BlocksRegistry.BLOCK_SELLER)
 				{
-					BlockSeller seller = (BlockSeller) world.getBlockState(pos).getBlock();
 					TileEntityBlockSeller te = (TileEntityBlockSeller)world.getTileEntity(pos);
 					if(te != null)
 					{
@@ -58,9 +64,28 @@ public class ClientEvents {
 							{
 								stack = new ItemStack(Blocks.BARRIER, 1);
 							}
-							
-							/*matrixStack.translate(x, y, z);
-							renderM.renderItem(stack, TransformType.FIXED, 1, 1, matrixStack, buffer);*/
+							Vec3d vec = event.getInfo().getProjectedView();
+							matrixStack.translate(-vec.x, -vec.y, -vec.z);
+							matrixStack.translate(x + 0.5, y + 0.5, z + 0.5);
+				            matrixStack.scale(0.5F, 0.5F, 0.5F);
+				            switch (direction) {
+							case NORTH:
+								matrixStack.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 180f, true));
+								break;
+							case SOUTH:
+								matrixStack.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 0f, true));
+								break;	
+							case WEST:
+								matrixStack.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), -90f, true));
+								break;
+							case EAST:
+								matrixStack.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 90f, true));
+								break;
+							default:
+								matrixStack.rotate(new Quaternion(new Vector3f(0, 1.0f, 0), 180f, true));
+								break;
+							}
+							renderM.renderItem(stack, TransformType.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrixStack, buffer);
 						    matrixStack.pop();						
 						   }
 					}

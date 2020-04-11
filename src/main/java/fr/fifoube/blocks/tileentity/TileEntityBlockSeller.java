@@ -1,5 +1,6 @@
 package fr.fifoube.blocks.tileentity;
 
+import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.gui.container.ContainerSeller;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,8 +47,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 		return inventory_seller;	
 	}
 	
-	
-	
+		
 	  public SUpdateTileEntityPacket getUpdatePacket()
 	    {
 	        return new SUpdateTileEntityPacket(this.pos, 1, this.getUpdateTag());
@@ -151,7 +151,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    
 	    public String getItem()
 	    {
-	    	return this.item;
+	    	return this.inventory_seller.getStackInSlot(0).getDisplayName().getFormattedText().toString();
 	    }
 	    
 	    public void setAmount(int amountS)
@@ -163,8 +163,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    {
 	    	return this.inventory_seller.getStackInSlot(0).getCount();
 	    }
-	    
-	    
+	   
 		@Override
 		public CompoundNBT write(CompoundNBT compound) 
 		{

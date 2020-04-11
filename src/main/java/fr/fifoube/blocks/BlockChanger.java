@@ -1,5 +1,6 @@
 package fr.fifoube.blocks;
 
+import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.Block;
@@ -9,11 +10,14 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.tileentity.TileEntity;
@@ -24,10 +28,10 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -54,6 +58,7 @@ public class BlockChanger extends ContainerBlock {
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
 		
+		boolean canOpen = true;
 		if(!worldIn.isRemote)
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -62,19 +67,24 @@ public class BlockChanger extends ContainerBlock {
 				TileEntityBlockChanger te = (TileEntityBlockChanger)tileentity;
 				if(te != null)
 				{
-					if(te.getNumbUse() < 1)
+					if(te.getNumbUse() >= 1)
 					{
-			            NetworkHooks.openGui((ServerPlayerEntity)playerIn, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
+						canOpen = false;
+				
+					}
+					if(canOpen)
+					{
+						NetworkHooks.openGui((ServerPlayerEntity)playerIn, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
 						te.setNumbUse(1);
 						te.setEntityPlayer(playerIn);
 						te.markDirty();
-						return ActionResultType.SUCCESS;
-	
+						return ActionResultType.SUCCESS;	
+
 					}
 					else
 					{
-						playerIn.sendMessage(new StringTextComponent(I18n.format("title.alreadyUsed")));
-						return ActionResultType.SUCCESS;
+						playerIn.sendStatusMessage(new TranslationTextComponent("title.alreadyUsed"), true);
+						return ActionResultType.FAIL;
 					}
 				}
 			}
@@ -106,6 +116,74 @@ public class BlockChanger extends ContainerBlock {
 	}
 	
 	@Override
+	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+		
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		if(tileentity instanceof TileEntityBlockChanger)
+		{
+			World world = worldIn.getWorld();
+			TileEntityBlockChanger te = (TileEntityBlockChanger)tileentity;
+			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_CHANGER));
+			worldIn.addEntity(itemBase);
+				for(int i=0; i < te.getHandler().getSlots(); i++)
+				{
+					Item toDrop = te.getStackInSlot(i).getItem();
+					if(toDrop != null && toDrop != Items.AIR)
+					{
+						ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(toDrop));
+						
+						float multiplier = 0.1f;
+						float motionX = world.rand.nextFloat() - 0.5F;
+						float motionY = world.rand.nextFloat() - 0.5F;
+						float motionZ = world.rand.nextFloat() - 0.5F;
+						
+						item.lastTickPosX = motionX * multiplier;
+						item.lastTickPosY = motionY * multiplier;
+						item.lastTickPosZ = motionZ * multiplier;
+						
+						worldIn.addEntity(item);
+					}
+				}
+				world.removeTileEntity(pos);
+
+			}
+	}
+	
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		
+		/*	TileEntity tileentity = worldIn.getTileEntity(pos);
+			if(tileentity instanceof TileEntityBlockChanger)
+			{
+				TileEntityBlockChanger te = (TileEntityBlockChanger)tileentity;
+				ItemEntity itemBase = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_CHANGER));
+				worldIn.addEntity(itemBase);
+					for(int i=0; i < te.getHandler().getSlots(); i++)
+					{
+						Item toDrop = te.getStackInSlot(i).getItem();
+						if(toDrop != null && toDrop != Items.AIR)
+						{
+							ItemEntity item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(toDrop));
+							
+							float multiplier = 0.1f;
+							float motionX = worldIn.rand.nextFloat() - 0.5F;
+							float motionY = worldIn.rand.nextFloat() - 0.5F;
+							float motionZ = worldIn.rand.nextFloat() - 0.5F;
+							
+							item.lastTickPosX = motionX * multiplier;
+							item.lastTickPosY = motionY * multiplier;
+							item.lastTickPosZ = motionZ * multiplier;
+							
+							worldIn.addEntity(item);
+						}
+					}
+				}
+			worldIn.removeTileEntity(pos);*/
+
+	}
+	
+	
+	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
@@ -126,19 +204,19 @@ public class BlockChanger extends ContainerBlock {
 	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
 	            Direction dir = (Direction)state.get(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isSolid() && blockstate1.isSolid())
+	            if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock())
 	            {
 	                dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.isCollisionShapeLargerThanFullBlock() && !blockstate.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isSolid() && blockstate3.isSolid())
+	            else if (dir == Direction.WEST && blockstate2.isCollisionShapeLargerThanFullBlock() && !blockstate3.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isSolid() && blockstate2.isSolid())
+	            else if (dir == Direction.EAST && blockstate3.isCollisionShapeLargerThanFullBlock() && !blockstate2.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.WEST;
 	            }

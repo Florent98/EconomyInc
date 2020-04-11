@@ -20,6 +20,7 @@ public class PacketsRegistery {
 		CHANNEL.messageBuilder(PacketSellerFundsTotal.class, 5).encoder(PacketSellerFundsTotal::encode).decoder(PacketSellerFundsTotal::decode).consumer(PacketSellerFundsTotal::handle).add();
 		CHANNEL.messageBuilder(PacketCardChangeSeller.class, 6).encoder(PacketCardChangeSeller::encode).decoder(PacketCardChangeSeller::decode).consumer(PacketCardChangeSeller::handle).add();
 		CHANNEL.messageBuilder(PacketCardChange.class, 7).encoder(PacketCardChange::encode).decoder(PacketCardChange::decode).consumer(PacketCardChange::handle).add();
+		CHANNEL.messageBuilder(PacketChangerUpdate.class, 8).encoder(PacketChangerUpdate::encode).decoder(PacketChangerUpdate::decode).consumer(PacketChangerUpdate::handle).add();
 
 	}
 

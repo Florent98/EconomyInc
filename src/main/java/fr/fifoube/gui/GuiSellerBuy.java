@@ -49,6 +49,8 @@ public class GuiSellerBuy extends Screen
 	private double cost;
 	private int amount;
 	private double fundsTotalRecovery;
+	private String sellerOwner = "";
+	private String worldPlayer = "";
 	
 	@Override
 	public void tick() 
@@ -73,8 +75,8 @@ public class GuiSellerBuy extends Screen
 			this.cost = tile.getCost();
 			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy"),(press) -> actionPerformed(0))); 
              
-			String sellerOwner = tile.getOwner();
-			String worldPlayer = minecraft.player.getUniqueID().toString();
+			sellerOwner = tile.getOwner();
+			worldPlayer = minecraft.player.getUniqueID().toString();
 			if(sellerOwner.equals(worldPlayer))
 			{
 				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, I18n.format("title.recover"),(press) -> actionPerformed(1))); 
@@ -111,7 +113,7 @@ public class GuiSellerBuy extends Screen
 								int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 								tile.setAmount(amount -1); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
 								PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-								PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost)); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+								PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
 								tile.markDirty();
 							}
 							else
@@ -122,7 +124,7 @@ public class GuiSellerBuy extends Screen
 								int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 								tile.setAmount(amount); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
 								PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-								PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost)); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+								PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
 								tile.markDirty();
 							}
 						}
@@ -154,7 +156,7 @@ public class GuiSellerBuy extends Screen
 												int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 												tile.setAmount(amount -1); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
 												PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-												PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost)); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+												PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
 												tile.markDirty();
 											}
 											else if(admin == true)
@@ -165,7 +167,7 @@ public class GuiSellerBuy extends Screen
 												int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
 												tile.setAmount(amount); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
 												PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-												PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost)); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+												PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
 												tile.markDirty();
 											}
 										}
@@ -208,8 +210,10 @@ public class GuiSellerBuy extends Screen
 			this.font.drawString(TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
 			this.font.drawString(TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
 			this.font.drawString(TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
-			this.font.drawString(TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
-
+			if(sellerOwner.equals(worldPlayer))
+			{
+				this.font.drawString(TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+			}
 
 			
 			super.render(mouseX, mouseY, partialTicks);

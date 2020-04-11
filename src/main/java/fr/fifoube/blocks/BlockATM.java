@@ -86,19 +86,19 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
 	            Direction dir = (Direction)state.get(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isSolid() && !blockstate1.isSolid())
+	            if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && !blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.isCollisionShapeLargerThanFullBlock() && !blockstate.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isSolid() && !blockstate3.isSolid())
+	            else if (dir == Direction.WEST && blockstate2.isCollisionShapeLargerThanFullBlock() && !blockstate3.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isSolid() && !blockstate2.isSolid())
+	            else if (dir == Direction.EAST && blockstate3.isCollisionShapeLargerThanFullBlock() && !blockstate2.isCollisionShapeLargerThanFullBlock())
 	            {
 	            	dir = Direction.WEST;
 	            }
@@ -138,8 +138,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 
 	@Override
 	public ITextComponent getDisplayName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.NAME;
 	}
 
 	@Override

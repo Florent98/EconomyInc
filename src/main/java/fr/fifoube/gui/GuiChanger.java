@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
 import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.packets.PacketChangerUpdate;
+import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
@@ -77,6 +79,13 @@ public class GuiChanger extends ContainerScreen<ContainerChanger> {
 	    		   this.blit(k + 55, l + 34, 176, 0, Math.round(display), this.ySize);
 	    	   }
 	       }		
+	}
+	
+	@Override
+	public void onClose() {
+		
+		tile.setNumbUse(0);
+		PacketsRegistery.CHANNEL.sendToServer(new PacketChangerUpdate(tile.getPos()));
 	}
 	
 

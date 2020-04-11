@@ -150,58 +150,62 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 		@Override
 		public void tick() 
 		{
-			TileEntityBlockChanger tile = (TileEntityBlockChanger)world.getTileEntity(pos);
-			ItemStack slot0 = tile.getStackInSlot(0);
-			ItemStack slot1 = tile.getStackInSlot(1);
-			ItemStack slot2 = tile.getStackInSlot(2);
-
-			if(!world.isRemote && slot0.getItem() == ItemsRegistery.ITEM_GOLDNUGGET && slot0.hasTag())
+			TileEntity te = world.getTileEntity(pos);
+			if(te instanceof TileEntityBlockChanger)
 			{
-					if(slot1.getItem() == ItemsRegistery.ITEM_CREDITCARD)
-					{
-						 if(slot1.hasTag() && tile.getEntityPlayer() != null)
-						    {
-					        	String nameCard = slot1.getTag().getString("OwnerUUID");
-								String nameGame =  tile.getEntityPlayer().getUniqueID().toString();
-								if(nameCard.equals(nameGame))
-								{
-									if(slot2.isEmpty())
+				TileEntityBlockChanger tile = (TileEntityBlockChanger)te;
+				ItemStack slot0 = tile.getStackInSlot(0);
+				ItemStack slot1 = tile.getStackInSlot(1);
+				ItemStack slot2 = tile.getStackInSlot(2);
+				if(slot0 != null && slot1 != null && slot2 != null)
+				if(!world.isRemote && slot0.getItem() == ItemsRegistery.ITEM_GOLDNUGGET && slot0.hasTag())
+				{
+						if(slot1.getItem() == ItemsRegistery.ITEM_CREDITCARD)
+						{
+							 if(slot1.hasTag() && tile.getEntityPlayer() != null)
+							    {
+						        	String nameCard = slot1.getTag().getString("OwnerUUID");
+									String nameGame =  tile.getEntityPlayer().getUniqueID().toString();
+									if(nameCard.equals(nameGame))
 									{
-										if(timePassed == 356)
+										if(slot2.isEmpty())
 										{
-											PlayerEntity playerIn = getEntityPlayer();
-											playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-												double fundsPrev = data.getMoney();
-												String weight = slot0.getTag().getString("weight");
-												double fundsNow = (fundsPrev + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight));
-												data.setMoney(fundsNow);
-												slot0.split(1);
-												ItemStack copyOfCard = slot1.copy();
-												slot1.split(1);
-												tile.setStackInSlot(2, copyOfCard, false);
-												timePassed = 0;
-												isProcessing = false;
+											if(timePassed == 356)
+											{
+												PlayerEntity playerIn = getEntityPlayer();
+												playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
+													double fundsPrev = data.getMoney();
+													String weight = slot0.getTag().getString("weight");
+													double fundsNow = (fundsPrev + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight));
+													data.setMoney(fundsNow);
+													slot0.split(1);
+													ItemStack copyOfCard = slot1.copy();
+													slot1.split(1);
+													tile.setStackInSlot(2, copyOfCard, false);
+													timePassed = 0;
+													isProcessing = false;
+													this.markDirty();
+												});
+	
+											}
+											else
+											{
+												++timePassed;
+												isProcessing = true;
 												this.markDirty();
-											});
-
-										}
-										else
-										{
-											++timePassed;
-											isProcessing = true;
-											this.markDirty();
+											}
 										}
 									}
-								}
-						    }
-						}
-			}
-		
-			if(slot0.getItem() == Items.AIR || slot1.getItem() == Items.AIR)
-			{
-					timePassed = 0;	
-					isProcessing = false;
-					this.markDirty();
+							    }
+							}
+				}
+			
+				if(slot0.getItem() == Items.AIR || slot1.getItem() == Items.AIR)
+				{
+						timePassed = 0;	
+						isProcessing = false;
+						this.markDirty();
+				}
 			}
 		}
 		

@@ -80,6 +80,7 @@ public class PacketSellerFundsTotal {
 							if(!te.getStackInSlot(0).isEmpty()) // IF THE SLOT IS NOT EMPTY
 							{
 								boolean admin = te.getAdmin();
+								//worldIn.getBlockState(pos);
 								if(admin == false) // NOT UNLIMITED STACK
 								{
 									te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
