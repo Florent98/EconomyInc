@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.items;
 
 import java.util.List;
@@ -67,27 +69,6 @@ public class ItemCreditCard extends Item{
 								}
 							}
 						}
-						else
-						{
-							/** NEED TO FIX ASAP**/
-							/*if(!worldIn.isRemote)
-							{
-								String playerCard = playerIn.getHeldItemMainhand().getTagCompound().getString("OwnerUUID"); //Get String UUID of card's owner.
-								UUID OwnerUUID = UUID.fromString(playerCard); //Transform string of card's owner to UUID.
-								EntityPlayer playerCardO = worldIn.getPlayerEntityByUUID(OwnerUUID); //EntityPlayer from the UUID of card's owner.
-								
-								String[] playerOnline = FMLServerHandler.instance().getServer().getOnlinePlayerNames(); //Get all players online.
-									for(String st : playerOnline)
-							        {
-										String nameGamePlayerS = playerCardO.getName();
-							            if(playerCardO.getName().equals(st) || !playerCardO.isDead)
-							            {
-							            	String nameGameNotOwner = playerIn.getName();
-											playerCardO.sendMessage(new TextComponentString(TextFormatting.RED + "WARNING: " + nameGameNotOwner + " is using your card, maybe without permission!"));
-							            }
-							       }
-							} */System.out.println("Will be fix in another version of the mod. Quite bugged for the moment.");
-						}
 			        }
 	        		
 	            return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
@@ -146,6 +127,7 @@ public class ItemCreditCard extends Item{
 			 {
 				linkedValue = I18n.format("title.no");
 			 }
+			 
 		        String ownerName = stack.getTag().getString("Owner");		      
 		        tooltip.add(new StringTextComponent(I18n.format("title.ownerCard") + " : " + ownerName));
 		        tooltip.add(new StringTextComponent(I18n.format("title.fundsCard") + " : " + String.valueOf(funds)));
@@ -158,9 +140,7 @@ public class ItemCreditCard extends Item{
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		if(stack.hasTag())
-		{
 			return true;
-		}
 		return false;
 	}
 }

@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.blocks;
 
 import java.util.Random;
@@ -215,7 +217,7 @@ public class BlockSeller extends ContainerBlock {
 	            }
 	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
 	        }
-	    }
+	}
 		
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
@@ -291,8 +293,6 @@ public class BlockSeller extends ContainerBlock {
 	private void updateNeighbors(BlockState state, World worldIn, BlockPos pos) {
 		  worldIn.notifyNeighborsOfStateChange(pos, this);
 		  worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), this);
-	}	
-	
-
+	}
 }
 

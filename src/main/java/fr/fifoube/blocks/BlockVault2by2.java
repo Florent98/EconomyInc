@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.blocks;
 
 
@@ -273,6 +275,10 @@ public class BlockVault2by2 extends ContainerBlock {
 		return getShapeMainFromDir(state);
 	}
 	
+	@Override
+	public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return getShapeMainFromDir(state);
+	}
 	
 	public VoxelShape getShapeMainFromDir(BlockState state)
 	{
@@ -296,6 +302,7 @@ public class BlockVault2by2 extends ContainerBlock {
 		}
 		return shapeMain;
 	}
+	
 	
 	
 }

@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.main;
 
 /***
@@ -21,7 +23,6 @@ import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.commands.CommandBalance;
 import fr.fifoube.main.commands.CommandsPlots;
 import fr.fifoube.main.commands.CommandsPlotsBuy;
-import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.main.config.ConfigHolder;
 import fr.fifoube.main.events.client.ClientEvents;
 import fr.fifoube.main.events.server.ServerEvents;
@@ -53,8 +54,9 @@ public class ModEconomyInc {
 			
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStartingEvent);
+			
 			FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ContainerTypeRegistery::registerContainers);
-			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
 			
 
 		}
@@ -75,13 +77,13 @@ public class ModEconomyInc {
 			RenderTypeLookup.setRenderLayer(BlocksRegistry.BLOCK_BILLS, RenderType.getCutout());
 		}
 		
-		
-		private void serverStartingEvent(FMLServerStartingEvent event)
+		//SERVER START
+		private void serverStartingEvent(final FMLServerStartingEvent event)
 		{
+			MinecraftForge.EVENT_BUS.register(new ServerEvents());
 			CommandBalance.register(event.getCommandDispatcher());
 			CommandsPlots.register(event.getCommandDispatcher());
 			CommandsPlotsBuy.register(event.getCommandDispatcher());
-			MinecraftForge.EVENT_BUS.register(new ServerEvents());
 
 		}	
 }

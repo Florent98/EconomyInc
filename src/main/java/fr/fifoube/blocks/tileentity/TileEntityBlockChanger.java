@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
 import java.math.BigDecimal;
@@ -154,9 +156,9 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 			if(te instanceof TileEntityBlockChanger)
 			{
 				TileEntityBlockChanger tile = (TileEntityBlockChanger)te;
-				ItemStack slot0 = tile.getStackInSlot(0);
-				ItemStack slot1 = tile.getStackInSlot(1);
-				ItemStack slot2 = tile.getStackInSlot(2);
+				ItemStack slot0 = inventory.getStackInSlot(0);
+				ItemStack slot1 = inventory.getStackInSlot(1);
+				ItemStack slot2 = inventory.getStackInSlot(2);
 				if(slot0 != null && slot1 != null && slot2 != null)
 				if(!world.isRemote && slot0.getItem() == ItemsRegistery.ITEM_GOLDNUGGET && slot0.hasTag())
 				{

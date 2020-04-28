@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
 import fr.fifoube.items.ItemsRegistery;
@@ -21,7 +23,7 @@ public class TileEntityBlockBills extends TileEntity {
 	
     public TileEntityBlockBills() 
     {
-		this(TileEntityRegistery.tile_bills);
+		this(TileEntityRegistery.TILE_BILLS);
 	}
     
     public SUpdateTileEntityPacket getUpdatePacket()

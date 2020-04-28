@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.blocks;
 
 import fr.fifoube.gui.ClientGuiScreen;
@@ -147,7 +149,6 @@ public class BlockATM extends Block implements INamedContainerProvider {
 			
 			@Override
 			public boolean canInteractWith(PlayerEntity playerIn) {
-				// TODO Auto-generated method stub
 				return true;
 			}
 			

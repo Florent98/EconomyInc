@@ -1,5 +1,7 @@
-package fr.fifoube.main.capabilities;
+/*******************************************************************************
+ *******************************************************************************/
 
+package fr.fifoube.main.capabilities;
 
 public interface IMoney {
 
@@ -7,10 +9,4 @@ public interface IMoney {
 	void setMoney(double money);
 	boolean getLinked();
 	void setLinked(boolean linked);
-	String getName();
-	void setName(String name);
-	String getOnlineUUID();
-	void setOnlineUUID(String onUUID);
-	
-	void forceSync(double money, boolean linked, String name, String onUUID);
 }

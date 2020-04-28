@@ -1,3 +1,5 @@
+/*******************************************************************************
+ *******************************************************************************/
 package fr.fifoube.gui.container;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
