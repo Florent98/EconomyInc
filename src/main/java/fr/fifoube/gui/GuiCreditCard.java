@@ -45,7 +45,6 @@ public class GuiCreditCard extends Screen {
 	private Button fiveHundreedBMinus;
 		
 	private double funds_s;
-	private boolean linked;
 	private String name = Minecraft.getInstance().player.getDisplayName().getString();
 	
 	protected int xSize = 256;
@@ -96,7 +95,6 @@ public class GuiCreditCard extends Screen {
 		PlayerEntity playerIn = getMinecraft().player;
 		playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 			this.funds_s = data.getMoney();
-			this.linked = data.getLinked();
 		});
 	}
 

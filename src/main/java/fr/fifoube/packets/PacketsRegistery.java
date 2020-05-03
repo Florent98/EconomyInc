@@ -18,11 +18,11 @@ public class PacketsRegistery {
 
 		CHANNEL.messageBuilder(PacketListNBT.class, 1).encoder(PacketListNBT::encode).decoder(PacketListNBT::decode).consumer(PacketListNBT::handle).add();
 		CHANNEL.messageBuilder(PacketMoneyData.class, 2).encoder(PacketMoneyData::encode).decoder(PacketMoneyData::decode).consumer(PacketMoneyData::handle).add();
-		CHANNEL.messageBuilder(PacketSellerCreated.class, 4).encoder(PacketSellerCreated::encode).decoder(PacketSellerCreated::decode).consumer(PacketSellerCreated::handle).add();
-		CHANNEL.messageBuilder(PacketSellerFundsTotal.class, 5).encoder(PacketSellerFundsTotal::encode).decoder(PacketSellerFundsTotal::decode).consumer(PacketSellerFundsTotal::handle).add();
-		CHANNEL.messageBuilder(PacketCardChangeSeller.class, 6).encoder(PacketCardChangeSeller::encode).decoder(PacketCardChangeSeller::decode).consumer(PacketCardChangeSeller::handle).add();
-		CHANNEL.messageBuilder(PacketCardChange.class, 7).encoder(PacketCardChange::encode).decoder(PacketCardChange::decode).consumer(PacketCardChange::handle).add();
-		CHANNEL.messageBuilder(PacketChangerUpdate.class, 8).encoder(PacketChangerUpdate::encode).decoder(PacketChangerUpdate::decode).consumer(PacketChangerUpdate::handle).add();
+		CHANNEL.messageBuilder(PacketSellerCreated.class, 3).encoder(PacketSellerCreated::encode).decoder(PacketSellerCreated::decode).consumer(PacketSellerCreated::handle).add();
+		CHANNEL.messageBuilder(PacketSellerFundsTotal.class, 4).encoder(PacketSellerFundsTotal::encode).decoder(PacketSellerFundsTotal::decode).consumer(PacketSellerFundsTotal::handle).add();
+		CHANNEL.messageBuilder(PacketCardChangeSeller.class, 5).encoder(PacketCardChangeSeller::encode).decoder(PacketCardChangeSeller::decode).consumer(PacketCardChangeSeller::handle).add();
+		CHANNEL.messageBuilder(PacketCardChange.class, 6).encoder(PacketCardChange::encode).decoder(PacketCardChange::decode).consumer(PacketCardChange::handle).add();
+		CHANNEL.messageBuilder(PacketChangerUpdate.class, 7).encoder(PacketChangerUpdate::encode).decoder(PacketChangerUpdate::decode).consumer(PacketChangerUpdate::handle).add();
 
 	}
 

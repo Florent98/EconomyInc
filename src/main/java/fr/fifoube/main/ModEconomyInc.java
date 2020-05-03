@@ -54,7 +54,7 @@ public class ModEconomyInc {
 			
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStartingEvent);
+			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
 			
 			FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ContainerTypeRegistery::registerContainers);
 			

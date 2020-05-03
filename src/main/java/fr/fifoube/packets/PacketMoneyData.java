@@ -16,29 +16,25 @@ import net.minecraftforge.fml.network.NetworkEvent;
 public class PacketMoneyData {
 
 	private double money;
-	private boolean linked;
 
 	
 	public PacketMoneyData(IMoney instance) {
 		this.money = instance.getMoney();
-		this.linked = instance.getLinked();
 	}
 	
-    public PacketMoneyData(double money, boolean linked)
-    {
-        this.money = money;
-		this.linked = linked;
-    }
+	public PacketMoneyData(double money)
+	{
+		this.money = money;
+	}
     
     public static void encode(PacketMoneyData pck, PacketBuffer buf)
     {
         buf.writeDouble(pck.money);
-        buf.writeBoolean(pck.linked);
     }
  
     public static PacketMoneyData decode(PacketBuffer buf)
     {
-        return new PacketMoneyData(buf.readDouble(), buf.readBoolean());
+        return new PacketMoneyData(buf.readDouble());
     }
  
     public static void handle(PacketMoneyData pck, Supplier<NetworkEvent.Context> ctxSupplier)
@@ -53,9 +49,9 @@ public class PacketMoneyData {
     {
         Minecraft.getInstance().player.getCapability(CapabilityMoney.MONEY_CAPABILITY)
                 .ifPresent(capa -> {
+                	System.out.println(pck.money);
                 	capa.setMoney(pck.money);
-                	capa.setLinked(pck.linked);
-                	}
+                }
                 );
     }
 }

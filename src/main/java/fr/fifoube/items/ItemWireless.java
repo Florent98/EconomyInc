@@ -60,9 +60,6 @@ public class ItemWireless extends Item {
 															player.sendMessage(new StringTextComponent(I18n.format("title.cardUpdated")));
 														}
 														hasCardIS.getTag().putBoolean("Linked", true);
-														player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-															data.setLinked(true);
-														});
 													}
 													else
 													{

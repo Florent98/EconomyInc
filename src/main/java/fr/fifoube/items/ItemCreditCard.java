@@ -54,8 +54,7 @@ public class ItemCreditCard extends Item{
 							{
 								if(ConfigFile.canAccessCardWithoutWT)
 								{
-									playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-										if(data.getLinked())
+									if(itemStackIn.getTag().getBoolean("Linked"))
 										{
 											ClientGuiScreen.openGui(0, null);											
 										}
@@ -63,9 +62,6 @@ public class ItemCreditCard extends Item{
 										{
 											playerIn.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
 										}
-										
-									});
-
 								}
 							}
 						}
@@ -88,7 +84,7 @@ public class ItemCreditCard extends Item{
 	        			itemStackIn.getTag().putString("OwnerUUID", ownerUUID.toString());
 	        			itemStackIn.getTag().putString("Owner", playerIn.getDisplayName().getFormattedText());
 	        			itemStackIn.getTag().putBoolean("Owned", true);
-	        			itemStackIn.getTag().putBoolean("Linked", data.getLinked());
+	        			itemStackIn.getTag().putBoolean("Linked", false);
 	        			playerIn.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F)); //Play a sound that alert everybody that a credit card was created.
 	        			});
 	        		}

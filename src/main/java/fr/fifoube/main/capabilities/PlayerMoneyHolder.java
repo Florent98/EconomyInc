@@ -15,18 +15,18 @@ public class PlayerMoneyHolder extends MoneyHolder {
 	public PlayerMoneyHolder(ServerPlayerEntity player) {
 		this.player = player;
 	}
-
+	
 	@Override
-	public void setNewCapaData(double money, boolean linked) {
+	public void setMoney(double money) {
 		
-		super.setNewCapaData(money, linked);
+		super.setMoney(money);
         if (player.connection != null)
         {
             player.getCapability(CapabilityMoney.MONEY_CAPABILITY)
-                    .ifPresent(capa -> PacketsRegistery.CHANNEL.send(
-                            PacketDistributor.PLAYER.with(() -> this.player),
-                            new PacketMoneyData(capa))
-                    );
+            .ifPresent(capa -> {
+            	PacketsRegistery.CHANNEL.send(PacketDistributor.PLAYER.with(() -> this.player), new PacketMoneyData(capa.getMoney()));
+            });
         }
 	}
+
 }
