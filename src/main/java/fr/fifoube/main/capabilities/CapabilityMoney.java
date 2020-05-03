@@ -63,6 +63,7 @@ public class CapabilityMoney {
     @SubscribeEvent
 	public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
     	
+    	if(event.isWasDeath())
         event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(newCapa -> {
             if(INVALIDATED_CAPS.containsKey(event.getOriginal()))
             {
