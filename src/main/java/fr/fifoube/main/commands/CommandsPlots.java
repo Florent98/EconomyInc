@@ -3,6 +3,8 @@
 package fr.fifoube.main.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -12,6 +14,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.world.saveddata.ChunksWorldSavedData;
 import fr.fifoube.world.saveddata.PlotsChunkData;
@@ -23,6 +26,9 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.BlockPosArgument;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.SignTileEntity;
@@ -72,7 +78,179 @@ public class CommandsPlots {
 								.executes(ctx -> removePlot(ctx.getSource(), StringArgumentType.getString(ctx, "name")))
 								)
 						)
-					);
+					.then(
+							Commands.literal("list")
+							.executes(ctx -> listPlot(ctx.getSource()))
+					)
+					.then(
+							Commands.literal("assign")
+							.then(
+								Commands.argument("player", EntityArgument.player())
+								.then(
+									Commands.argument("name", StringArgumentType.string())
+									.executes(ctx -> assignPlotTo(ctx.getSource(), EntityArgument.getPlayer(ctx, "player"), StringArgumentType.getString(ctx, "name")))
+								)
+
+							)
+					)
+					.then(
+							Commands.literal("teleport")
+							.then(
+								Commands.argument("name", StringArgumentType.string())
+								.executes(ctx -> teleportToPlot(ctx.getSource(), null, StringArgumentType.getString(ctx, "name"), false))
+								.then(
+										Commands.argument("players", EntityArgument.players())
+										.executes(ctx -> teleportToPlot(ctx.getSource(), EntityArgument.getEntitiesAllowingNone(ctx, "players"), StringArgumentType.getString(ctx, "name"), true))
+								)
+							)
+					)
+			);
+	}
+	
+	private static int teleportToPlot(CommandSource src, Collection<? extends Entity> targets, String plotsName, boolean tpOther)
+	{
+    	int indexToProceedBuy = -1;
+		ServerPlayerEntity player = null;
+		try {
+			player = src.asPlayer();
+		} catch (CommandSyntaxException e) {e.printStackTrace();}
+		
+		if(player != null)
+		{
+			ServerPlayerEntity playerTarget = player;
+			ServerWorld worldIn = player.getServerWorld();
+			DimensionSavedDataManager storage = worldIn.getSavedData();
+			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+			if(dataWorld != null)
+			{
+				for (int i = 0; i < dataWorld.getListContainer().size(); i++) 
+				{
+					PlotsData plotsData = dataWorld.getListContainer().get(i);
+					if(plotsData != null)
+					if(plotsData.getList().get(0).equals(plotsName))
+					{
+						indexToProceedBuy = i;
+					}
+				}
+				if(indexToProceedBuy != -1)
+				{
+					PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
+					Vec3d center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
+					if(!tpOther)
+					{
+						player.teleport(player.getServerWorld(), center.x, center.y, center.z, player.rotationYaw, player.rotationPitch);
+						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success"), false);
+					}
+					else
+					{
+						targets.forEach(e -> {
+							if(e instanceof ServerPlayerEntity)
+							{
+								ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
+								playerMP.teleport(playerTarget.getServerWorld(), center.x, center.y, center.z, playerMP.rotationYaw, playerMP.rotationPitch);
+								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success.extras", playerMP.getDisplayName().getFormattedText(), plotsData.name), false);
+							}	
+						});
+					}
+				}
+				else
+				{
+					src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.fail"), false);
+				}
+			}
+		}
+		return 0;
+	}
+	
+	private static int assignPlotTo(CommandSource src, ServerPlayerEntity assignedPlayer, String plotsName) {
+		
+    	boolean canProceedBuy = false;
+    	int indexToProceedBuy = -1;
+		ServerPlayerEntity player = null;
+
+		try {
+			player = src.asPlayer();
+		} catch (CommandSyntaxException e) {e.printStackTrace();}
+		
+		if(player != null)
+		{
+				ServerWorld worldIn = player.getServerWorld();
+				DimensionSavedDataManager storage = worldIn.getSavedData();
+				PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+				if(dataWorld != null)
+				{
+					for (int i = 0; i < dataWorld.getListContainer().size(); i++) 
+					{
+						PlotsData plotsData = dataWorld.getListContainer().get(i);
+						if(plotsData != null)
+						if(plotsData.getList().get(0).equals(plotsName))
+						{
+							boolean bought = plotsData.getBought();
+							if(!bought)
+							{
+								indexToProceedBuy = i;
+								canProceedBuy = true;
+							}
+							else
+							{
+								src.sendFeedback(new TranslationTextComponent("commands.plotbuy.alreadybought"), false);
+							}
+						}
+					}
+				}
+				if(canProceedBuy && indexToProceedBuy != -1)
+				{
+					PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
+					plotsData.bought = true;
+					plotsData.owner = assignedPlayer.getUniqueID().toString();		
+					dataWorld.markDirty();
+					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
+					saveAll(src, false);
+					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success"), false);
+				}
+		}
+		return 0;
+	}
+
+	public static int listPlot(CommandSource src)
+	{
+    	ServerPlayerEntity player = null;
+    	
+		try {
+			player = src.asPlayer();
+		} catch (CommandSyntaxException e) {e.printStackTrace();}
+		
+		if(player != null)
+		{
+			DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
+			PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+			List<String> namePlot = new ArrayList<String>();
+			if(data != null)
+			{
+				for (int i = 0; i < data.getListContainer().size(); i++) 
+				{
+					PlotsData plotsData = data.getListContainer().get(i);
+					if(plotsData != null)
+					{
+						namePlot.add(plotsData.getList().get(0));
+					}
+				}
+				Collections.sort(namePlot);
+				String name = "Plots name : ";
+				for (int i = 0; i < namePlot.size(); i++) {
+					
+					String seperator = ",";
+					if(i+1 == namePlot.size())
+					{
+						seperator = ".";
+					}
+					name += namePlot.get(i) + seperator; 
+				}
+				src.sendFeedback(new TranslationTextComponent(name), false);
+			}
+		}
+		
+		return 0;
 	}
 
 	

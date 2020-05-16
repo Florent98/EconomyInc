@@ -3,6 +3,8 @@
 package fr.fifoube.blocks;
 
 
+import java.util.UUID;
+
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.block.Block;
@@ -19,6 +21,9 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -48,6 +53,9 @@ public class BlockVault2by2 extends ContainerBlock {
 	public static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(-1D, 0, 0, 1D, 2, 1D);
 	public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0, 0, 0, 1D, 2, 2D);
 	public static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0, 0, -1D, 1D, 2, 1D);
+	
+	public static final VoxelShape NORTH_VOXELSHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 32.0D, 32.0D, 16.0D);
+
 	public static VoxelShape shapeMain;
 
 	
@@ -146,8 +154,9 @@ public class BlockVault2by2 extends ContainerBlock {
 					{
 						for(int i = 0; i < te.getAllowedPlayers().size(); i++)
 						{
-							String listToCheck = te.getAllowedPlayers().get(i).toString();
-							if(player.getName().equals(listToCheck))
+							String fullString = te.getAllowedPlayers().get(i);
+							String listToCheck = fullString.substring(fullString.indexOf(",") + 1);
+							if(player.getUniqueID().equals(UUID.fromString(listToCheck)))
 							{
 					            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)tileentity, buf -> buf.writeBlockPos(pos));
 								te.markDirty();
@@ -257,6 +266,7 @@ public class BlockVault2by2 extends ContainerBlock {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
 	}
+	
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

@@ -78,7 +78,6 @@ public class PacketSellerCreated {
 					te.setCreated(packet.created); // SERVER ADD CREATED TO TILE ENTITY
 					te.setCost(packet.cost); // SERVER ADD COST TO TILE ENTITY
 					te.setItem(packet.name); // SERVER ADD NAME TO TILE ENTITY
-					te.setAmount(packet.amount); // SERVER ADD AMOUNT TO TILE ENTITY
 					te.setAdmin(packet.admin); // SERVER ADD ADMIN TO TILE ENTITY
 					te.markDirty(); //UPDATE THE TILE ENTITY
 				}

@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.gui.container.ContainerVault2by2;
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -23,7 +24,7 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 {
 
 	protected TileEntityBlockVault2by2 tile_getter;
-	protected PlayerInventory playerInventory_getter;
+	protected PlayerInventory player_inventory;
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_vault2by2.png");
 	protected int xSize = 176;
 	protected int ySize = 222;
@@ -36,7 +37,7 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 	{
 		super(container, playerInventory, name);
 		this.tile_getter = getContainer().getTile();
-		this.playerInventory_getter = playerInventory;	
+		this.player_inventory = playerInventory;	
 	}
 	
 	@Override
@@ -55,9 +56,8 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 	{		
 		switch (buttonId) {
 		case 0:
-			Minecraft.getInstance().player.sendMessage(new StringTextComponent("Not available right now."));
+			ClientGuiScreen.openGui(2, tile_getter);
 			break;
-
 		default:
 			break;
 		}

@@ -156,11 +156,6 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    	return this.inventory_seller.getStackInSlot(0).getDisplayName().getFormattedText().toString();
 	    }
 	    
-	    public void setAmount(int amountS)
-	    {
-	    	this.amount = amountS;
-	    }
-	    
 	    public int getAmount()
 	    {
 	    	return this.inventory_seller.getStackInSlot(0).getCount();

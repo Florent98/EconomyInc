@@ -155,7 +155,6 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 							final int z = tile.getPos().getZ(); // GET Z
 							int amount = tile.getStackInSlot(0).getCount(); // GET COUNT IN TILE THANKS TO STACK IN SLOT
 							String name = tile.getStackInSlot(0).getDisplayName().getString(); // GET ITEM NAME IN TILE THANKS TO STACK IN SLOT
-							tile.setAmount(amount); //CLIENT SET AMOUNT
 							tile.setItem(name); // CLIENT SET ITEM NAME
 							tile.markDirty();
 							PacketsRegistery.CHANNEL.sendToServer(new PacketSellerCreated(true, this.cost, name, amount, x, y, z, false)); // SEND SERVER PACKET FOR CREATED, COST, NAME, AMOUNT, X,Y,Z ARE TILE COORDINATES
@@ -170,7 +169,6 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 							final int z = tile.getPos().getZ(); // GET Z
 							int amount = tile.getStackInSlot(0).getCount(); // GET COUNT IN TILE THANKS TO STACK IN SLOT
 							String name = tile.getStackInSlot(0).getDisplayName().getString(); // GET ITEM NAME IN TILE THANKS TO STACK IN SLOT
-							tile.setAmount(amount); //CLIENT SET AMOUNT
 							tile.setItem(name); // CLIENT SET ITEM NAME
 							tile.markDirty();
 							PacketsRegistery.CHANNEL.sendToServer(new PacketSellerCreated(true, this.cost, name, amount, x, y, z, true)); // SEND SERVER PACKET FOR CREATED, COST, NAME, AMOUNT, X,Y,Z ARE TILE COORDINATES

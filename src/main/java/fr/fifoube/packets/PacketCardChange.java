@@ -6,16 +6,18 @@ import java.util.function.Supplier;
 
 import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class PacketCardChange {
 
 
 	private double funds;
-
 	
 	public PacketCardChange() 
 	{
@@ -41,20 +43,27 @@ public class PacketCardChange {
 	
 	public static void handle(PacketCardChange packet, Supplier<NetworkEvent.Context> ctx)
 	{
-
 		ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ctx.get().getSender(); // GET PLAYER
 			player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
 				.ifPresent(data -> {
-					
+					 
 					double funds = packet.funds;
 					if(funds == 1)
 					{
 						if(data.getMoney() >= 1)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 1);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_ONEB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_ONEB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 1);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
+							
 						}
 						
 					}
@@ -62,9 +71,16 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 5)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 5);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIVEB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIVEB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 5);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 						}
 						
 					}
@@ -72,9 +88,16 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 10)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 10);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TENB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TENB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 10);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 
 						}
 					}
@@ -82,9 +105,16 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 20)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 20);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TWENTYB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TWENTYB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 20);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 
 						}
 					}
@@ -92,18 +122,32 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 50)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 50);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIFTYB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIFTYB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 50);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 						}
 					}
 					else if(funds == 100)
 					{
 						if(data.getMoney() >= 100)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 100);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_HUNDREEDB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_HUNDREEDB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 100);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 
 						}
 					}
@@ -111,9 +155,16 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 200)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 200);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 200);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 
 						}
 					}
@@ -121,9 +172,16 @@ public class PacketCardChange {
 					{
 						if(data.getMoney() >= 500)
 						{
-							double previous_money = data.getMoney();
-							data.setMoney(previous_money - 500);
-							player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB));
+							boolean flag = player.addItemStackToInventory(new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB));
+							if(flag)
+							{
+								double previous_money = data.getMoney();
+								data.setMoney(previous_money - 500);								
+							}
+							else
+							{
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+							}
 						}
 					}
 					else if(funds == -1)

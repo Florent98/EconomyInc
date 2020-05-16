@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.INBT;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -32,8 +33,6 @@ public class CapabilityMoney {
 	@CapabilityInject(IMoney.class)
 	public static final Capability<IMoney> MONEY_CAPABILITY = null;
 	
-	private static final Map<Entity, IMoney> INVALIDATED_CAPS = new WeakHashMap<>();
-
 	public static void register()
 	{
 	    CapabilityManager.INSTANCE.register(IMoney.class, new DefaultMoneyStorage(), MoneyHolder::new);
@@ -42,6 +41,7 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void attachToPlayer(AttachCapabilitiesEvent<Entity> event)
 	{
+		event.getObject().world.getProfiler().startSection("AttachEvent");
 		if(event.getObject() instanceof PlayerEntity)
 		{
 				IMoney holder;
@@ -55,38 +55,39 @@ public class CapabilityMoney {
 		        }
 				PlayerMoneyWrapper wrapper = new PlayerMoneyWrapper(holder);
 				event.addCapability(CAP_KEY, wrapper);
-	            event.addListener(() -> wrapper.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(cap -> INVALIDATED_CAPS.put(event.getObject(), cap)));
 
 		}
+		event.getObject().world.getProfiler().endSection();
 	}
 	
     @SubscribeEvent
 	public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
     	
-    	if(event.isWasDeath())
-        event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(newCapa -> {
-            if(INVALIDATED_CAPS.containsKey(event.getOriginal()))
-            {
-                INBT nbt = CapabilityMoney.MONEY_CAPABILITY.writeNBT(INVALIDATED_CAPS.get(event.getOriginal()), null);
-                System.out.println(nbt);
-                CapabilityMoney.MONEY_CAPABILITY.readNBT(newCapa, null, nbt);
-            }
+		event.getPlayer().world.getProfiler().startSection("PlayerClone");
+    	PlayerEntity oldPlayer = event.getOriginal();
+        oldPlayer.revive();
+        PlayerEntity newPlayer = event.getPlayer();
+        oldPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(oldData -> { 	
+        	newPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> data.setMoney(oldData.getMoney()));
         });
-
+        event.getPlayer().world.getProfiler().endSection();
 	}
 		
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 	{
+		event.getPlayer().world.getProfiler().startSection("Playerlogin");
 		if(!event.getPlayer().world.isRemote)
 			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
 			});
+		event.getPlayer().world.getProfiler().endSection();
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
+		event.getPlayer().world.getProfiler().startSection("PlayerRespawn");
 		if(!event.getPlayer().world.isRemote && event.getPlayer() instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity)event.getPlayer();
@@ -95,6 +96,7 @@ public class CapabilityMoney {
 				PacketsRegistery.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PacketMoneyData(data.getMoney()));
 			});	
 		}
+		event.getPlayer().world.getProfiler().endSection();
 
 	}
 	

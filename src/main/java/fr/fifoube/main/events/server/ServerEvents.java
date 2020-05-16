@@ -113,13 +113,15 @@ public class ServerEvents {
 	    	    			if(uuidOwner != null)
 	    	    			if(!player.getUniqueID().equals(uuidOwner))
 	    	    			{
-	    	    				event.setCanceled(true);
+	    	    				if(player.hasPermissionLevel(4))
+	    	    				{
+	    	    					event.setCanceled(false);
+	    	    				}
+	    	    				else
+	    	    				{
+	    	    					event.setCanceled(true);
+	    	    				}
 	    	    			}
-	    	    			else if(player.isCreative())
-	    	    			{
-	    	    				event.setCanceled(false);
-	    	    			}
-	
 	    	    		}
 	    	    	}
 	    		}
@@ -188,13 +190,16 @@ public class ServerEvents {
 	    	    			if(uuidOwner != null)
 	    	    			if(!event.getPlayer().getUniqueID().equals(uuidOwner))
 	    	    			{
-	    	    				event.setCanceled(true);
+	    	    				if(player.hasPermissionLevel(4))
+	    	    				{
+	    	    					event.setCanceled(false);
+	    	    				}
+	    	    				else
+	    	    				{
+	    	    					event.setCanceled(true);
+	    	    				}
 	    	    			}
-	    	    			else if(event.getPlayer().isCreative())
-	    	    			{
-	    	    				event.setCanceled(false);
-	    	    			}
-	
+
 	    	    		}
 	    	    	}
 	    		}

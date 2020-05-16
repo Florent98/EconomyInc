@@ -37,10 +37,10 @@ public class CommandsPlotsBuy {
 				LiteralArgumentBuilder.<CommandSource>literal("plotbuy")
 				.then(
 						Commands.literal("buy")
-						.requires(src -> src.hasPermissionLevel(1))
+						.requires(src -> src.hasPermissionLevel(0))
 						.then(
-						Commands.argument("plotname", StringArgumentType.string())
-						.executes(ctx -> requireBuy(ctx.getSource(), StringArgumentType.getString(ctx, "plotname")))
+							Commands.argument("plotname", StringArgumentType.string())
+							.executes(ctx -> requireBuy(ctx.getSource(), StringArgumentType.getString(ctx, "plotname")))
 						)
 				 )
 		);

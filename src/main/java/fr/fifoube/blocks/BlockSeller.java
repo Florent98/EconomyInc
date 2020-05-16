@@ -139,6 +139,14 @@ public class BlockSeller extends ContainerBlock {
 			}
 		}
 	}
+	
+	@Override
+	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
+		
+		super.onPlayerDestroy(worldIn, pos, state);
+		worldIn.getWorld().removeTileEntity(pos);
+
+	}
 
 	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
 		

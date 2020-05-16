@@ -167,6 +167,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
     {
+    	this.allowedPlayers.clear();
     	read(pkt.getNbtCompound());
     }
 

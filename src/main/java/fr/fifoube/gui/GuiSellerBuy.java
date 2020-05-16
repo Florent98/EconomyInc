@@ -61,7 +61,6 @@ public class GuiSellerBuy extends Screen
 		amount = tile.getAmount();
 		fundsTotalRecovery = tile.getFundsTotal();	
 		tile.setFundsTotal(fundsTotalRecovery);
-		tile.setAmount(amount);
 		tile.markDirty();
 	}
 	
@@ -107,51 +106,43 @@ public class GuiSellerBuy extends Screen
 						{
 							if(minecraft.player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard) //IF AN ITEM CREDIT CARD IS FOUND WE ACCEPT THE ACTION PERFORMED
 							{
-								ItemStack creditCard = minecraft.player.inventory.getStackInSlot(i); //SET THE SLOT FOUND TO BE THE CREDIT CARD
-								if(creditCard.hasTag()) //IF IT HAS TAG 
-								if(minecraft.player.getUniqueID().toString().equals(creditCard.getTag().getString("OwnerUUID"))) //AND IT'S THE SAME OWNER 
-								{
-									if(creditCard.getTag().getBoolean("Linked")) //IF IT'S A LINKED CREDIT CARD THEN WE ACCEPT 
+									ItemStack creditCard = minecraft.player.inventory.getStackInSlot(i); //SET THE SLOT FOUND TO BE THE CREDIT CARD
+									if(creditCard.hasTag()) //IF IT HAS TAG 
+									if(minecraft.player.getUniqueID().toString().equals(creditCard.getTag().getString("OwnerUUID"))) //AND IT'S THE SAME OWNER 
 									{
-										if(data.getMoney() >= tile.getCost()) //IF THE PLAYER HAS ENOUGH MONEY
+										if(creditCard.getTag().getBoolean("Linked")) //IF IT'S A LINKED CREDIT CARD THEN WE ACCEPT 
 										{
-											if(tile.getAmount() >= 1)
+											if(data.getMoney() >= tile.getCost()) //IF THE PLAYER HAS ENOUGH MONEY
 											{
-												boolean admin = tile.getAdmin();
-												if(!admin)
+												if(tile.getAmount() >= 1)
 												{
-													double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
-													tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-													final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
-													int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
-													tile.setAmount(amount -1); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
-													PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-													PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
-													tile.markDirty();
+													boolean admin = tile.getAdmin();
+													if(!admin)
+													{
+														double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
+														int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
+														PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundTotal, tile.getCost(), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+														tile.markDirty();
+													}
+													else if(admin)
+													{
+														double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
+														int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
+														PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundTotal, tile.getCost(), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+														tile.markDirty();
+													}
 												}
-												else if(admin)
-												{
-													double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
-													tile.setFundsTotal(fundTotal + tile.getCost()); // CLIENT ADD TOTAL FUNDS + THE COST OF THE ITEM
-													final double cost = tile.getCost(); // GET COST OF THE TILE ENTITY
-													int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
-													tile.setAmount(amount); // CLIENT SET AMOUNT MINUS ONE EACH TIME HE BUY
-													PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal((fundTotal + tile.getCost()), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-													PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(cost, tile.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
-													tile.markDirty();
-												}
+											}
+											else
+											{
+												minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")));
 											}
 										}
 										else
 										{
-											minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")));
+											minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
+	
 										}
-									}
-									else
-									{
-										minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
-
-									}
 								}
 								else
 								{
@@ -164,7 +155,7 @@ public class GuiSellerBuy extends Screen
 				{
 					tile.setFundsTotal(0);
 					tile.markDirty();
-					PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundsTotalRecovery, x,y,z, amount, true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+					PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundsTotalRecovery, 0, x,y,z, amount, true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
 				}			
 			}
 			
