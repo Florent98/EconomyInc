@@ -2,8 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.items.ItemsRegistery;
@@ -160,7 +158,7 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 				ItemStack slot1 = inventory.getStackInSlot(1);
 				ItemStack slot2 = inventory.getStackInSlot(2);
 				if(slot0 != null && slot1 != null && slot2 != null)
-				if(!world.isRemote && slot0.getItem() == ItemsRegistery.ITEM_GOLDNUGGET && slot0.hasTag())
+				if(!world.isRemote && slot0.getItem() == ItemsRegistery.ITEM_GOLDNUGGET)
 				{
 						if(slot1.getItem() == ItemsRegistery.ITEM_CREDITCARD)
 						{
@@ -172,6 +170,21 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 									{
 										if(slot2.isEmpty())
 										{
+											if(timePassed == 0)
+											{
+												String w =  String.valueOf(world.getRandom().nextDouble()).substring(0,4);
+												if(slot0.hasTag())
+												{
+													if(!slot0.getTag().contains("weight"))
+													{
+														slot0.getTag().putString("weight", w);
+													}
+												}
+												else
+												{
+													slot0.getOrCreateTag().putString("weight", w);
+												}
+											}
 											if(timePassed == 356)
 											{
 												PlayerEntity playerIn = getEntityPlayer();

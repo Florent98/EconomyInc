@@ -5,6 +5,7 @@ package fr.fifoube.gui;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.tileentity.TileEntity;
 
 

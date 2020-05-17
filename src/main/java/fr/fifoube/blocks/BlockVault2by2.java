@@ -150,6 +150,12 @@ public class BlockVault2by2 extends ContainerBlock {
 						te.markDirty();
 						return ActionResultType.SUCCESS;
 					}
+					else if(player.hasPermissionLevel(4))
+					{
+			            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
+						te.markDirty();
+						return ActionResultType.SUCCESS;
+					}
 					else
 					{
 						for(int i = 0; i < te.getAllowedPlayers().size(); i++)

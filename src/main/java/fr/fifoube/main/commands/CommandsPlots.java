@@ -139,7 +139,7 @@ public class CommandsPlots {
 					if(!tpOther)
 					{
 						player.teleport(player.getServerWorld(), center.x, center.y, center.z, player.rotationYaw, player.rotationPitch);
-						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success"), false);
+						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", player.getDisplayName().getFormattedText(), plotsData.name), false);
 					}
 					else
 					{
@@ -148,7 +148,7 @@ public class CommandsPlots {
 							{
 								ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 								playerMP.teleport(playerTarget.getServerWorld(), center.x, center.y, center.z, playerMP.rotationYaw, playerMP.rotationPitch);
-								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success.extras", playerMP.getDisplayName().getFormattedText(), plotsData.name), false);
+								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", playerMP.getDisplayName().getFormattedText(), plotsData.name), false);
 							}	
 						});
 					}
@@ -206,7 +206,7 @@ public class CommandsPlots {
 					dataWorld.markDirty();
 					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
 					saveAll(src, false);
-					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success"), false);
+					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getFormattedText()), false);
 				}
 		}
 		return 0;

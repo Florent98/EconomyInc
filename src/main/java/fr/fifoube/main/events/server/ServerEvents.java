@@ -32,25 +32,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ServerEvents {
-
-	private static final Random rand = new Random();
-	
-	@SubscribeEvent
-	public void onSmelting(PlayerEvent.ItemSmeltedEvent event)
-	{
-		if(ConfigFile.goldNuggetRecipe)
-		{
-			if(!event.getSmelting().isEmpty() && event.getSmelting() != null)
-			{
-				ItemStack stack = event.getSmelting();
-				if(stack.getItem().equals(ItemsRegistery.ITEM_GOLDNUGGET))
-				{
-					String valeur = Double.toString(rand.nextDouble()).substring(0, 4);
-					stack.setTagInfo("weight", StringNBT.valueOf(valeur));
-				}
-			}
-		}
-	}
 	
 	@SubscribeEvent
     public void onPlacedBlock(EntityPlaceEvent event)

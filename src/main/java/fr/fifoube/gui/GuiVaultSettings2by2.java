@@ -19,9 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -39,12 +37,10 @@ public class GuiVaultSettings2by2  extends Screen
 	protected TileEntityBlockVault2by2 tile;
 		
 	List<Button> buttonList = new ArrayList<Button>();
-	
+		
 	public GuiVaultSettings2by2(TileEntityBlockVault2by2 te) {
 		super(new TranslationTextComponent("gui.vaultsettings"));
 		this.tile = te;
-
-
 	}
 	
 
@@ -57,6 +53,15 @@ public class GuiVaultSettings2by2  extends Screen
 	    this.commandTextField.setMaxStringLength(35);
 	    this.commandTextField.setText("Add other players.");
 	    this.children.add(this.commandTextField);
+	    buttonList.clear();
+	    for(int i = 0; i < 5; i++)
+	    {
+	    	int id = i;
+	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, TextFormatting.DARK_RED + "✖", (press) -> this.actionPerformed(id));
+	    	buttonList.add(id, button);
+	    	button.active = false;
+	    	this.addButton(button);
+	    }
 	}
 	
 	@Override
@@ -87,29 +92,36 @@ public class GuiVaultSettings2by2  extends Screen
 		    	this.commandTextField.render(mouseX, mouseY, partialTicks);
 		    }
 	    }
-	    if(!tile.getAllowedPlayers().isEmpty())
-	    {
-	    	buttonList.clear();
-	    	for(int i = 0; i < tile.getAllowedPlayers().size(); i++)
+	    for (int i = 0; i < tile.getAllowedPlayers().size(); i++) {
+	    	
+    		String playerName = tile.getAllowedPlayers().get(i).substring(0, tile.getAllowedPlayers().get(i).indexOf(","));
+    		this.font.drawString(playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
+		}
+	    for (int j = 0; j < 5; j++) {
+			
+	    	if(!tile.getAllowedPlayers().isEmpty())
 	    	{
-	    		int id = i;
-	    		String playerName = tile.getAllowedPlayers().get(i).substring(0, tile.getAllowedPlayers().get(i).indexOf(","));
-	    		this.font.drawString(playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
-	    		Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, TextFormatting.DARK_RED + "✖", (press) -> this.actionPerformed(id));
-	    		buttonList.add(id, button);
-	    		this.addButton(button);
+	    		if(tile.getAllowedPlayers().size() > j)
+	    		{
+	    			buttonList.get(j).active = true;
+	    		}
+	    		else
+	    		{
+	    			buttonList.get(j).active = false;
+	    		}		
 	    	}
-	    }
-	
+	    	else
+	    	{
+    			buttonList.get(j).active = false;
+	    	}
+		}
+
 	}
 	
 	
-	protected void actionPerformed(int buttonIDScreen)
+	protected void actionPerformed(int id)
 	{		
-		Button actualButton = buttonList.get(buttonIDScreen);
-		this.buttons.remove(actualButton);
-		this.children.remove(actualButton);
-        PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), "", true, buttonIDScreen));
+        PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), "", true, id));
 	}
 
 	
@@ -124,17 +136,14 @@ public class GuiVaultSettings2by2  extends Screen
 			        this.addPlayerToTileEntity();
 			        this.commandTextField.setText("");	
 			        return true;
-	        	}
+			    }
 	        	else
 	        	{
 	        		this.commandTextField.setText("Max players allowed reached ");
 	        		return false;
 	        	}
 	      } 
-	      else 
-	      {
-	          return super.keyPressed(keyPressedCode, p_keyPressed_2_, p_keyPressed_3_);
-	      }
+	      return super.keyPressed(keyPressedCode, p_keyPressed_2_, p_keyPressed_3_);
 	}
 	
 	private void addPlayerToTileEntity() {
@@ -147,12 +156,36 @@ public class GuiVaultSettings2by2  extends Screen
 		    	{
 		    		if(playerList.get(i).getName().getString().equals(s))
 		    		{
-		    			UUID playerUUID = playerList.get(i).getUniqueID();
-		    			String playerName = playerList.get(i).getDisplayName().getFormattedText();
-				        PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));
+		    			if(!playerList.get(i).getUniqueID().toString().equals(tile.ownerS))
+		    			{
+		    				UUID playerUUID = playerList.get(i).getUniqueID();
+		    				boolean flag = checkForSamePlayer(playerUUID);
+		    				if(flag)
+		    				{
+		    					String playerName = playerList.get(i).getDisplayName().getFormattedText();
+		    					PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));			    					
+		    				}
+		    			}
 		    		}
 		    	}
 		    }
+	}
+	
+	private boolean checkForSamePlayer(UUID uuid)
+	{
+		if(!tile.getAllowedPlayers().isEmpty())
+		{
+			for (int i = 0; i < tile.getAllowedPlayers().size(); i++) {
+				
+				String playerUUID = tile.getAllowedPlayers().get(i).substring(tile.getAllowedPlayers().get(i).indexOf(",") + 1);
+				UUID uuidPlayer = UUID.fromString(playerUUID);
+				if(uuidPlayer.equals(uuid))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	@Override

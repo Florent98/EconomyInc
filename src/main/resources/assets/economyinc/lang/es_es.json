@@ -65,6 +65,11 @@
 "commands.plot.errorsaved": "Problemo durante la guardo del archivo.",
 "commands.plot.wrongPlotBorder" : "Los bordes de la parcela referenciado en el server config file es incorrecto. Reemplazada por defecto.",
 
+"commands.plot.teleport.success" : "Transportación de %s a %s.",
+"commands.plot.teleport.fail" : "No se puede transportar al jugador a la parcela solicitada.",
+
+"commands.plot.assigned.success" : "%s bien asignado a la parcela %s.",
+
 "commands.plotbuy.alreadybought": "La parcela ya fue comprada por otra persona.",
 "commands.plotbuy.success": "Parcela comprado con éxito. Por favor espere pocos minutos durante la gurado del archivo.",
 

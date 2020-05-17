@@ -23,8 +23,11 @@ public class ItemGoldNuggetSubs extends Item{
 		
 		if(stack.hasTag())
 		{
-	        String weight = stack.getTag().getString("weight");
-			tooltip.add(new StringTextComponent(I18n.format("title.weight") + weight));
+			if(stack.getTag().contains("weight"))
+			{
+				String weight = stack.getTag().getString("weight");
+				tooltip.add(new StringTextComponent(I18n.format("title.weight") + weight));
+			}
 		}
 	}
 

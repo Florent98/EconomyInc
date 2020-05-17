@@ -64,6 +64,11 @@
 "commands.plot.errorsaved": "Problem while saving map files.",
 "commands.plot.wrongPlotBorder" : "The borders referenced in the server config file is wrong. Replaced by default.",
 
+"commands.plot.teleport.success" : "Teleported %s to %s.",
+"commands.plot.teleport.fail" : "Could not teleport player to plot.",
+
+"commands.plot.assigned.success" : "Successfully assigned %s to %s.",
+
 "commands.plotbuy.alreadybought": "This plot was already bought by someone else.",
 "commands.plotbuy.success": "Plot successfully bought. Please wait few minutes while map is updating.",
 

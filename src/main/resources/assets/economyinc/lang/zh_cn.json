@@ -62,7 +62,12 @@
 "commands.plot.nomatch": "未找到地皮",
 "commands.plot.saved": "成功更新地图文件",
 "commands.plot.errorsaved": "保存地图文件时出现问题",
-"commands.plot.wrongPlotBorder" : "The borders referenced in the server config file is wrong. Replaced by default.", //TRANSLATION NEEDED
+"commands.plot.wrongPlotBorder" : "The borders referenced in the server config file is wrong. Replaced by default.",
+
+"commands.plot.teleport.success" : "Teleported %s to %s.",
+"commands.plot.teleport.fail" : "Could not teleport player to plot.",
+
+"commands.plot.assigned.success" : "Successfully assigned %s to %s.",
 
 "commands.plotbuy.alreadybought": "这个地皮已经被使用",
 "commands.plotbuy.success": "地皮购买成功，地图正在更新，请稍等几分钟",

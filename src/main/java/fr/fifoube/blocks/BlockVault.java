@@ -361,6 +361,13 @@ public class BlockVault extends ContainerBlock {
 						return ActionResultType.SUCCESS;
 						
 					}
+					else if(player.hasPermissionLevel(4))
+					{
+			            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
+						te.setIsOpen(true);
+						te.markDirty();
+						return ActionResultType.SUCCESS;
+					}
 					else
 					{
 						for(int i = 0; i < te.getAllowedPlayers().size(); i++)

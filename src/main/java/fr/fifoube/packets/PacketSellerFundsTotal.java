@@ -4,8 +4,10 @@ package fr.fifoube.packets;
 
 import java.util.function.Supplier;
 
+import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -99,7 +101,17 @@ public class PacketSellerFundsTotal {
 										te.getStackInSlot(0).split(1);
 										te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
 										te.markDirty();
-										PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(packet.cost, te.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+										//
+										player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
+										.ifPresent(data -> {
+											data.setMoney(data.getMoney() - packet.cost);
+										});
+										BlockState state = worldIn.getBlockState(pos);
+										if(state.getBlock() instanceof BlockSeller)
+										{
+											BlockSeller seller = (BlockSeller) state.getBlock();
+											seller.scheduleTick(state, worldIn, pos);
+										}
 									}
 									else
 									{
@@ -113,7 +125,17 @@ public class PacketSellerFundsTotal {
 									{
 										te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
 										te.markDirty();	
-										PacketsRegistery.CHANNEL.sendToServer(new PacketCardChangeSeller(packet.cost, te.getPos())); // SENDING ANOTHER PACKET TO UPDATE CLIENT'S CARD IN SERVER KNOWLEDGE
+										//
+										player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
+										.ifPresent(data -> {
+											data.setMoney(data.getMoney() - packet.cost);
+										});
+										BlockState state = worldIn.getBlockState(pos);
+										if(state.getBlock() instanceof BlockSeller)
+										{
+											BlockSeller seller = (BlockSeller) state.getBlock();
+											seller.scheduleTick(state, worldIn, pos);
+										}
 									}
 									else
 									{

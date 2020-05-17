@@ -36,17 +36,12 @@ public class GuiVault extends ContainerScreen<ContainerVault>
 	protected int ySize = 168;
 	protected int guiLeft;
 	protected int guiTop;
-	private Button settings;
    
 	@Override
 	protected void init() {
 		super.init();
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        if(tile_getter.getOwnerS().equals(getMinecraft().player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
-        {
-        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, TextFormatting.BOLD.toString() + TextFormatting.WHITE + "⚙",(press) -> actionPerformed(0)));
-        }
 	}
 
     

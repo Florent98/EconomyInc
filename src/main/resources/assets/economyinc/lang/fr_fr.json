@@ -65,6 +65,11 @@
 "commands.plot.errorsaved": "Problème rencontré lors de l'actualisation des fichiers.",
 "commands.plot.wrongPlotBorder" : "Les bordures de la parcelle référencé dans le fichier config serveur est erroné. Remplacé par défaut.",
 
+"commands.plot.teleport.success" : "Téléportation de %s à %s.",
+"commands.plot.teleport.fail" : "Impossible de téléporté le joueur au plot demandé.",
+
+"commands.plot.assigned.success" : "%s bien assigné au plot %s.",
+
 "commands.plotbuy.alreadybought": "Ce plot à déjà été acheté.",
 "commands.plotbuy.success": "Plot acheté avec succès. Merci d'attendre quelques minutes pour l'actualisation de la map.",
 
