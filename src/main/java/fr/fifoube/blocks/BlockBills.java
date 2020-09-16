@@ -43,8 +43,9 @@ public class BlockBills extends ContainerBlock {
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntityBlockBills();
 	}
+	
 	@Override
-	public boolean hasTileEntity() {
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
 	
@@ -185,34 +186,34 @@ public class BlockBills extends ContainerBlock {
 		}
 	}
 	
-	public void checkBillRefForDrop(TileEntityBlockBills te, IWorld worldIn, BlockPos pos)
+	public void checkBillRefForDrop(TileEntityBlockBills te, World worldIn, BlockPos pos)
 	{
 		if(!worldIn.isRemote())
 		{
 			switch (te.getBillRef()) {
 				case "item.economyinc.item_oneb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_ONEB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_ONEB));
 					break;
 				case "item.economyinc.item_fiveb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEB));
 					break;
 				case "item.economyinc.item_tenb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TENB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TENB));
 					break;
 				case "item.economyinc.item_twentyb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWENTYB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWENTYB));
 					break;
 				case "item.economyinc.item_fiftybe":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIFTYB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIFTYB));
 					break;
 				case "item.economyinc.item_hundreedb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_HUNDREEDB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_HUNDREEDB));
 					break;
 				case "item.economyinc.item_twohundreedb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB));
 					break;
 				case "item.economyinc.item_fivehundreedb":
-					item = new ItemEntity(worldIn.getWorld(), pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB));
+					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB));
 					break;
 				default:
 					break;
@@ -235,11 +236,6 @@ public class BlockBills extends ContainerBlock {
 	public BlockRenderType getRenderType(BlockState state)
 	{
 		return BlockRenderType.MODEL;
-	}
-
-	@Override
-	public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return false;
 	}
 
 	@Override

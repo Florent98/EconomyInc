@@ -5,8 +5,10 @@ package fr.fifoube.blocks.tileentity;
 
 import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.items.ItemsRegistery;
+import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.stats.StatsRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,7 +35,7 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 	public int numbUse;
 	public PlayerEntity user;
 	public String name;
-	public int timeProcess = 356;
+	public int timeProcess = ConfigFile.goldChangerDuration;
 	public int timePassed = 0;
 	public boolean isProcessing;
     private ITextComponent customName;
@@ -60,7 +62,7 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
     {
-    	read(pkt.getNbtCompound());
+    	deserializeNBT(pkt.getNbtCompound());
     }
     
 	public ItemStack setStackInSlot(int slot, ItemStack stack, boolean simulate)
@@ -125,20 +127,20 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
        }
 		return super.write(compound);
 	}
-	
-	
+		
 	@Override
-	public void read(CompoundNBT compound) 
-	{
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+
+		super.read(state, compound);
 		this.numbUse = compound.getInt("numbUse");
 		this.isProcessing = compound.getBoolean("isProcessing");
 		this.timePassed = compound.getInt("timePassed");
 		inventory.deserializeNBT((CompoundNBT)compound.get("inventory"));
 	    if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-	    this.customName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
+	    this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
 	    }
 	}
+
 	
 		@Override
 		public void markDirty() 
@@ -185,7 +187,7 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 													slot0.getOrCreateTag().putString("weight", w);
 												}
 											}
-											if(timePassed == 356)
+											if(timePassed == timeProcess)
 											{
 												PlayerEntity playerIn = getEntityPlayer();
 												playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
@@ -200,6 +202,8 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 													timePassed = 0;
 													isProcessing = false;
 													this.markDirty();
+													playerIn.addStat(StatsRegistry.CHANGED_GOLD_TO_MONEY);
+													ModEconomyInc.LOGGER.info(playerIn.getDisplayName().getString() + " has changed gold with the weight ("+ weight +"), the change was at " + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight) + ". Balance was at " + fundsPrev + ", balance is now " + data.getMoney() + "." + "[UUID: " + playerIn.getUniqueID() + "," + te.getPos() + "]");
 												});
 	
 											}

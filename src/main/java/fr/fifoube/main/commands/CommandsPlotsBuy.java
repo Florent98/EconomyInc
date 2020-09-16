@@ -9,7 +9,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import fr.fifoube.main.capabilities.IMoney;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
 import net.minecraft.block.Blocks;
@@ -21,7 +23,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -86,10 +88,12 @@ public class CommandsPlotsBuy {
 			}
 			if(canProceedBuy && indexToProceedBuy != -1)
 			{
+				ServerPlayerEntity s = player;
 				PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
 				player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 				
 					double playerMoney = data.getMoney();
+					ModEconomyInc.LOGGER.info(s.getDisplayName().getString() + " has bought plot " + plotsData.name + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - plotsData.price) + "." + "[UUID: " + s.getUniqueID() + ",PlotID: " + plotsData.name +"]");
 					if(playerMoney >= plotsData.price)
 					{
 						plotsData.bought = true;
@@ -110,9 +114,9 @@ public class CommandsPlotsBuy {
 		return 0;
 	}
 	
-	public static Vec3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
+	public static Vector3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
 	{
-		return new Vec3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
+		return new Vector3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
 	}
 	
 	public static void replaceSign(ServerWorld worldIn, int xPosFirst, int yPos, int zPosFirst, int xPosSecond, int zPosSecond, String name, String owner)
@@ -120,7 +124,7 @@ public class CommandsPlotsBuy {
 		PlayerEntity playerIn = worldIn.getPlayerByUuid(UUID.fromString(owner));
 		if(playerIn != null)
 		{
-			Vec3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
+			Vector3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
 			BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
 			worldIn.destroyBlock(posSign, false);
 			worldIn.setBlockState(posSign, Blocks.OAK_SIGN.getDefaultState(), 2);
@@ -134,10 +138,10 @@ public class CommandsPlotsBuy {
 			
 			if(signTe != null)
 			{
-				signTe.signText[0] = new StringTextComponent("[" + name + "]").setStyle(new Style().setBold(true).setColor(TextFormatting.BLUE));
-				signTe.signText[1] = new StringTextComponent("Owned by").setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
-				signTe.signText[2] = new StringTextComponent(playerIn.getDisplayName().getString()).setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
-				signTe.signText[3] = new StringTextComponent("[SOLD]").setStyle(new Style().setBold(true).setColor(TextFormatting.RED));
+				signTe.setText(0 , new StringTextComponent("[" + name + "]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLUE));
+				signTe.setText(1 , new StringTextComponent("Owned by").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
+				signTe.setText(2 , new StringTextComponent(playerIn.getDisplayName().getString()).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
+				signTe.setText(3 , new StringTextComponent("[SOLD]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED));
 				signTe.markDirty();
 			}
 		}

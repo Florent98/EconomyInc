@@ -89,8 +89,6 @@ public class PacketListNBT {
 						TileEntityBlockVault te = (TileEntityBlockVault)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
-							te.setAllowedPlayers(packet.names);
-							te.addToMax();
 							te.markDirty();
 						}
 					}
@@ -112,8 +110,6 @@ public class PacketListNBT {
 						TileEntityBlockVault te = (TileEntityBlockVault)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
-							te.getAllowedPlayers().remove(packet.index);
-							te.removeToMax();
 							te.markDirty();
 						}
 					}	

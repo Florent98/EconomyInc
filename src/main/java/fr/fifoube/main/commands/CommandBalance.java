@@ -8,7 +8,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
+import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
+import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -61,9 +63,10 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
+					ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has received " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendFeedback(new TranslationTextComponent("commands.balance.added", money, playerMP.getDisplayName().getFormattedText()), false);
+				src.sendFeedback(new TranslationTextComponent("commands.balance.added", money, playerMP.getDisplayName().getString()), false);
 			}	
 		});
 
@@ -77,9 +80,10 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
+					ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has been withdrawn " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendFeedback(new TranslationTextComponent("commands.balance.withdraw", money, playerMP.getDisplayName().getFormattedText()), false);
+				src.sendFeedback(new TranslationTextComponent("commands.balance.withdraw", money, playerMP.getDisplayName().getString()), false);
 			}	
 		});
 	 	return 0;
@@ -92,7 +96,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendFeedback(new TranslationTextComponent("commands.balance.funds", playerMP.getDisplayName().getFormattedText(), data.getMoney()), false);
+					src.sendFeedback(new TranslationTextComponent("commands.balance.funds", playerMP.getDisplayName().getString(), data.getMoney()), false);
 				});
 			}	
 		});

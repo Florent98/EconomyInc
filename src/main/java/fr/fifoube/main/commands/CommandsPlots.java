@@ -37,7 +37,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -54,7 +54,7 @@ public class CommandsPlots {
 			
 			dispatcher.register(
 					LiteralArgumentBuilder.<CommandSource>literal("plot")
-					.requires(src -> src.hasPermissionLevel(4))
+					.requires(src -> src.hasPermissionLevel(3))
 					.then(
 							Commands.literal("create")
 							.then(
@@ -135,11 +135,11 @@ public class CommandsPlots {
 				if(indexToProceedBuy != -1)
 				{
 					PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
-					Vec3d center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
+					Vector3d center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
 					if(!tpOther)
 					{
 						player.teleport(player.getServerWorld(), center.x, center.y, center.z, player.rotationYaw, player.rotationPitch);
-						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", player.getDisplayName().getFormattedText(), plotsData.name), false);
+						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
 					}
 					else
 					{
@@ -148,7 +148,7 @@ public class CommandsPlots {
 							{
 								ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 								playerMP.teleport(playerTarget.getServerWorld(), center.x, center.y, center.z, playerMP.rotationYaw, playerMP.rotationPitch);
-								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", playerMP.getDisplayName().getFormattedText(), plotsData.name), false);
+								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
 							}	
 						});
 					}
@@ -206,7 +206,7 @@ public class CommandsPlots {
 					dataWorld.markDirty();
 					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
 					saveAll(src, false);
-					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getFormattedText()), false);
+					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
 				}
 		}
 		return 0;
@@ -408,7 +408,7 @@ public class CommandsPlots {
 	{
 		AxisAlignedBB area = new AxisAlignedBB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
 		AxisAlignedBB areaGrown = area.grow(1.0D, 0.0D, 1.0D);
-		Vec3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
+		Vector3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
 		BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
 		
 		Block block = Blocks.SMOOTH_STONE_SLAB;
@@ -448,18 +448,18 @@ public class CommandsPlots {
 		
 		if(signTe != null)
 		{
-			signTe.signText[0] = new StringTextComponent("[" + name + "]").setStyle(new Style().setBold(true).setColor(TextFormatting.BLUE));
-			signTe.signText[1] = new StringTextComponent(senderName).setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
-			signTe.signText[2] = new StringTextComponent(String.valueOf(priceIn) + "$").setStyle(new Style().setBold(true).setColor(TextFormatting.BLACK));
-			signTe.signText[3] = new StringTextComponent("[BUY]").setStyle(new Style().setBold(true).setColor(TextFormatting.GREEN));
+			signTe.setText(0 , new StringTextComponent("[" + name + "]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLUE));
+			signTe.setText(1 , new StringTextComponent(senderName).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
+			signTe.setText(2 , new StringTextComponent(String.valueOf(priceIn) + "$").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
+			signTe.setText(3 , new StringTextComponent("[BUY]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.GREEN));
 			signTe.markDirty();
 		}
 		
 	}
 	
-	public static Vec3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
+	public static Vector3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
 	{
-		return new Vec3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
+		return new Vector3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
 	}
 	
 	 private static int saveAll(CommandSource source, boolean flush) {

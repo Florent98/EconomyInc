@@ -4,6 +4,7 @@ package fr.fifoube.gui;
 
 import java.awt.Color;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -58,23 +60,23 @@ public class GuiCreditCard extends Screen {
 		this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
         
-        this.oneB = this.addButton(new Button(width / 2 + 90, height / 2 - 55, 30, 20, TextFormatting.GREEN + "+1", (press) -> actionPerformed(0))); 
-        this.fiveB = this.addButton(new Button(width / 2 - 120, height / 2 , 30, 20, TextFormatting.GREEN + "+5", (press) ->actionPerformed(1)));
-        this.tenB = this.addButton(new Button(width / 2 - 85, height / 2 , 30, 20, TextFormatting.GREEN + "+10", (press) ->actionPerformed(2)));
-        this.twentyB = this.addButton(new Button(width /2 - 50, height / 2 , 30, 20, TextFormatting.GREEN + "+20",(press) -> actionPerformed(3)));
-        this.fiftyB = this.addButton(new Button(width / 2 - 15, height / 2 , 30, 20, TextFormatting.GREEN + "+50", (press) ->actionPerformed(4)));
-        this.hundreedB = this.addButton(new Button(width / 2 + 20, height / 2 , 30, 20, TextFormatting.GREEN + "+100", (press) ->actionPerformed(5)));
-        this.twoHundreedB = this.addButton(new Button(width / 2 + 55, height / 2 , 30, 20, TextFormatting.GREEN + "+200", (press) ->actionPerformed(6)));
-        this.fiveHundreedB = this.addButton(new Button(width / 2 + 90, height / 2 , 30, 20, TextFormatting.GREEN + "+500", (press) ->actionPerformed(7)));
+        this.oneB = this.addButton(new Button(width / 2 + 90, height / 2 - 55, 30, 20, new StringTextComponent("+1").mergeStyle(TextFormatting.GREEN), (press) -> actionPerformed(0))); 
+        this.fiveB = this.addButton(new Button(width / 2 - 120, height / 2 , 30, 20, new StringTextComponent("+5").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(1)));
+        this.tenB = this.addButton(new Button(width / 2 - 85, height / 2 , 30, 20, new StringTextComponent("+10").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(2)));
+        this.twentyB = this.addButton(new Button(width /2 - 50, height / 2 , 30, 20, new StringTextComponent("+20").mergeStyle(TextFormatting.GREEN),(press) -> actionPerformed(3)));
+        this.fiftyB = this.addButton(new Button(width / 2 - 15, height / 2 , 30, 20, new StringTextComponent("+50").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(4)));
+        this.hundreedB = this.addButton(new Button(width / 2 + 20, height / 2 , 30, 20, new StringTextComponent("+100").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(5)));
+        this.twoHundreedB = this.addButton(new Button(width / 2 + 55, height / 2 , 30, 20, new StringTextComponent("+200").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(6)));
+        this.fiveHundreedB = this.addButton(new Button(width / 2 + 90, height / 2 , 30, 20, new StringTextComponent("+500").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(7)));
 		
-        this.oneBMinus = this.addButton(new Button(width / 2 + 90, height / 2 - 25, 30, 20,TextFormatting.RED +  "-1", (press) ->actionPerformed(8)));
-        this.fiveBMinus = this.addButton(new Button(width / 2 - 120, height / 2 + 30, 30, 20,TextFormatting.RED +  "-5", (press) ->actionPerformed(9)));
-        this.tenBMinus = this.addButton(new Button(width / 2 - 85, height / 2 + 30, 30, 20, TextFormatting.RED + "-10", (press) ->actionPerformed(10)));
-        this.twentyBMinus = this.addButton(new Button(width /2 - 50, height / 2 + 30, 30, 20, TextFormatting.RED + "-20", (press) ->actionPerformed(11)));
-        this.fiftyBMinus = this.addButton(new Button(width / 2 - 15, height / 2 + 30, 30, 20, TextFormatting.RED + "-50", (press) ->actionPerformed(12)));
-        this.hundreedBMinus = this.addButton(new Button(width / 2 + 20, height / 2 + 30, 30, 20, TextFormatting.RED + "-100", (press) ->actionPerformed(13)));
-        this.twoHundreedBMinus = this.addButton(new Button(width / 2 + 55, height / 2 + 30, 30, 20, TextFormatting.RED + "-200", (press) ->actionPerformed(14)));
-        this.fiveHundreedBMinus = this.addButton(new Button(width / 2 + 90, height / 2 + 30, 30, 20, TextFormatting.RED + "-500", (press) ->actionPerformed(15)));
+        this.oneBMinus = this.addButton(new Button(width / 2 + 90, height / 2 - 25, 30, 20, new StringTextComponent("-1").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(8)));
+        this.fiveBMinus = this.addButton(new Button(width / 2 - 120, height / 2 + 30, 30, 20,new StringTextComponent("-5").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(9)));
+        this.tenBMinus = this.addButton(new Button(width / 2 - 85, height / 2 + 30, 30, 20, new StringTextComponent("-10").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(10)));
+        this.twentyBMinus = this.addButton(new Button(width /2 - 50, height / 2 + 30, 30, 20, new StringTextComponent("-20").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(11)));
+        this.fiftyBMinus = this.addButton(new Button(width / 2 - 15, height / 2 + 30, 30, 20, new StringTextComponent("-50").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(12)));
+        this.hundreedBMinus = this.addButton(new Button(width / 2 + 20, height / 2 + 30, 30, 20, new StringTextComponent("-100").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(13)));
+        this.twoHundreedBMinus = this.addButton(new Button(width / 2 + 55, height / 2 + 30, 30, 20, new StringTextComponent("-200").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(14)));
+        this.fiveHundreedBMinus = this.addButton(new Button(width / 2 + 90, height / 2 + 30, 30, 20, new StringTextComponent("-500").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(15)));
         super.init();
 	}
 	
@@ -105,15 +107,17 @@ public class GuiCreditCard extends Screen {
 	}	
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		// TODO Auto-generated method stub
+		this.renderBackground(matrixStack);
 		this.minecraft.getTextureManager().bindTexture(background);
-		this.blit(this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+		this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
         InventoryScreen.drawEntityOnScreen(this.guiLeft + 25, this.guiTop + 58, 25, (float)(this.guiLeft + 51) - mouseX, (float)(this.guiTop + 75 - 50) - mouseY, this.getMinecraft().player);
-		super.render(mouseX, mouseY, partialTicks);
-		this.font.drawString(new TranslationTextComponent(I18n.format("title.ownerCard")+ ": " + name).getFormattedText(), (this.width / 2) - 75, (this.height / 2)- 55, Color.DARK_GRAY.getRGB());
-		this.font.drawString(new TranslationTextComponent(I18n.format("title.fundsCard")+ ": " + String.valueOf(funds_s)).getFormattedText(), (this.width / 2) - 75, (this.height / 2)- 45, Color.DARK_GRAY.getRGB());
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.font.drawString(matrixStack, I18n.format("title.ownerCard")+ ": " + name, (this.width / 2) - 75, (this.height / 2)- 55, Color.DARK_GRAY.getRGB());
+		this.font.drawString(matrixStack, I18n.format("title.fundsCard")+ ": " + String.valueOf(funds_s), (this.width / 2) - 75, (this.height / 2)- 45, Color.DARK_GRAY.getRGB());
 
 	}
+	
 	
 }

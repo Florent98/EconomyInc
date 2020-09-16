@@ -57,7 +57,7 @@ public class ItemWireless extends Item {
 													{
 														if(worldIn.isRemote)
 														{
-															player.sendMessage(new StringTextComponent(I18n.format("title.cardUpdated")));
+															player.sendMessage(new StringTextComponent(I18n.format("title.cardUpdated")), player.getUniqueID());
 														}
 														hasCardIS.getTag().putBoolean("Linked", true);
 													}
@@ -65,7 +65,7 @@ public class ItemWireless extends Item {
 													{
 														if(worldIn.isRemote)
 														{
-															player.sendMessage(new StringTextComponent(I18n.format("title.cardAlreadyLinked")));
+															player.sendMessage(new StringTextComponent(I18n.format("title.cardAlreadyLinked")), player.getUniqueID());
 														}
 														player.addItemStackToInventory(itemStackInC);
 													}
@@ -85,7 +85,7 @@ public class ItemWireless extends Item {
 						{
 							if(worldIn.isRemote)
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.cardTooMuch")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.cardTooMuch")), player.getUniqueID());
 							}
 								return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
 						}

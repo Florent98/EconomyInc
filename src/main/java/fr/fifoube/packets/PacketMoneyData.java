@@ -4,6 +4,7 @@ package fr.fifoube.packets;
 
 import java.util.function.Supplier;
 
+import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.capabilities.IMoney;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,6 @@ public class PacketMoneyData {
     {
         Minecraft.getInstance().player.getCapability(CapabilityMoney.MONEY_CAPABILITY)
                 .ifPresent(capa -> {
-                	System.out.println(pck.money);
                 	capa.setMoney(pck.money);
                 }
                 );

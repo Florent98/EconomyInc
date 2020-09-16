@@ -107,5 +107,7 @@
 "title.noCardFoundAndNoLink":"Aucune carte de crédit n'a été trouvée ou vous n'avez pas la technologie sans fil",
 "title.noMoreQuantity":"Le vendeur automatique est vide, contacter le vendeur.",
 
+"stat.economyinc.changed_gold_money": "Or transformé",
+
  "itemGroup.eic": "Economy Inc."
 }

@@ -5,6 +5,7 @@ package fr.fifoube.packets;
 import java.util.function.Supplier;
 
 import fr.fifoube.items.ItemsRegistery;
+import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -57,11 +58,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 1 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 1) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 1);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 							
 						}
@@ -75,11 +77,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 5 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 5) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 5);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 						}
 						
@@ -92,11 +95,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 10 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 10) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 10);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 
 						}
@@ -109,11 +113,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 20 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 20) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 20);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 
 						}
@@ -126,11 +131,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 50 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 50) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 50);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 						}
 					}
@@ -142,11 +148,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 100 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 100) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 100);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 
 						}
@@ -159,11 +166,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 200 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 200) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 200);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 
 						}
@@ -176,11 +184,12 @@ public class PacketCardChange {
 							if(flag)
 							{
 								double previous_money = data.getMoney();
+								ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has withdrawn " + 500 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() - 500) + "." + "[UUID: " + player.getUniqueID() + "]");
 								data.setMoney(previous_money - 500);								
 							}
 							else
 							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")));
+								player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 							}
 						}
 					}
@@ -190,6 +199,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack(ItemsRegistery.ITEM_ONEB)))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 1 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 1) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 1);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_ONEB), 1);
 						}
@@ -199,6 +209,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_FIVEB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 5 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 5) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 5);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_FIVEB), 1);
 
@@ -209,6 +220,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_TENB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 10 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 10) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 10);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_TENB), 1);
 
@@ -219,6 +231,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_TWENTYB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 20 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 20) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 20);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_TWENTYB), 1);
 						}
@@ -228,6 +241,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_FIFTYB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 50 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 50) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 50);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_FIFTYB), 1);
 
@@ -238,6 +252,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_HUNDREEDB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 100 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 100) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 100);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_HUNDREEDB), 1);
 
@@ -248,6 +263,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_TWOHUNDREEDB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 200 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 200) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 200);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB), 1);
 
@@ -258,6 +274,7 @@ public class PacketCardChange {
 						if(player.inventory.hasItemStack(new ItemStack((ItemsRegistery.ITEM_FIVEHUNDREEDB))))
 						{
 							double previous_money = data.getMoney();
+							ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has added " + 500 + "." + " Balance was " + previous_money + ", balance is now " + (data.getMoney() + 500) + "." + "[UUID: " + player.getUniqueID() + "]");
 							data.setMoney(previous_money + 500);
 							clearMatchingItems(player, new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB), 1);
 

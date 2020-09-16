@@ -134,11 +134,10 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 		return super.write(compound);
 	}
 	
-	
 	@Override
-	public void read(CompoundNBT compound) 
-	{
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+
+		super.read(state, compound);
 		inventory.deserializeNBT(compound.getCompound("inventory"));
 		this.ownerS = compound.getString("ownerS");
 		this.direction = compound.getByte("direction");
@@ -149,7 +148,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
             this.allowedPlayers.add(i, tagList.getString(i));
         }
         if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-            this.customName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
+            this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
          }
 
 	}
@@ -168,7 +167,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
     {
     	this.allowedPlayers.clear();
-    	read(pkt.getNbtCompound());
+    	read(null, pkt.getNbtCompound());
     }
 
 	@Override

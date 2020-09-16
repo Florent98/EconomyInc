@@ -107,5 +107,7 @@
 "title.noCardFoundAndNoLink":"No encontra niguna tarjeta de credito y no te tenes la tecnologia microchip.",
 "title.noMoreQuantity":"la maquina es vacio, contacto el vendedor.",
 
- "itemGroup.eic": "Economy Inc."
+"stat.economyinc.changed_gold_money": "Oro transformado",
+
+"itemGroup.eic": "Economy Inc."
 }

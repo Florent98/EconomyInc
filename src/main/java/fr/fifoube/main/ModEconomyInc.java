@@ -1,19 +1,19 @@
 /*******************************************************************************
- *******************************************************************************/
-package fr.fifoube.main;
-
 /***
  * 	Florent T. also know as Fifou_BE
  *  Mod created by Florent T. also known as Fifou_BE
  *  Officials threads of this mod are
-	 * 	https://minecraft.curseforge.com/projects/economy-inc
-	 * 	https://www.planetminecraft.com/mod/economy-inc/
-	 * 	https://www.minecraftforgefrance.fr/showthread.php?tid=4715
+ * 	https://minecraft.curseforge.com/projects/economy-inc
+ * 	https://www.planetminecraft.com/mod/economy-inc/
+ * 	https://www.minecraftforgefrance.fr/showthread.php?tid=4715
  *  For more info read terms and conditions and also read https://account.mojang.com/documents/minecraft_eula parts with MOD
  */
+ /*******************************************************************************/
+package fr.fifoube.main;
 
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import fr.fifoube.blocks.BlocksRegistry;
 import fr.fifoube.blocks.tileentity.TileEntityRegistery;
@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -40,23 +41,26 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod("economyinc")
+@Mod(ModEconomyInc.MOD_ID)
 public class ModEconomyInc {
 
 		public static final String MOD_ID = "economyinc";
-		public static final Logger LOGGER = LogManager.getLogManager().getLogger(MOD_ID);
+		public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 		public static final ItemGroup EIC = new ItemGroupEIC("eic");
 		
 		public ModEconomyInc() {
 
+			
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
 			ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);	
 			
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
-			
+	        MinecraftForge.EVENT_BUS.addListener(this::onCommandRegister);
+
 			FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, ContainerTypeRegistery::registerContainers);
+			
 			
 
 		}
@@ -81,9 +85,14 @@ public class ModEconomyInc {
 		private void serverStartingEvent(final FMLServerStartingEvent event)
 		{
 			MinecraftForge.EVENT_BUS.register(new ServerEvents());
-			CommandBalance.register(event.getCommandDispatcher());
-			CommandsPlots.register(event.getCommandDispatcher());
-			CommandsPlotsBuy.register(event.getCommandDispatcher());
-
-		}	
+		}
+		
+		//COMMANDS
+		public void onCommandRegister(RegisterCommandsEvent event)
+		{
+			CommandBalance.register(event.getDispatcher());
+			CommandsPlots.register(event.getDispatcher());
+			CommandsPlotsBuy.register(event.getDispatcher());
+		}
+		
 }

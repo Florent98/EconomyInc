@@ -6,6 +6,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
@@ -58,6 +59,14 @@ public class GuiSellerBuy extends Screen
 		fundsTotalRecovery = tile.getFundsTotal();	
 		tile.setFundsTotal(fundsTotalRecovery);
 		tile.markDirty();
+		if(tile.getTime() != 0)
+		{
+			slot1.active = false;
+		}
+		else
+		{
+			slot1.active = true;
+		}
 	}
 	
 	@Override
@@ -70,13 +79,13 @@ public class GuiSellerBuy extends Screen
 			this.owner = tile.getOwnerName();
 			this.itemName = tile.getItem();
 			this.cost = tile.getCost();
-			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, I18n.format("title.buy"),(press) -> actionPerformed(0))); 
+			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, new TranslationTextComponent("title.buy"),(press) -> actionPerformed(0))); 
              
 			sellerOwner = tile.getOwner();
 			worldPlayer = minecraft.player.getUniqueID().toString();
 			if(sellerOwner.equals(worldPlayer))
 			{
-				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, I18n.format("title.recover"),(press) -> actionPerformed(1))); 
+				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, new TranslationTextComponent("title.recover"),(press) -> actionPerformed(1))); 
 			}
 			
 		}
@@ -131,18 +140,18 @@ public class GuiSellerBuy extends Screen
 											}
 											else
 											{
-												minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")));
+												minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")), minecraft.player.getUniqueID());
 											}
 										}
 										else
 										{
-											minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
+											minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.notLinked")), minecraft.player.getUniqueID());
 	
 										}
 								}
 								else
 								{
-									minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noSameOwner")));
+									minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noSameOwner")), minecraft.player.getUniqueID());
 								}
 							}
 						}
@@ -160,25 +169,25 @@ public class GuiSellerBuy extends Screen
 	}
 	 
 		@Override
-		public void render(int mouseX, int mouseY, float partialTicks)
+		public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
 		{
-			this.renderBackground();
+			this.renderBackground(matrixStack);
 			// added
 	        this.getMinecraft().getTextureManager().bindTexture(background);
 	        int i = this.guiLeft;
 	        int j = this.guiTop;
-	        this.blit(i, j, 0, 0, this.xSize, this.ySize);
-			this.font.drawString(TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-			this.font.drawString(TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-			this.font.drawString(TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
-			this.font.drawString(TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
+	        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
 			if(sellerOwner.equals(worldPlayer))
 			{
-				this.font.drawString(TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+				this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
 			}
 
 			
-			super.render(mouseX, mouseY, partialTicks);
+			super.render(matrixStack, mouseX, mouseY, partialTicks);
 	        drawImageInGui();
 
 	    }

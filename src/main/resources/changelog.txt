@@ -159,7 +159,7 @@ Keys : + Added
  
  1.6/1.6.1/1.6.2
  
- @ Upgrading from 1.12.2 to Minecraft 1.14.X.
+ @ Upgrading from 1.12.X to Minecraft 1.14.X.
  @ Villages are not done yet, so there is no bank yet.
  * Fixed config file.
  + Added a command plot, that allows operators of server to create plots with a certain price that players can buy with their money. Plots are protected and can only be modified by the owner of the plot.
@@ -182,14 +182,90 @@ Keys : + Added
  1.6.3
  
  * Fixed vending machine not being accessible to others after creation.
+ * Fixed block seller that wasn't dropping itself and the resources it contains.
+ * Fixed block seller that could be destroy normally by hand.
+ + Added mysql (not implemented but added to the project).
+ 
+ 1.6.4
+ 
+ @ Cleaning code
+ 
+ 1.6.5
+ 
+ * Fixed credit card not being updated after death.
+ * Fixed chinese translations.
+ + Added more translations for gui and cards stuff.
+ 
+ 1.6.6
+ 
+ * Fixed config file not working.
+ * Fixed a bug that prevented the wireless technology to be applied because of error/confirmation message that was sent to the player on a dedicated server.
+ + Added a lang line for the limited/unlimited on the gui seller creation. 
+ 
+ 1.6.7
+ 
+ @ Upgrading from 1.14.X to 1.15.X
+ 
+ 1.6.8
+ 
+ + Added server config to change the edges of plots.  By default, it's the smooth stone slab. It can't be air so minecraft:air won't work.
+ * Fixed a bug where the block could not be placed by commands (would give an overflow crash error).
+ + Funds to recover title when buying items is now only visible by the owner.
+ + Seller gives now a redstone output when someone buys. (15 power, 1 tick)
+ * Fixed multiple Json error in the console.
+ * Fixed block changer title "already used" is now fixed and only allow one person using the block.
+ * Fixed block bills render in world. (Inventory render still WIP)
+ * Fixed block vault 2x2x1 bounding box to match the real geometry of the block.
+ + Seller can now be refilled and sell another object, by right clicking with the wrench on it. (Probably temporary).
+ * Seller display now directly what it's selling by hovering the block.
+ * Fixed a bug where the vault would give a crash when clicking on the button on the top corner right of the GUI. (Temporary fix, will be replaced once the settings gui are added back)
+ - Removed village feature.
+ * Fixed vault render in inventory/hand/3rd Person.
+ * Changed the pure gold nugget texture to match new MC textures.
+ * Fixed a bug where placing a block on a slab would rotate the block in the wrong direction.
+ 
+ 1.6.9
+ 
+ * Fixed a bug where the command buyplot could not be used by players or could appear in red and still working.
+ + Added arguments to plot command
+          * list, list all the plots from A-Z
+          * assign, assign a plot to a player without making them buy for it
+          * teleport, teleport you or players to a certain plot
+ * Seller destroyed in creative will now remove the tile entity attached to it. Prevent it the data to stay on the world at that position, so placing a seller back a that position gives fresh tile entity.
+ + Added vault settings for the big vault only. Giving you the option to add 5 friends to your vault and allowing them to open the vault.
+ @ Rework the way money is stored.
+ + Microchip now is dependant from the card and not the player. So if the card is removed you will need to re-upgrade it.
+ + Operators can now destroy on any plots and can open any vault.
+ * Fixed lang files
+ + Added new lang files for new command plot
+ * Fixed a bug where seller would give an error in the server console.
+ 
+ 1.6.9.1
+ 
+ * Fixed a bug that would cause the game to crash with the debug profiler not having a reference to the world.
+
+ 1.6.9.2 
+ 
+ + Added support for NBT in the seller. You can now sell anything that has nbt tags (so potions, nametag, datapack should also work).
+ 
+ 1.6.9.3
+ 
+ * Fixed plot not working in some certain cases.
+ 
+ 1.6.9.4
+ 
+ @ Updated from Minecraft 1.15.x to Minecraft 1.16.x
+ + Added a server config for the process time of the gold changer.
+ + Added a cooldown for the buy button in the seller GUI. (Should no prevent duplicating buy when server is lagging).
+ + Added a server config for the time of the seller button cooldown.
+ + Added a server config for the duration of the redstone signal coming from the seller.
+ * Fixed the sound coming from the creation of a new credit card being displayed to everyone except the player creating the card.
+ + Added logging feature in logs to track down every money changes made to an account (credit card adding or withdrawing money, seller buy, seller funds recovery, plots buy, gold exchange, command balance). They can be found easily in the logs by searching for [economyinc/].
+ 
+ 
+ 
  Known bugs : 
- 
- TESR lighting has no darkness.
- Block seller is acting weird when displaying what item it's selling, looking at certain faces of the block won't display what's inside.
- Plots does not write the right chunk coord.
- Pure gold nugget will have no weight when taken from furnace with hopper,minecart hopper, shift click.
- Infinite loop leading to crash after block is placed (vending machine, block changer). 
- 
+  
  Please let me know if you know step to reproduce bugs here -> https://github.com/FifouBE/EconomyInc/issues/
  
  

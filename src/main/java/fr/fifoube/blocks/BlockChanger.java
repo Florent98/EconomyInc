@@ -49,7 +49,7 @@ public class BlockChanger extends ContainerBlock {
 	}
 	
 	@Override
-	public boolean hasTileEntity() {
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
 	
@@ -203,10 +203,6 @@ public class BlockChanger extends ContainerBlock {
 		{
 			return BlockRenderType.MODEL;
 		}
-		
-		@Override
-		public boolean isNormalCube(BlockState state, IBlockReader worldIn, BlockPos pos) {
-			return false;
-		}
+	
 		
 }

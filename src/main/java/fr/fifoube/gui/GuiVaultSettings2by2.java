@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.main.ModEconomyInc;
@@ -22,6 +23,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -49,7 +51,7 @@ public class GuiVaultSettings2by2  extends Screen
 		
 		super.init();
 		this.minecraft.keyboardListener.enableRepeatEvents(true);
-		this.commandTextField = new TextFieldWidget(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, I18n.format("gui.vaultsettings"));
+		this.commandTextField = new TextFieldWidget(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, new TranslationTextComponent("gui.vaultsettings"));
 	    this.commandTextField.setMaxStringLength(35);
 	    this.commandTextField.setText("Add other players.");
 	    this.children.add(this.commandTextField);
@@ -57,7 +59,7 @@ public class GuiVaultSettings2by2  extends Screen
 	    for(int i = 0; i < 5; i++)
 	    {
 	    	int id = i;
-	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, TextFormatting.DARK_RED + "✖", (press) -> this.actionPerformed(id));
+	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, new StringTextComponent("✖").mergeStyle(TextFormatting.DARK_RED), (press) -> this.actionPerformed(id));
 	    	buttonList.add(id, button);
 	    	button.active = false;
 	    	this.addButton(button);
@@ -76,26 +78,26 @@ public class GuiVaultSettings2by2  extends Screen
 	}
 	
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) 
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) 
 	{
-		this.renderBackground();
+		this.renderBackground(matrixStack);
 	    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
 	    this.minecraft.getTextureManager().bindTexture(BACKGROUND); 
 	    int k = (this.width - this.xSize) / 2; 
 	    int l = (this.height - this.ySize) / 2;
-	    this.blit(k, l, 0, 0, this.xSize, this.ySize); 
-	    super.render(mouseX, mouseY, partialTicks);
+	    this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
+	    super.render(matrixStack, mouseX, mouseY, partialTicks);
 	    if(!Minecraft.getInstance().isSingleplayer())
 	    {
 		    if(tile.getOwnerS().equals(Minecraft.getInstance().player.getUniqueID().toString()))
 		    {
-		    	this.commandTextField.render(mouseX, mouseY, partialTicks);
+		    	this.commandTextField.render(matrixStack, mouseX, mouseY, partialTicks);
 		    }
 	    }
 	    for (int i = 0; i < tile.getAllowedPlayers().size(); i++) {
 	    	
     		String playerName = tile.getAllowedPlayers().get(i).substring(0, tile.getAllowedPlayers().get(i).indexOf(","));
-    		this.font.drawString(playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
+    		this.font.drawString(matrixStack, playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
 		}
 	    for (int j = 0; j < 5; j++) {
 			
@@ -162,7 +164,7 @@ public class GuiVaultSettings2by2  extends Screen
 		    				boolean flag = checkForSamePlayer(playerUUID);
 		    				if(flag)
 		    				{
-		    					String playerName = playerList.get(i).getDisplayName().getFormattedText();
+		    					String playerName = playerList.get(i).getDisplayName().getUnformattedComponentText();
 		    					PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));			    					
 		    				}
 		    			}

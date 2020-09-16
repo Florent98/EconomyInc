@@ -16,14 +16,14 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,7 +66,7 @@ public class ClientEvents {
 							{
 								stack = new ItemStack(Blocks.BARRIER, 1);
 							}
-							Vec3d vec = event.getInfo().getProjectedView();
+							Vector3d vec = event.getInfo().getProjectedView();
 							matrixStack.translate(-vec.x, -vec.y, -vec.z);
 							matrixStack.translate(x + 0.5, y + 0.5, z + 0.5);
 				            matrixStack.scale(0.5F, 0.5F, 0.5F);

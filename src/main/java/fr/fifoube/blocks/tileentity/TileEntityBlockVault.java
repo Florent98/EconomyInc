@@ -31,8 +31,6 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 	ItemStackHandler inventory = new ItemStackHandler(27);
 	private String ownerS = "";
 	private byte direction;
-	private List<String> allowedPlayers = new ArrayList<String>();
-	private int maxAllowedPlayers = 0;
 	private boolean isOpen;
     private ITextComponent customName;
 	
@@ -62,8 +60,7 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
     {
-    	this.allowedPlayers.clear();
-    	read(pkt.getNbtCompound());
+    	read(null, pkt.getNbtCompound());
     }
     // ANIMATION
 	
@@ -100,31 +97,6 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 		return false;	
     }
     
-    public void setAllowedPlayers(String allowed)
-    {
-    	this.allowedPlayers.add(allowed);
-    }
-    
-    public List<String> getAllowedPlayers()
-    {
-		return this.allowedPlayers; 	
-    }
-      
-    public int getMax()
-    {
-    	return this.maxAllowedPlayers;
-    }
-    
-    public void addToMax()
-    {
-    	this.maxAllowedPlayers = this.maxAllowedPlayers + 1;
-    }
-    
-    public void removeToMax()
-    {
-    	this.maxAllowedPlayers = this.maxAllowedPlayers - 1;
-    }
-    
     public byte getDirection()
     {
     	return this.direction;
@@ -141,45 +113,25 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
     {
         compound.put("inventory", inventory.serializeNBT());
         compound.putString("ownerS", this.ownerS);
-        compound.putByte("direction", this.direction);
-        compound.putInt("maxallowed", this.maxAllowedPlayers);
-        ListNBT tagList = new ListNBT();
-         for(int i = 0; i < this.allowedPlayers.size(); i++)
-         {
-          String s = allowedPlayers.get(i);
-          if(s != null)
-          {
-              tagList.add(StringNBT.valueOf(s));
-          }
-         }
-         compound.put("allowedList", tagList);
-         compound.putBoolean("isOpen", this.isOpen);
-         
+        compound.putByte("direction", this.direction);     
          if (this.getDisplayName() != null) {
              compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
           }
         return super.write(compound);
     }
     
-    
     @Override
-    public void read(CompoundNBT compound) 
-    {
-        super.read(compound);
-        inventory.deserializeNBT(compound.getCompound("inventory"));
-        this.ownerS = compound.getString("ownerS");
-        this.direction = compound.getByte("direction");
-        this.maxAllowedPlayers = compound.getInt("maxallowed");
-		this.isOpen = compound.getBoolean("isOpen");
-        ListNBT tagList = compound.getList("allowedList", NBT.TAG_STRING);
-        for(int i = 0; i < tagList.size(); i++)
-        {    
-            this.allowedPlayers.add(i, tagList.getString(i));
-        }
-        if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-            this.customName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
-         }
+    public void read(BlockState state, CompoundNBT compound) {
+
+    	super.read(state, compound);
+    	 inventory.deserializeNBT(compound.getCompound("inventory"));
+         this.ownerS = compound.getString("ownerS");
+         this.direction = compound.getByte("direction");
+         if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
+             this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
+          }
     }
+    
     
 	@Override
 	public void markDirty() 

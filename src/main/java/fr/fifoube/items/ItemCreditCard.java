@@ -9,6 +9,7 @@ import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,7 +20,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -27,7 +30,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemCreditCard extends Item{
-
 	
 	public ItemCreditCard(Properties properties) {
 		super(properties);
@@ -60,7 +62,7 @@ public class ItemCreditCard extends Item{
 										}
 										else
 										{
-											playerIn.sendMessage(new StringTextComponent(I18n.format("title.notLinked")));
+											playerIn.sendMessage(new StringTextComponent(I18n.format("title.notLinked")), playerIn.getUniqueID());
 										}
 								}
 							}
@@ -76,28 +78,23 @@ public class ItemCreditCard extends Item{
 	        			itemStackIn.setTag(new CompoundNBT());
 	        		}
 	        		
-	        		if(!itemStackIn.getTag().hasUniqueId("Owner"))
+	        		if(!itemStackIn.getTag().contains("Owner"))
 	        		{
-
 	        			playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 	        			UUID ownerUUID = playerIn.getUniqueID();
 	        			itemStackIn.getTag().putString("OwnerUUID", ownerUUID.toString());
-	        			itemStackIn.getTag().putString("Owner", playerIn.getDisplayName().getFormattedText());
+	        			itemStackIn.getTag().putString("Owner", playerIn.getDisplayName().getString());
 	        			itemStackIn.getTag().putBoolean("Owned", true);
 	        			itemStackIn.getTag().putBoolean("Linked", false);
-	        			playerIn.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F)); //Play a sound that alert everybody that a credit card was created.
+	        			worldIn.playSound(null, playerIn.getPosition(),  SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5f, 0.0f);
 	        			});
 	        		}
 	        		
 	        	}
+
 	 	}
 	       
-        return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	private void openGui(Screen screen) {
-		Minecraft.getInstance().displayGuiScreen(screen);
+        return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
 	}
 
 	@Override

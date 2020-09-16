@@ -41,7 +41,6 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void attachToPlayer(AttachCapabilitiesEvent<Entity> event)
 	{
-		event.getObject().world.getProfiler().startSection("AttachEvent");
 		if(event.getObject() instanceof PlayerEntity)
 		{
 				IMoney holder;
@@ -57,37 +56,31 @@ public class CapabilityMoney {
 				event.addCapability(CAP_KEY, wrapper);
 
 		}
-		event.getObject().world.getProfiler().endSection();
 	}
 	
     @SubscribeEvent
 	public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
     	
-		event.getPlayer().world.getProfiler().startSection("PlayerClone");
     	PlayerEntity oldPlayer = event.getOriginal();
         oldPlayer.revive();
         PlayerEntity newPlayer = event.getPlayer();
         oldPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(oldData -> { 	
         	newPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> data.setMoney(oldData.getMoney()));
         });
-        event.getPlayer().world.getProfiler().endSection();
 	}
 		
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 	{
-		event.getPlayer().world.getProfiler().startSection("Playerlogin");
 		if(!event.getPlayer().world.isRemote)
 			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
 			});
-		event.getPlayer().world.getProfiler().endSection();
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		event.getPlayer().world.getProfiler().startSection("PlayerRespawn");
 		if(!event.getPlayer().world.isRemote && event.getPlayer() instanceof ServerPlayerEntity)
 		{
 			ServerPlayerEntity player = (ServerPlayerEntity)event.getPlayer();
@@ -96,7 +89,6 @@ public class CapabilityMoney {
 				PacketsRegistery.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PacketMoneyData(data.getMoney()));
 			});	
 		}
-		event.getPlayer().world.getProfiler().endSection();
 
 	}
 	

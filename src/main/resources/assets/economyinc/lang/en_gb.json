@@ -98,13 +98,14 @@
 "title.item":"Item : ",
 "title.unlimitedStack":"unlimited",
 "title.limitedStack":"limited",
-"title.limitedStack":"Set to limited Stack.",
 "title.weight":"Weight : ",
 "title.alreadyUsed":"This block is already used by someone else.",
 "title.block_changer":"Gold changer",
 "title.exchange": "Accept interaction ?",
 "title.noCardFoundAndNoLink":"No credit card was found and you don't have the wireless technology.",
 "title.noMoreQuantity":"There is no more item in this block, contact the seller.",
+
+"stat.economyinc.changed_gold_money": "Gold changed",
 
  "itemGroup.eic": "Economy Inc."
 }

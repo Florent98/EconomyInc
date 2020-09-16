@@ -52,7 +52,7 @@ public class BlockVault extends ContainerBlock {
 	}
 
 	@Override
-	public boolean hasTileEntity() {
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
 	
@@ -368,20 +368,6 @@ public class BlockVault extends ContainerBlock {
 						te.markDirty();
 						return ActionResultType.SUCCESS;
 					}
-					else
-					{
-						for(int i = 0; i < te.getAllowedPlayers().size(); i++)
-						{
-							String listToCheck = te.getAllowedPlayers().get(i).toString();
-							if(player.getName().equals(listToCheck))
-							{
-					            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
-								te.markDirty();
-								return ActionResultType.SUCCESS;
-							}
-						}
-					}
-	
 				}
 				
 			}

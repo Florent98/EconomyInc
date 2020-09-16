@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
@@ -20,7 +21,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityBlockSeller extends TileEntity implements INamedContainerProvider {
+public class TileEntityBlockSeller extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.seller");
 	ItemStackHandler inventory_seller = new ItemStackHandler(1); //STACK HANDLER FOR ONE SLOT = 0 
@@ -34,6 +35,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	private boolean admin;
 	private String facing = "";
     private ITextComponent customName;
+    private int timer;
 	
 	public TileEntityBlockSeller()
 	{
@@ -63,7 +65,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    @Override
 	    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
 	    {
-	    	read(pkt.getNbtCompound());
+	    	deserializeNBT(pkt.getNbtCompound());
 	    }
 	    
 
@@ -153,12 +155,22 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    
 	    public String getItem()
 	    {
-	    	return this.inventory_seller.getStackInSlot(0).getDisplayName().getFormattedText().toString();
+	    	return this.inventory_seller.getStackInSlot(0).getDisplayName().getString();
 	    }
 	    
 	    public int getAmount()
 	    {
 	    	return this.inventory_seller.getStackInSlot(0).getCount();
+	    }
+	    
+	    public void setTime(int time)
+	    {
+	    	this.timer = time;
+	    }
+	    
+	    public int getTime()
+	    {
+	    	return this.timer;
 	    }
 	   
 		@Override
@@ -177,14 +189,14 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			if (this.getDisplayName() != null) {
 	             compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
 	        }
+			compound.putInt("timer", this.timer);
 			return super.write(compound);
 		}
 		
-		
 		@Override
-		public void read(CompoundNBT compound) 
-		{
-			super.read(compound);
+		public void read(BlockState state, CompoundNBT compound) {
+			
+			super.read(state, compound);
 			inventory_seller.deserializeNBT(compound.getCompound("inventory"));
 			this.owner = compound.getString("ownerS");
 			this.ownerName = compound.getString("ownerName");
@@ -196,9 +208,12 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			this.admin = compound.getBoolean("admin");
 			this.facing = compound.getString("facing");
 	        if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-	            this.customName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
+	            this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
 	        }
-		}	
+	        this.timer = compound.getInt("timer");
+		}
+
+		
 		
 		 @Override
 		 public void markDirty() 
@@ -215,6 +230,16 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 		@Override
 		public ITextComponent getDisplayName() {
 			return NAME;
+		}
+
+		@Override
+		public void tick() {
+			
+			if(this.timer != 0)
+			{
+				--this.timer;
+			}
+			
 		}
 		
 

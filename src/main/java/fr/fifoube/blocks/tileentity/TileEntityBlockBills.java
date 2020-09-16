@@ -39,7 +39,7 @@ public class TileEntityBlockBills extends TileEntity {
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
     {
-    	read(pkt.getNbtCompound());
+    	read(null, pkt.getNbtCompound());
     }
     
     public String getBillRef()
@@ -87,15 +87,16 @@ public class TileEntityBlockBills extends TileEntity {
 		return super.write(compound);
 	}
 	
-	
 	@Override
-	public void read(CompoundNBT compound) 
-	{
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+		// TODO Auto-generated method stub
+		super.read(state, compound);
 		this.numbBills = compound.getInt("numbBills");
 		this.direction = compound.getByte("direction");
 		this.billRef = compound.getString("billRef");
 	}
+	
+
 	
 	@Override
 	public void markDirty() 

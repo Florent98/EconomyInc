@@ -7,6 +7,7 @@ import java.util.Random;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
+import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -57,7 +58,7 @@ public class BlockSeller extends ContainerBlock {
 	}
 
 	@Override
-	public boolean hasTileEntity() {
+	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
 	
@@ -138,14 +139,6 @@ public class BlockSeller extends ContainerBlock {
 				}
 			}
 		}
-	}
-	
-	@Override
-	public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-		
-		super.onPlayerDestroy(worldIn, pos, state);
-		worldIn.getWorld().removeTileEntity(pos);
-
 	}
 
 	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
@@ -264,19 +257,6 @@ public class BlockSeller extends ContainerBlock {
 		
 		return state.get(POWERED) ? 15 : 0;
 	}
-	
-	@Override
-	public void updateNeighbors(BlockState stateIn, IWorld world, BlockPos pos, int flags) {
-		
-		World worldIn = world.getWorld();
-	    worldIn.notifyNeighborsOfStateChange(pos, this);
-
-	}
-	
-	@Override
-	public int tickRate(IWorldReader worldIn) {
-		return 1;
-	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -286,16 +266,17 @@ public class BlockSeller extends ContainerBlock {
 			if (state.get(POWERED)) {
 				
 		          worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(false)), 3);
-		          this.updateNeighbors(state, worldIn, pos, 2);
+		          this.updateNeighbors(state, worldIn, pos);
 
 		      }
 	}
 	
+
 	public void scheduleTick(BlockState state, World worldIn, BlockPos pos)
 	{
 		  worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 3);
 	      this.updateNeighbors(state, worldIn, pos);
-	      worldIn.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(worldIn));
+	      worldIn.getPendingBlockTicks().scheduleTick(pos, this, 20);
 	}
 
 	private void updateNeighbors(BlockState state, World worldIn, BlockPos pos) {
