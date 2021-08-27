@@ -2,6 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
+import fr.fifoube.gui.PacketBuyerChange;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -23,6 +24,9 @@ public class PacketsRegistery {
 		CHANNEL.messageBuilder(PacketCardChange.class, 5).encoder(PacketCardChange::encode).decoder(PacketCardChange::decode).consumer(PacketCardChange::handle).add();
 		CHANNEL.messageBuilder(PacketChangerUpdate.class, 6).encoder(PacketChangerUpdate::encode).decoder(PacketChangerUpdate::decode).consumer(PacketChangerUpdate::handle).add();
 		CHANNEL.messageBuilder(PacketVaultSettings.class, 7).encoder(PacketVaultSettings::encode).decoder(PacketVaultSettings::decode).consumer(PacketVaultSettings::handle).add();
+		CHANNEL.messageBuilder(PacketRefillSeller.class, 8).encoder(PacketRefillSeller::encode).decoder(PacketRefillSeller::decode).consumer(PacketRefillSeller::handle).add();
+		CHANNEL.messageBuilder(PacketBuyerCreation.class, 9).encoder(PacketBuyerCreation::encode).decoder(PacketBuyerCreation::decode).consumer(PacketBuyerCreation::handle).add();
+		CHANNEL.messageBuilder(PacketBuyerChange.class, 10).encoder(PacketBuyerChange::encode).decoder(PacketBuyerChange::decode).consumer(PacketBuyerChange::handle).add();
 	}
 
 

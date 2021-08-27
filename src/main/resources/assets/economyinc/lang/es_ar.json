@@ -27,33 +27,16 @@
 "block.economyinc.block_seller":"Maquina expenderdora",
 "block.economyinc.block_changer":"Cambio de oro",
 "block.economyinc.block_atm":"Cajero",
-"block.economyinc.block_village":"Caja de seguridad",
 "block.economyinc.block_bills":"Almacenador de billetes",
-
-
-"entity.entityInformater":"Informador",
 
 "title.ownerCard":"Propietario",
 "title.fundsCard":"Fondos",
 
-"title.deleteC1":"Eliminas tu tarjeta",
-
+"title.linkdCard":"Mejorar",
 "title.yes":"Si",
 "title.no":"No",
 
-"title.block_vault":"Caja de seguridad",
-
-"title.linkdCard":"Mejorar",
-
 "title.wireless":"Microchip",
-
-"title.stranger":"Hey extranjero !",
-"title.informations":"Tengo informacion para ti.",
-"title.seevault":"Ves la caja de seguridad",
-"title.codevault":"en el banco ? Tengo su codigo",
-"title.onlyhundred":"para solamente 100 dolares...",
-"title.deal":"Trato?",
-"title.accept":"Hecho!",
 
 "commands.plot.samename": "Una parcela con este nombre ya existe.",
 "commands.plot.success": "Parcela creada con éxito.",
@@ -93,17 +76,14 @@
 "title.noSameCardBuy":"No te puede comprar cosas con la tarjeta de una otra personna.",
 "title.seller":"Vendedor : ",
 "title.cost":"Costo : ",
-"title.mode":"Modo : ",
 "title.amount":"Cantidad : ",
 "title.fundsToRecover":"Fondos par recuperar : ",
 "title.item":"Item : ",
 "title.unlimited":"Pila ilimitada",
-"title.unlimitedStack":"ilimitada",
-"title.limitedStack":"limitada",
+"title.limited":"Pila limitada",
 "title.weight":"Peso : ",
 "title.alreadyUsed":"La maquina ya es usado por alguien mas.",
 "title.block_changer":"Cambio de oro",
-"title.exchange": "Aceptar la interaccion ?",
 "title.noCardFoundAndNoLink":"No encontra niguna tarjeta de credito y no te tenes la tecnologia microchip.",
 "title.noMoreQuantity":"la maquina es vacio, contacto el vendedor.",
 

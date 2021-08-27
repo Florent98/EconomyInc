@@ -262,9 +262,27 @@ Keys : + Added
  * Fixed the sound coming from the creation of a new credit card being displayed to everyone except the player creating the card.
  + Added logging feature in logs to track down every money changes made to an account (credit card adding or withdrawing money, seller buy, seller funds recovery, plots buy, gold exchange, command balance). They can be found easily in the logs by searching for [economyinc/].
  
+ 1.7
  
+ * Fixed blocks storing the string UUID of the player instead of the UUID.
+ * Fixed tile entity not being destroyed when destroyed in creative and some rare occasion in survival.
+ * Fixed a duplication bug that was happening when right clicking wireless and an Item was in the off hand slot.
+ * Fixed name of blocks in GUI being "tile.XXXX" instead of "block.economyinc.XXXX".
+ * Fixed logs saying that player has bought air when it has only 1 item in the seller.
+ * Fixed block buyer creation not giving back money to the player if inventory is full.
+ + Added new way to set the cost inside the seller ranging from 0.00 to 1.7*10^308.
+ + Added block buyer.
+ + Added NBT value to the bills and packets of bills. (Bills of 5$ will now hold nbt value of 5)
+ + Added a way to refill automatically seller by placing a vault under it. (Note that it will take any items, it doesn't have to be the same as the first one you put in the seller, allowing you to sell a lot more of items that have the same price).
+ 
+ + Added a custom button to set refill of the seller to true.
+ - Removed cost buttons in gui seller.
+ @ Clarified some of the variables name to their specific roles.
  
  Known bugs : 
+  
+  - Creating a bigger vault sometimes lead to a crash if the player unshift and place the last block of the multiblock. (Conflict between creating structure and actually placing the single vault block)
+  
   
  Please let me know if you know step to reproduce bugs here -> https://github.com/FifouBE/EconomyInc/issues/
  

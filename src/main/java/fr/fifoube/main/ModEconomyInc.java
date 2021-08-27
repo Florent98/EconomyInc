@@ -1,7 +1,6 @@
 /*******************************************************************************
 /***
- * 	Florent T. also know as Fifou_BE
- *  Mod created by Florent T. also known as Fifou_BE
+ *  Mod created by Florent T. also known as FlorentLeBelge
  *  Officials threads of this mod are
  * 	https://minecraft.curseforge.com/projects/economy-inc
  * 	https://www.planetminecraft.com/mod/economy-inc/
@@ -78,6 +77,7 @@ public class ModEconomyInc {
 			TileEntityRegistery.registerTileRenderer();
 			MinecraftForge.EVENT_BUS.register(new ClientEvents());
 			RenderTypeLookup.setRenderLayer(BlocksRegistry.BLOCK_SELLER, RenderType.getCutoutMipped());
+			RenderTypeLookup.setRenderLayer(BlocksRegistry.BLOCK_BUYER, RenderType.getCutoutMipped());
 			RenderTypeLookup.setRenderLayer(BlocksRegistry.BLOCK_BILLS, RenderType.getCutout());
 		}
 		

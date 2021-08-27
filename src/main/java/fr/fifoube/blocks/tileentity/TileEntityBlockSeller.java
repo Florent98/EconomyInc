@@ -2,20 +2,27 @@
  *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
+import java.util.UUID;
+
 import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.gui.container.ContainerSeller;
+import fr.fifoube.packets.PacketRefillSeller;
+import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
@@ -25,17 +32,18 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.seller");
 	ItemStackHandler inventory_seller = new ItemStackHandler(1); //STACK HANDLER FOR ONE SLOT = 0 
-	private String owner = ""; 
+	private ITextComponent customName;
+	private UUID owner; 
 	private String ownerName = "";
+	private String item = "";
+	private String facing = "";
 	private double funds_total;
 	private double cost;
-	private boolean created;
 	private int amount;
-	private String item = "";
+	private int timer;
+	private boolean autorefill;
 	private boolean admin;
-	private String facing = "";
-    private ITextComponent customName;
-    private int timer;
+	private boolean created;
 	
 	public TileEntityBlockSeller()
 	{
@@ -99,12 +107,12 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			return this.admin;
 		}
 		
-	    public void setOwner(String string)
+	    public void setOwner(UUID uuid)
 	    {
-	        this.owner = string;
+	    	this.owner = uuid;	
 	    }
 	    
-	    public String getOwner()
+	    public UUID getOwner()
 	    {
 	        return this.owner;
 	    }
@@ -173,11 +181,23 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	    	return this.timer;
 	    }
 	   
+	    public void setAutoRefill(boolean restock)
+	    {
+	    	this.autorefill = restock;
+	    }
+	    
+	    public boolean getAutoRefill()
+	    {
+	    	return this.autorefill;
+	    }
 		@Override
 		public CompoundNBT write(CompoundNBT compound) 
 		{
 			compound.put("inventory", inventory_seller.serializeNBT());
-			compound.putString("ownerS", this.owner);
+			if(this.owner != null)
+			{
+				compound.putUniqueId("ownerUUID", this.owner);	
+			}
 			compound.putString("ownerName", this.ownerName);
 			compound.putDouble("cost", this.cost);
 			compound.putInt("amount", this.amount);
@@ -190,6 +210,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 	             compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
 	        }
 			compound.putInt("timer", this.timer);
+			compound.putBoolean("restock", this.autorefill);
 			return super.write(compound);
 		}
 		
@@ -198,7 +219,7 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			
 			super.read(state, compound);
 			inventory_seller.deserializeNBT(compound.getCompound("inventory"));
-			this.owner = compound.getString("ownerS");
+			this.owner = compound.getUniqueId("ownerUUID");
 			this.ownerName = compound.getString("ownerName");
 			this.cost = compound.getDouble("cost");
 			this.amount = compound.getInt("amount");
@@ -208,9 +229,10 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			this.admin = compound.getBoolean("admin");
 			this.facing = compound.getString("facing");
 	        if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-	            this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
+	            this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
 	        }
 	        this.timer = compound.getInt("timer");
+	        this.autorefill = compound.getBoolean("restock");
 		}
 
 		
@@ -242,6 +264,21 @@ public class TileEntityBlockSeller extends TileEntity implements INamedContainer
 			
 		}
 		
-
-
+		public void refill()
+		{
+			BlockPos pos = getPos().down();
+			if(getWorld().getTileEntity(pos) instanceof TileEntityBlockVault)
+			{
+				TileEntityBlockVault te = (TileEntityBlockVault) getWorld().getTileEntity(pos);
+				if(te.getOwner().equals(getOwner()))
+				{
+					ItemStack stack = getStackInSlot(0);
+					if(stack.getCount() != stack.getMaxStackSize())
+					{
+						PacketsRegistery.CHANNEL.sendToServer(new PacketRefillSeller(getPos(), getPos().down(), stack));
+					}
+				}
+			}
+		}
+		
 }

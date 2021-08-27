@@ -27,33 +27,16 @@
 "block.economyinc.block_seller":"Vendeur automatique",
 "block.economyinc.block_changer":"Changeur d'or",
 "block.economyinc.block_atm":"Distributeur de billets",
-"block.economyinc.block_village":"Coffre-fort sécurisé",
 "block.economyinc.block_bills":"Stockage à billets",
-
-
-"entity.entityInformater":"Informateur",
 
 "title.ownerCard":"Propriétaire",
 "title.fundsCard":"Fonds",
 
-"title.deleteC1":"Supprimer la carte",
-
+"title.linkdCard":"Améliorée",
 "title.yes":"Oui",
 "title.no":"Non",
 
-"title.block_vault":"Coffre-fort",
-
-"title.linkdCard":"Améliorée",
-
 "title.wireless":"Technologie sans fil",
-
-"title.stranger":"Salut étranger!",
-"title.informations":"J'ai des infos",
-"title.seevault":"pour toi. Tu vois le coffre-fort à la",
-"title.codevault":"banque ? Je peux t'en donner le code",
-"title.onlyhundred":"pour seulement cent dollars...",
-"title.deal":"Deal ?",
-"title.accept":"Deal !",
 
 "commands.plot.samename": "Nom de plot déjà existant.",
 "commands.plot.success": "Plot créé avec succès.",
@@ -98,12 +81,10 @@
 "title.fundsToRecover":"Fonds à récuperer : ",
 "title.item":"Objet : ",
 "title.unlimited":"Stack illimité",
-"title.unlimitedStack":"illimité",
-"title.limitedStack":"limité",
+"title.limited":"Stack limité",
 "title.weight":"Poids : ",
 "title.alreadyUsed":"Ce vendeur automatique est déjà en cours d'utilisation.'",
 "title.block_changer":"Changeur d'or",
-"title.exchange": "Accepter l'intéraction ?",
 "title.noCardFoundAndNoLink":"Aucune carte de crédit n'a été trouvée ou vous n'avez pas la technologie sans fil",
 "title.noMoreQuantity":"Le vendeur automatique est vide, contacter le vendeur.",
 

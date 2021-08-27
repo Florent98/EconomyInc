@@ -3,6 +3,7 @@
 package fr.fifoube.gui;
 
 import java.awt.Color;
+import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
@@ -30,11 +31,6 @@ public class GuiSellerBuy extends Screen
 {
 	private TileEntityBlockSeller tile;
 	
-	public GuiSellerBuy(TileEntityBlockSeller te) {
-		super(new TranslationTextComponent("gui.sellerbuy"));
-		this.tile = te;
-	}
-	
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
 	protected int xSize = 256;
 	protected int ySize = 124;
@@ -48,8 +44,14 @@ public class GuiSellerBuy extends Screen
 	private double cost;
 	private int amount;
 	private double fundsTotalRecovery;
-	private String sellerOwner = "";
-	private String worldPlayer = "";
+	private UUID sellerOwnerUUID;
+	private UUID worldPlayerUUID;
+	
+	public GuiSellerBuy(TileEntityBlockSeller te) {
+		super(new TranslationTextComponent("gui.sellerbuy"));
+		this.tile = te;
+	}
+	
 	
 	@Override
 	public void tick() 
@@ -81,9 +83,9 @@ public class GuiSellerBuy extends Screen
 			this.cost = tile.getCost();
 			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, new TranslationTextComponent("title.buy"),(press) -> actionPerformed(0))); 
              
-			sellerOwner = tile.getOwner();
-			worldPlayer = minecraft.player.getUniqueID().toString();
-			if(sellerOwner.equals(worldPlayer))
+			sellerOwnerUUID = tile.getOwner();
+			worldPlayerUUID = minecraft.player.getUniqueID();
+			if(sellerOwnerUUID.equals(worldPlayerUUID))
 			{
 				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, new TranslationTextComponent("title.recover"),(press) -> actionPerformed(1))); 
 			}
@@ -92,6 +94,16 @@ public class GuiSellerBuy extends Screen
 		super.init();
 	}
 	
+	@Override
+	public void onClose() {
+
+		if(tile.getAutoRefill())
+		{
+			tile.refill();
+		}
+		super.onClose();
+	}
+
 	@Override
 	public boolean isPauseScreen() {
 		return false;
@@ -181,7 +193,7 @@ public class GuiSellerBuy extends Screen
 			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
 			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
 			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
-			if(sellerOwner.equals(worldPlayer))
+			if(sellerOwnerUUID.equals(worldPlayerUUID))
 			{
 				this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
 			}

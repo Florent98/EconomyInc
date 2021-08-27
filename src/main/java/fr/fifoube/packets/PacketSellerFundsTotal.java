@@ -93,12 +93,12 @@ public class PacketSellerFundsTotal {
 					TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
 					if(te != null) // IF TILE ENTITY EXIST
 					{
-						if(packet.recovery == false)
+						if(!packet.recovery)
 						{
 							if(!te.getStackInSlot(0).isEmpty()) // IF THE SLOT IS NOT EMPTY
 							{
 								boolean admin = te.getAdmin();
-								if(admin == false) // NOT UNLIMITED STACK
+								if(!admin) // NOT UNLIMITED STACK
 								{
 									CompoundNBT nbt = te.getStackInSlot(0).getTag();
 									ItemStack stack = new ItemStack(te.getStackInSlot(0).getItem(), 1);
@@ -109,15 +109,14 @@ public class PacketSellerFundsTotal {
 									boolean flag = player.inventory.addItemStackToInventory(stack);
 									if(flag)
 									{
-										te.getStackInSlot(0).split(1);
 										te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
 										te.markDirty();
-										//
 										player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
 										.ifPresent(data -> {
 											ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " for " + packet.cost + "." + " Balance was " + data.getMoney() + ", balance is now " + (data.getMoney() - packet.cost) + "." + "[UUID: " + player.getUniqueID() + "," + te.getPos() + "]");
 											data.setMoney(data.getMoney() - packet.cost);
 										});
+										te.getStackInSlot(0).split(1);
 										te.setTime(ConfigFile.cooldownSeller);
 										BlockState state = worldIn.getBlockState(pos);
 										if(state.getBlock() instanceof BlockSeller)
@@ -131,7 +130,7 @@ public class PacketSellerFundsTotal {
 										player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
 									}
 								}
-								else if(admin == true) // UNLIMITED STACK
+								else if(admin) // UNLIMITED STACK
 								{
 									CompoundNBT nbt = te.getStackInSlot(0).getTag();
 									ItemStack stack = new ItemStack(te.getStackInSlot(0).getItem(), 1);
@@ -165,7 +164,7 @@ public class PacketSellerFundsTotal {
 								}
 							}
 						}
-						else if(packet.recovery == true)
+						else if(packet.recovery)
 						{
 							player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
 								.ifPresent(data -> { 			

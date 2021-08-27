@@ -48,7 +48,7 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 		this.minecraft.keyboardListener.enableRepeatEvents(true);
 			int i = (this.width - this.xSize) / 2;
 			int j = (this.height - this.ySize) / 2;
-			if(tile_getter.getOwnerS().equals(this.minecraft.player.getUniqueID().toString()) && !Minecraft.getInstance().isSingleplayer())
+			if(tile_getter.getOwner().equals(this.minecraft.player.getUniqueID()) && !Minecraft.getInstance().isSingleplayer())
 	        {
 	        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, new StringTextComponent("⚙").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.WHITE),(press) -> actionPerformed(0)));
 	        }
@@ -68,7 +68,7 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 	@Override
 	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) 
 	{
-		this.font.drawString(matrixStack, I18n.format("title.block_vault"), 8.0F, -22, 4210752);
+		this.font.drawString(matrixStack, I18n.format("block.economyinc.block_vault"), 8.0F, -22, 4210752);
 	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 122), 4210752);		
 	}
 				

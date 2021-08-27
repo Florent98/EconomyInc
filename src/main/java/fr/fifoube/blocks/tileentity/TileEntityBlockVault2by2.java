@@ -6,6 +6,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import fr.fifoube.gui.container.ContainerVault2by2;
 import net.minecraft.block.BlockState;
@@ -32,7 +33,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 
 	public static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault2by2");
 	ItemStackHandler inventory = new ItemStackHandler(54);
-	public String ownerS = "";
+	public UUID owner;
 	private byte direction;
 	private List<String> allowedPlayers = new ArrayList<String>();
 	private int maxAllowedPlayers = 0;
@@ -66,14 +67,14 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 		return false;	
     }
 	
-    public void setString(String string)
+    public void setOwner(UUID uuid)
     {
-        this.ownerS = string;
+        this.owner = uuid;
     }
     
-    public String getOwnerS()
+    public UUID getOwner()
     {
-        return this.ownerS;
+        return this.owner;
     }
     
     public void addAllowedPlayers(String allowed)
@@ -115,7 +116,6 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 	public CompoundNBT write(CompoundNBT compound) 
 	{
 		compound.put("inventory", inventory.serializeNBT());
-		compound.putString("ownerS", this.ownerS);
 		compound.putByte("direction", this.direction);
 		compound.putInt("maxallowed", this.maxAllowedPlayers);
         ListNBT tagList = new ListNBT();
@@ -128,6 +128,9 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
           }
          }
          compound.put("allowedList", tagList);
+         if(this.owner != null){
+        	 compound.putUniqueId("ownerUUID", this.owner);
+         }
          if (this.getDisplayName() != null) {
              compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
           }
@@ -139,7 +142,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
 
 		super.read(state, compound);
 		inventory.deserializeNBT(compound.getCompound("inventory"));
-		this.ownerS = compound.getString("ownerS");
+		this.owner = compound.getUniqueId("ownerUUID");
 		this.direction = compound.getByte("direction");
 		this.maxAllowedPlayers = compound.getInt("maxallowed");
         ListNBT tagList = compound.getList("allowedList", NBT.TAG_STRING);
@@ -148,7 +151,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
             this.allowedPlayers.add(i, tagList.getString(i));
         }
         if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-            this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
+            this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
          }
 
 	}

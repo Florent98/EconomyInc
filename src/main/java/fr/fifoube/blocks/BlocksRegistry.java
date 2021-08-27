@@ -27,7 +27,8 @@ public class BlocksRegistry{
 	public static final Block BLOCK_SELLER = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_bills")
 	public static final Block BLOCK_BILLS = null;
-
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_buyer")
+	public static final Block BLOCK_BUYER = null;
 
 	
 
@@ -40,6 +41,7 @@ public class BlocksRegistry{
 		event.getRegistry().register(new BlockChanger(Block.Properties.create(Material.IRON).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("block_changer"));
 		event.getRegistry().register(new BlockSeller(Block.Properties.create(Material.WOOD).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("block_seller"));
 		event.getRegistry().register(new BlockBills(Block.Properties.create(Material.IRON)).setRegistryName("block_bills"));
+		event.getRegistry().register(new BlockBuyer(Block.Properties.create(Material.WOOD).hardnessAndResistance(-1.0F, 3600000.0F)).setRegistryName("block_buyer"));
 
 	}
 	
@@ -53,7 +55,7 @@ public class BlocksRegistry{
 		event.getRegistry().register(new BlockItem(BLOCK_CHANGER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_CHANGER.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_SELLER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_SELLER.getRegistryName()));
 		event.getRegistry().register(new BlockItem(BLOCK_BILLS, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_BILLS.getRegistryName()));
-
+		event.getRegistry().register(new BlockItem(BLOCK_BUYER, new Item.Properties().group(ModEconomyInc.EIC)).setRegistryName(BLOCK_BUYER.getRegistryName()));
 
 	}
 }

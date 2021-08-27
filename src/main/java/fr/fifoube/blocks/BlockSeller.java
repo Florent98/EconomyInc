@@ -3,6 +3,7 @@
 package fr.fifoube.blocks;
 
 import java.util.Random;
+import java.util.UUID;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.ClientGuiScreen;
@@ -17,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -62,6 +64,7 @@ public class BlockSeller extends ContainerBlock {
 		return true;
 	}
 	
+	
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!worldIn.isRemote)
@@ -72,8 +75,8 @@ public class BlockSeller extends ContainerBlock {
 				TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
 				if(te.getOwner() != null)
 				{
-					String checkONBT = te.getOwner();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 						
 						if(checkONBT.equals(checkOBA))
 						{
@@ -127,8 +130,8 @@ public class BlockSeller extends ContainerBlock {
 			{
 				if(stack.isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
 				{
-					String checkONBT = te.getOwner();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 					
 					if(checkONBT.equals(checkOBA))
 					{
@@ -155,20 +158,19 @@ public class BlockSeller extends ContainerBlock {
 			}
 		}
 	}
-	
+		
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof TileEntityBlockSeller)
-		{
-			TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
-			te.setOwner(placer.getUniqueID().toString());
-			te.setFacing(state.toString().substring(38, 43));
-			te.setOwnerName(placer.getName().getString());   
-		}
+	    	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if(tileentity instanceof TileEntityBlockSeller)
+			{
+				TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
+				te.setOwner(placer.getUniqueID());
+				te.setFacing(state.toString().substring(38, 43));
+				te.setOwnerName(placer.getName().getString());   
+			}
 	}
 	
 	@Override
@@ -282,6 +284,14 @@ public class BlockSeller extends ContainerBlock {
 	private void updateNeighbors(BlockState state, World worldIn, BlockPos pos) {
 		  worldIn.notifyNeighborsOfStateChange(pos, this);
 		  worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), this);
+	}
+	
+	@Override
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player,
+			boolean willHarvest, FluidState fluid) {
+		
+		world.removeTileEntity(pos);
+		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 	}
 }
 

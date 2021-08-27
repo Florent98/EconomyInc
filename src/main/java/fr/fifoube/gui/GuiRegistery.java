@@ -14,5 +14,7 @@ public class GuiRegistery {
 		ScreenManager.registerFactory(ContainerTypeRegistery.VAULT_TYPE, GuiVault::new);
 		ScreenManager.registerFactory(ContainerTypeRegistery.VAULT2BY2_TYPE, GuiVault2by2::new);
 		ScreenManager.registerFactory(ContainerTypeRegistery.CHANGER_TYPE, GuiChanger::new);
+		ScreenManager.registerFactory(ContainerTypeRegistery.BUYER_CREATION_TYPE, GuiBuyerCreation::new);
+		ScreenManager.registerFactory(ContainerTypeRegistery.BUYER_TYPE, GuiBuyerContainer::new);
 	}
 }

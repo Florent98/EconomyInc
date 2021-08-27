@@ -4,6 +4,7 @@ package fr.fifoube.blocks.tileentity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import fr.fifoube.gui.container.ContainerVault;
 import net.minecraft.block.BlockState;
@@ -29,7 +30,7 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 
 	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault");
 	ItemStackHandler inventory = new ItemStackHandler(27);
-	private String ownerS = "";
+	private UUID owner;
 	private byte direction;
 	private boolean isOpen;
     private ITextComponent customName;
@@ -75,14 +76,14 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 	}
 	
 	// AUTRES
-    public void setOwner(String string)
+    public void setOwner(UUID uuid)
     {
-        this.ownerS = string;
+        this.owner = uuid;
     }
     
-    public String getOwnerS()
+    public UUID getOwner()
     {
-        return this.ownerS;
+        return this.owner;
     }
     
     public Boolean hasItems()
@@ -112,11 +113,13 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
     public CompoundNBT write(CompoundNBT compound) 
     {
         compound.put("inventory", inventory.serializeNBT());
-        compound.putString("ownerS", this.ownerS);
         compound.putByte("direction", this.direction);     
-         if (this.getDisplayName() != null) {
-             compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
-          }
+        if(this.owner != null) {
+        	compound.putUniqueId("ownerUUID", this.owner);
+        }  	
+        if (this.getDisplayName() != null) {
+        	compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
+        }
         return super.write(compound);
     }
     
@@ -125,10 +128,10 @@ public class TileEntityBlockVault extends TileEntity implements INamedContainerP
 
     	super.read(state, compound);
     	 inventory.deserializeNBT(compound.getCompound("inventory"));
-         this.ownerS = compound.getString("ownerS");
+         this.owner = compound.getUniqueId("ownerUUID");
          this.direction = compound.getByte("direction");
          if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-             this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
+             this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
           }
     }
     

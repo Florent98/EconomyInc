@@ -23,6 +23,13 @@ public class MoneyHolder implements IMoney {
 		
 	}
 	
+	@Override
+	public void addMoney(double moneyToAdd) {
+		
+		this.money += moneyToAdd;
+		
+	}
+	
 	private double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 

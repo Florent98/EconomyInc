@@ -81,7 +81,7 @@ public class GuiVault extends ContainerScreen<ContainerVault>
 	@Override
 	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) 
 	{
-		this.font.drawString(matrixStack, I18n.format("title.block_vault"), 8.0F, 5, 4210752);
+		this.font.drawString(matrixStack, I18n.format("block.economyinc.block_vault"), 8.0F, 5, 4210752);
 	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 94), 4210752);
 		
 	}

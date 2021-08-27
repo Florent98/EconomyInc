@@ -137,8 +137,8 @@ public class TileEntityBlockChanger extends TileEntity implements INamedContaine
 		this.timePassed = compound.getInt("timePassed");
 		inventory.deserializeNBT((CompoundNBT)compound.get("inventory"));
 	    if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-	    this.customName = ITextComponent.Serializer.func_240643_a_(compound.getString("CustomName"));
-	    }
+	    this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
+	    }	            
 	}
 
 	

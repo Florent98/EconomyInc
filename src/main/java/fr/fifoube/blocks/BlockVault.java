@@ -2,6 +2,8 @@
  *******************************************************************************/
 package fr.fifoube.blocks;
 
+import java.util.UUID;
+
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.items.ItemsRegistery;
@@ -64,7 +66,7 @@ public class BlockVault extends ContainerBlock {
 		if(tileentity instanceof TileEntityBlockVault)
 		{
 			TileEntityBlockVault te = (TileEntityBlockVault)tileentity;
-		    te.setOwner(placer.getUniqueID().toString());
+		    te.setOwner(placer.getUniqueID());
 			if(state.get(FACING).equals(Direction.SOUTH))
 			{
 				int xPos = te.getPos().getX();
@@ -83,7 +85,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos + 1, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.SOUTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos + 1, yPos, zPos));
 					te2by2.setDirection((byte)0);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos - 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos - 1, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -99,7 +101,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.SOUTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos));
 					te2by2.setDirection((byte)0);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos - 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos - 1, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -114,7 +116,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.SOUTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos));
 					te2by2.setDirection((byte)0);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos + 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos + 1, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -129,7 +131,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos + 1, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.SOUTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos + 1, yPos - 1, zPos));
 					te2by2.setDirection((byte)0);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				
 			}
@@ -151,7 +153,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos - 1, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.NORTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos - 1, yPos, zPos));
 					te2by2.setDirection((byte)2);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos + 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos + 1, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -166,7 +168,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.NORTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos));
 					te2by2.setDirection((byte)2);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos + 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos + 1, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
@@ -182,7 +184,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.NORTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos));
 					te2by2.setDirection((byte)2);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos - 1, yPos, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos - 1, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
@@ -198,7 +200,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos - 1, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.NORTH));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos - 1, yPos - 1, zPos));
 					te2by2.setDirection((byte)2);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 
 				}
 				
@@ -222,7 +224,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos + 1), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.WEST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos + 1));
 					te2by2.setDirection((byte)1);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos, yPos, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos , yPos + 1, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -237,7 +239,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.WEST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos));
 					te2by2.setDirection((byte)1);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos , yPos, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -252,7 +254,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.WEST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos));
 					te2by2.setDirection((byte)1);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos, yPos, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -267,7 +269,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos + 1), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.WEST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos + 1));
 					te2by2.setDirection((byte)1);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 			}
 			else if(state.get(FACING).equals(Direction.EAST))
@@ -289,7 +291,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos - 1), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.EAST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos - 1));
 					te2by2.setDirection((byte)3);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos, yPos, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos , yPos + 1, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos + 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -304,7 +306,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.EAST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos, zPos));
 					te2by2.setDirection((byte)3);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos , yPos, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos + 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -319,7 +321,7 @@ public class BlockVault extends ContainerBlock {
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.EAST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos));
 					te2by2.setDirection((byte)3);
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 				else if(worldIn.getBlockState(new BlockPos(xPos, yPos, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos - 1)).getBlock() == BlocksRegistry.BLOCK_VAULT && worldIn.getBlockState(new BlockPos(xPos, yPos - 1, zPos)).getBlock() == BlocksRegistry.BLOCK_VAULT)
 				{
@@ -333,7 +335,7 @@ public class BlockVault extends ContainerBlock {
 					}	
 					worldIn.setBlockState(new BlockPos(xPos, yPos - 1, zPos - 1), BlocksRegistry.BLOCK_VAULT_2BY2.getDefaultState().with(FACING, Direction.EAST));
 					TileEntityBlockVault2by2 te2by2 = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(xPos, yPos - 1, zPos - 1));
-					te2by2.setString(te.getOwnerS());
+					te2by2.setOwner(te.getOwner());
 				}
 			}
 		}
@@ -348,10 +350,10 @@ public class BlockVault extends ContainerBlock {
 			if(tileentity instanceof TileEntityBlockVault)
 			{
 				TileEntityBlockVault te = (TileEntityBlockVault)tileentity;
-				if(te.getOwnerS() != null)
+				if(te.getOwner() != null)
 				{
-					String checkONBT = te.getOwnerS();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 					
 					if(checkONBT.equals(checkOBA))
 					{
@@ -388,8 +390,8 @@ public class BlockVault extends ContainerBlock {
 			{
 				if(stack.isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
 				{
-					String checkONBT = te.getOwnerS();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 					
 					if(checkONBT.equals(checkOBA))
 					{

@@ -89,7 +89,7 @@ public class GuiVaultSettings2by2  extends Screen
 	    super.render(matrixStack, mouseX, mouseY, partialTicks);
 	    if(!Minecraft.getInstance().isSingleplayer())
 	    {
-		    if(tile.getOwnerS().equals(Minecraft.getInstance().player.getUniqueID().toString()))
+		    if(tile.getOwner().equals(Minecraft.getInstance().player.getUniqueID()))
 		    {
 		    	this.commandTextField.render(matrixStack, mouseX, mouseY, partialTicks);
 		    }
@@ -158,13 +158,13 @@ public class GuiVaultSettings2by2  extends Screen
 		    	{
 		    		if(playerList.get(i).getName().getString().equals(s))
 		    		{
-		    			if(!playerList.get(i).getUniqueID().toString().equals(tile.ownerS))
+		    			if(!playerList.get(i).getUniqueID().equals(tile.getOwner()))
 		    			{
 		    				UUID playerUUID = playerList.get(i).getUniqueID();
 		    				boolean flag = checkForSamePlayer(playerUUID);
 		    				if(flag)
 		    				{
-		    					String playerName = playerList.get(i).getDisplayName().getUnformattedComponentText();
+		    					String playerName = playerList.get(i).getDisplayName().getString();
 		    					PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));			    					
 		    				}
 		    			}

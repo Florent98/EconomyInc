@@ -27,7 +27,8 @@ public class TileEntityRegistery {
 	public static final TileEntityType<TileEntityBlockChanger> TILE_CHANGER = null;
 	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_bills_te")
 	public static final TileEntityType<TileEntityBlockBills> TILE_BILLS = null;
-	
+	@ObjectHolder(ModEconomyInc.MOD_ID + ":block_buyer_te")
+	public static final TileEntityType<TileEntityBlockBuyer> TILE_BUYER = null;
 	
 	@SubscribeEvent
 	public static void registerTileEntity(final RegistryEvent.Register<TileEntityType<?>> event) 
@@ -37,6 +38,7 @@ public class TileEntityRegistery {
 		event.getRegistry().register(TileEntityType.Builder.create(TileEntityBlockSeller::new, BlocksRegistry.BLOCK_SELLER).build(null).setRegistryName(ModEconomyInc.MOD_ID + ":block_seller_te"));
 		event.getRegistry().register(TileEntityType.Builder.create(TileEntityBlockChanger::new, BlocksRegistry.BLOCK_CHANGER).build(null).setRegistryName(ModEconomyInc.MOD_ID + ":block_changer_te"));
 		event.getRegistry().register(TileEntityType.Builder.create(TileEntityBlockBills::new, BlocksRegistry.BLOCK_BILLS).build(null).setRegistryName(ModEconomyInc.MOD_ID + ":block_bills_te"));
+		event.getRegistry().register(TileEntityType.Builder.create(TileEntityBlockBuyer::new, BlocksRegistry.BLOCK_BUYER).build(null).setRegistryName(ModEconomyInc.MOD_ID + ":block_buyer_te"));
 
 	}
 	

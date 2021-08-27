@@ -24,76 +24,33 @@ public class ItemWireless extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		
-		ItemStack itemStackIn = player.getHeldItemOffhand();
-		ItemStack itemStackInC = player.getHeldItemMainhand();
-		int totalcount = 0;
-		if(!worldIn.isRemote)
-		{
-			if(!player.inventory.hasItemStack(itemStackIn))
+		ItemStack stackInHand = playerIn.getHeldItem(handIn);
+		ItemStack stackCard = ItemStack.EMPTY;
+		boolean keepSearching = true;
+		for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
+			
+			if(keepSearching)
 			{
-				if(player.inventory.hasItemStack(itemStackInC))
+				if(playerIn.inventory.getStackInSlot(i).getItem().equals(ItemsRegistery.ITEM_CREDITCARD))
 				{
-					for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+					if(playerIn.inventory.getStackInSlot(i).hasTag() && playerIn.inventory.getStackInSlot(i).getTag().getString("OwnerUUID").equals(playerIn.getUniqueID().toString()) && !playerIn.inventory.getStackInSlot(i).getTag().getBoolean("Linked"))
 					{
-						if(player.inventory.getStackInSlot(i) != null)
-						{
-							if(player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard)
-							{
-									totalcount++;
-									ItemStack hasCardIS = player.inventory.getStackInSlot(i);
-									if(!(totalcount > 1))
-									{
-											if(hasCardIS.hasTag() && hasCardIS.getTag().contains("Owner"))
-											{
-												String nameCard = hasCardIS.getTag().getString("OwnerUUID");
-												String nameGame = player.getUniqueID().toString();
-
-												if(nameCard.equals(nameGame))
-												{
-													boolean linked = hasCardIS.getTag().getBoolean("Linked");
-													if(linked == false)
-													{
-														if(worldIn.isRemote)
-														{
-															player.sendMessage(new StringTextComponent(I18n.format("title.cardUpdated")), player.getUniqueID());
-														}
-														hasCardIS.getTag().putBoolean("Linked", true);
-													}
-													else
-													{
-														if(worldIn.isRemote)
-														{
-															player.sendMessage(new StringTextComponent(I18n.format("title.cardAlreadyLinked")), player.getUniqueID());
-														}
-														player.addItemStackToInventory(itemStackInC);
-													}
-													
-												}
-											}
-											else
-											{
-												player.addItemStackToInventory(itemStackInC);	
-											}
-
-								}
-								return new ActionResult<ItemStack>(ActionResultType.SUCCESS, itemStackIn);
-							}
-						}
-						else
-						{
-							if(worldIn.isRemote)
-							{
-								player.sendMessage(new StringTextComponent(I18n.format("title.cardTooMuch")), player.getUniqueID());
-							}
-								return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
-						}
+						keepSearching = false;
+						stackCard = playerIn.inventory.getStackInSlot(i);
 					}
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(ActionResultType.FAIL, itemStackIn);
+		if(stackCard != ItemStack.EMPTY) {
+			
+			playerIn.inventory.deleteStack(stackInHand);
+			stackCard.getTag().putBoolean("Linked", true);
+			return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stackInHand);
+
+		}
+		return new ActionResult<ItemStack>(ActionResultType.FAIL, stackInHand);
 	}
 	
 	@Override

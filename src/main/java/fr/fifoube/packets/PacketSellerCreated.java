@@ -21,10 +21,11 @@ public class PacketSellerCreated {
 	private String name = "";
 	private int amount = 0;
 	private boolean admin;
+	private boolean autorefill;
 	
 	public PacketSellerCreated() {}
 	
-	public PacketSellerCreated(boolean createdS, double costS, String nameS, int amountS, int xS, int yS, int zS, boolean adminS)
+	public PacketSellerCreated(boolean createdS, double costS, String nameS, int amountS, int xS, int yS, int zS, boolean adminS, boolean refill)
 	{
 		this.created = createdS;
 		this.cost = costS;
@@ -34,6 +35,7 @@ public class PacketSellerCreated {
 		this.y = yS;
 		this.z = zS;
 		this.admin = adminS;
+		this.autorefill = refill;
 	}
 	
 	public static PacketSellerCreated decode(PacketBuffer buf) 
@@ -46,7 +48,8 @@ public class PacketSellerCreated {
 		int y = buf.readInt();
 		int z = buf.readInt();
 		boolean admin = buf.readBoolean();
-		return new PacketSellerCreated(created, cost, name, amount, x, y, z, admin);
+		boolean refill = buf.readBoolean();
+		return new PacketSellerCreated(created, cost, name, amount, x, y, z, admin, refill);
 	}
 
 
@@ -60,7 +63,7 @@ public class PacketSellerCreated {
 		buf.writeInt(packet.y);
 		buf.writeInt(packet.z);
 		buf.writeBoolean(packet.admin);
-
+		buf.writeBoolean(packet.autorefill);
 	}
 	
     
@@ -73,12 +76,14 @@ public class PacketSellerCreated {
 	  			World world = player.world;  
 				BlockPos pos = new BlockPos(packet.x, packet.y, packet.z);
 				TileEntityBlockSeller te = (TileEntityBlockSeller)world.getTileEntity(pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
+				if(packet.cost > 0 && packet.cost != 0)
 				if(te != null) // CHECK IF PLAYER HAS NOT DESTROYED TILE ENTITY IN THE SHORT TIME OF SENDING PACKET
 				{
 					te.setCreated(packet.created); // SERVER ADD CREATED TO TILE ENTITY
 					te.setCost(packet.cost); // SERVER ADD COST TO TILE ENTITY
 					te.setItem(packet.name); // SERVER ADD NAME TO TILE ENTITY
 					te.setAdmin(packet.admin); // SERVER ADD ADMIN TO TILE ENTITY
+					te.setAutoRefill(packet.autorefill);
 					te.markDirty(); //UPDATE THE TILE ENTITY
 				}
 		});

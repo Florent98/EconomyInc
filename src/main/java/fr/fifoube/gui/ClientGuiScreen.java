@@ -2,6 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
+import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import net.minecraft.client.Minecraft;
@@ -22,6 +23,10 @@ public class ClientGuiScreen {
 			break;
 		case 2:
 			Minecraft.getInstance().displayGuiScreen(new GuiVaultSettings2by2((TileEntityBlockVault2by2)te));
+			break;
+		case 3:
+			Minecraft.getInstance().displayGuiScreen(new GuiBuyerSell((TileEntityBlockBuyer) te));
+			break;
 		default:
 			break;
 		}

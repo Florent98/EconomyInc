@@ -288,11 +288,13 @@ public class PacketCardChange {
 	
 	public static void clearMatchingItems(PlayerEntity player, ItemStack stack, int count) {
 
+		boolean found = false;
 	      for(int j = 0; j < player.inventory.getSizeInventory(); ++j) 
 	      {
 	         ItemStack itemstack = player.inventory.getStackInSlot(j);
-	         if(itemstack.isItemEqual(stack))
+	         if(itemstack.isItemEqual(stack) && !found)
 	         {
+	        	 found = true;
 	        	 itemstack.setCount(itemstack.getCount() - count);
 	         }
 	      }

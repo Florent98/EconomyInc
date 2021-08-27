@@ -116,8 +116,7 @@ public class BlockVault2by2 extends ContainerBlock {
     	if(tileentity instanceof TileEntityBlockVault2by2)
     	{
     		TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
-    		te.setString(placer.getUniqueID().toString());
-    		te.ownerS = placer.getUniqueID().toString();
+    		te.setOwner(placer.getUniqueID());
     		int direction = MathHelper.floor((double) (placer.rotationYaw * 4.0F / 360.0F) + 2.5D) & 3;
     		te.setDirection((byte) direction);
     	}
@@ -132,10 +131,10 @@ public class BlockVault2by2 extends ContainerBlock {
 			if(tileentity instanceof TileEntityBlockVault2by2)
 			{
 				TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
-				if(te.getOwnerS() != null)
+				if(te.getOwner() != null)
 				{
-					String checkONBT = te.getOwnerS();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 					
 					if(checkONBT.equals(checkOBA))
 					{
@@ -173,6 +172,7 @@ public class BlockVault2by2 extends ContainerBlock {
 
 	@Override
 	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+		
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if(tileentity instanceof TileEntityBlockVault2by2)
 		{
@@ -184,8 +184,8 @@ public class BlockVault2by2 extends ContainerBlock {
 			{
 				if(stack.isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
 				{
-					String checkONBT = te.getOwnerS();
-					String checkOBA = player.getUniqueID().toString();
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUniqueID();
 					
 					if(checkONBT.equals(checkOBA))
 					{
