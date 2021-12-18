@@ -2,22 +2,16 @@
  *******************************************************************************/
 package fr.fifoube.main.capabilities;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketMoneyData;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.INBT;
-import net.minecraft.profiler.Profiler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;

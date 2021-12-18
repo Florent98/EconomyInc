@@ -2,18 +2,17 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
 import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketCardChange {
 

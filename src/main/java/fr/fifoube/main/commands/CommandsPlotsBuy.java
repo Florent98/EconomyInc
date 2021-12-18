@@ -2,20 +2,15 @@
  *******************************************************************************/
 package fr.fifoube.main.commands;
 
-import java.util.UUID;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import fr.fifoube.main.capabilities.IMoney;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,11 +20,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
+
+import java.util.UUID;
 
 public class CommandsPlotsBuy {
 

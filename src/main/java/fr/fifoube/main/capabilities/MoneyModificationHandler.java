@@ -14,7 +14,6 @@
 package fr.fifoube.main.capabilities;
 
 import fr.fifoube.main.ModEconomyInc;
-
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

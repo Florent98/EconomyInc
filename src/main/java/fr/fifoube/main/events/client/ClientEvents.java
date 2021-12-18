@@ -3,7 +3,6 @@
 package fr.fifoube.main.events.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.blocks.BlocksRegistry;
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
@@ -13,10 +12,8 @@ import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;

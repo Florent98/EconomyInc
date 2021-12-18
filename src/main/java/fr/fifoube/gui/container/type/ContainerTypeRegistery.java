@@ -2,12 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.gui.container.type;
 
-import fr.fifoube.gui.container.ContainerBuyer;
-import fr.fifoube.gui.container.ContainerBuyerCreation;
-import fr.fifoube.gui.container.ContainerChanger;
-import fr.fifoube.gui.container.ContainerSeller;
-import fr.fifoube.gui.container.ContainerVault;
-import fr.fifoube.gui.container.ContainerVault2by2;
+import fr.fifoube.gui.container.*;
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;

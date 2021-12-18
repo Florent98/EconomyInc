@@ -2,10 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.packets.PacketCardChange;
@@ -20,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.awt.*;
 
 public class GuiCreditCard extends Screen {
 

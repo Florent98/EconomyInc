@@ -2,15 +2,10 @@
  *******************************************************************************/
 package fr.fifoube.main.commands;
 
-import java.util.Collection;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
-import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -18,6 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.Collection;
 
 public class CommandBalance {
 

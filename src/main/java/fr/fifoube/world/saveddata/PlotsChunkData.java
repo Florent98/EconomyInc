@@ -2,10 +2,10 @@
  *******************************************************************************/
 package fr.fifoube.world.saveddata;
 
+import net.minecraft.util.math.ChunkPos;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.math.ChunkPos;
 
 public class PlotsChunkData {
 	

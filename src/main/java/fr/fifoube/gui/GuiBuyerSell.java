@@ -13,17 +13,10 @@
 
 package fr.fifoube.gui;
 
-import java.awt.Color;
-import java.util.UUID;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.packets.PacketSellerFundsTotal;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -36,6 +29,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class GuiBuyerSell extends Screen
 {

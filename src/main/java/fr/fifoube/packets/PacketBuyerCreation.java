@@ -13,11 +13,7 @@
 
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
-import fr.fifoube.blocks.BlockBuyer;
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.gui.container.ContainerBuyer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,6 +21,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketBuyerCreation {
 

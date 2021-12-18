@@ -2,8 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +9,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketListNBT {
 

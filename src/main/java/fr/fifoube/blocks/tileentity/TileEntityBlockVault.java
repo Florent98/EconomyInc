@@ -2,10 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import fr.fifoube.gui.container.ContainerVault;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,8 +10,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
@@ -23,8 +17,9 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.UUID;
 
 public class TileEntityBlockVault extends TileEntity implements INamedContainerProvider {
 

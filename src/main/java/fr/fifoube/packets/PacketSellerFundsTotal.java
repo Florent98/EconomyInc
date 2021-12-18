@@ -2,11 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.main.ModEconomyInc;
@@ -14,8 +9,6 @@ import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketSellerFundsTotal {
 

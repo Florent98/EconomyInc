@@ -2,9 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.items;
 
-import java.util.List;
-
-import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +13,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemWireless extends Item {
 

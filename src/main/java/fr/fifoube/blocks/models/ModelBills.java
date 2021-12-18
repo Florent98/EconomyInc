@@ -2,11 +2,8 @@
  *******************************************************************************/
 package fr.fifoube.blocks.models;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
@@ -14,6 +11,8 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelBills extends Model

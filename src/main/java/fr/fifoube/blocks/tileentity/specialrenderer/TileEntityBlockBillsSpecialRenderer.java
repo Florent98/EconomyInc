@@ -4,7 +4,6 @@ package fr.fifoube.blocks.tileentity.specialrenderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import fr.fifoube.blocks.models.ModelBills;
 import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
 import fr.fifoube.main.ModEconomyInc;

@@ -13,13 +13,9 @@
 
 package fr.fifoube.gui;
 
-import java.awt.Color;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.gui.container.ContainerBuyer;
 import fr.fifoube.gui.container.ContainerBuyerCreation;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketBuyerCreation;
@@ -33,8 +29,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import java.awt.*;
 
 public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
 {

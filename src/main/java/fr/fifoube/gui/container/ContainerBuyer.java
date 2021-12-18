@@ -14,12 +14,10 @@
 package fr.fifoube.gui.container;
 
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;

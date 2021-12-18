@@ -13,12 +13,8 @@
 
 package fr.fifoube.gui;
 
-import java.util.ArrayList;
-import java.util.function.Supplier;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import fr.fifoube.packets.PacketBuyerCreation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -26,6 +22,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import java.util.ArrayList;
+import java.util.function.Supplier;
 
 public class PacketBuyerChange {
 

@@ -10,10 +10,6 @@
  /*******************************************************************************/
 package fr.fifoube.main;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
 import fr.fifoube.blocks.BlocksRegistry;
 import fr.fifoube.blocks.tileentity.TileEntityRegistery;
 import fr.fifoube.gui.GuiRegistery;
@@ -39,6 +35,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(ModEconomyInc.MOD_ID)
 public class ModEconomyInc {

@@ -2,9 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
-import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.capabilities.IMoney;
 import net.minecraft.client.Minecraft;
@@ -13,6 +10,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketMoneyData {
 

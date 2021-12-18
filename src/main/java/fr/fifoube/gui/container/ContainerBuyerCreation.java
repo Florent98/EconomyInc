@@ -13,9 +13,6 @@
 
 package fr.fifoube.gui.container;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
 import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import fr.fifoube.items.IValue;

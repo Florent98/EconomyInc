@@ -2,9 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.blocks.tileentity;
 
-import java.util.UUID;
-
-import fr.fifoube.blocks.BlockSeller;
 import fr.fifoube.gui.container.ContainerSeller;
 import fr.fifoube.packets.PacketRefillSeller;
 import fr.fifoube.packets.PacketsRegistery;
@@ -14,19 +11,19 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.UUID;
 
 public class TileEntityBlockSeller extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 

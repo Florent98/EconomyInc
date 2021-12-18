@@ -4,7 +4,6 @@ package fr.fifoube.gui;
 
 import fr.fifoube.gui.container.type.ContainerTypeRegistery;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
 
 public class GuiRegistery {
 

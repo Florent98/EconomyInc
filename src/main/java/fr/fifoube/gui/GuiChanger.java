@@ -2,14 +2,10 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
 import fr.fifoube.gui.container.ContainerChanger;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.packets.PacketChangerUpdate;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -17,7 +13,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
 
 public class GuiChanger extends ContainerScreen<ContainerChanger> {
 

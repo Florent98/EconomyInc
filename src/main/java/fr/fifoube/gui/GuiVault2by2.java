@@ -3,14 +3,10 @@
 package fr.fifoube.gui;
 
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.gui.container.ContainerVault2by2;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -20,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
 
 public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 {

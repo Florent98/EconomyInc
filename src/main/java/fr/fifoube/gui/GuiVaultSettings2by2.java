@@ -2,16 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketVaultSettings;
@@ -21,11 +12,15 @@ import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class GuiVaultSettings2by2  extends Screen
 {

@@ -13,10 +13,6 @@
 
 package fr.fifoube.blocks.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
 import fr.fifoube.gui.container.ContainerBuyer;
 import fr.fifoube.gui.container.ContainerBuyerCreation;
 import fr.fifoube.items.IValue;
@@ -34,9 +30,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class TileEntityBlockBuyer extends TileEntity implements INamedContainerProvider, ITickableTileEntity{
 

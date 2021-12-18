@@ -2,13 +2,12 @@
  *******************************************************************************/
 package fr.fifoube.main.config;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
 
 @EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigHolder {

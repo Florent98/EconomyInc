@@ -2,14 +2,8 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-import java.util.UUID;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
 import fr.fifoube.items.ItemCreditCard;
 import fr.fifoube.main.ModEconomyInc;
@@ -26,6 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.util.UUID;
 
 public class GuiSellerBuy extends Screen
 {

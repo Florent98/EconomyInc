@@ -13,10 +13,7 @@
 
 package fr.fifoube.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
 import fr.fifoube.gui.container.ContainerBuyer;
 import fr.fifoube.main.ModEconomyInc;
@@ -25,6 +22,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import org.lwjgl.opengl.GL11;
 
 public class GuiBuyerContainer extends ContainerScreen<ContainerBuyer>
 {
