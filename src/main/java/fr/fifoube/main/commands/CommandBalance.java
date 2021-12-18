@@ -63,7 +63,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has received " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
+					//ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has received " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
 					data.setMoney(data.getMoney() + money);
 				});
 				src.sendFeedback(new TranslationTextComponent("commands.balance.added", money, playerMP.getDisplayName().getString()), false);
@@ -80,7 +80,7 @@ public class CommandBalance {
 			{
 				ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has been withdrawn " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
+					//ModEconomyInc.LOGGER.info(playerMP.getDisplayName().getString() + " has been withdrawn " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - money) + "." + "[UUID: " + playerMP.getUniqueID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUniqueID() +"]");
 					data.setMoney(data.getMoney() - money);
 				});
 				src.sendFeedback(new TranslationTextComponent("commands.balance.withdraw", money, playerMP.getDisplayName().getString()), false);
