@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "economyinc:block/block_bills" }
+  "variants": {
+    "": {
+      "model": "economyinc:block/block_bills"
     }
+  }
 }

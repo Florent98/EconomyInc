@@ -6,9 +6,9 @@ import net.minecraft.item.Item;
 
 public class ItemGear extends Item {
 
-	public ItemGear(Properties properties) {
-		super(properties);
-	}
+    public ItemGear(Properties properties) {
+        super(properties);
+    }
 
 }
 

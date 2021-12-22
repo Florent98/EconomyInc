@@ -1,8 +1,19 @@
 {
-    "variants": {
-        "facing=north": { "model": "economyinc:block/block_vault2by2" },
-        "facing=south": { "model": "economyinc:block/block_vault2by2" ,"y": 180 },
-        "facing=west":  { "model": "economyinc:block/block_vault2by2" ,"y": 270 },
-        "facing=east":  { "model": "economyinc:block/block_vault2by2" ,"y": 90 }
+  "variants": {
+    "facing=north": {
+      "model": "economyinc:block/block_vault2by2"
+    },
+    "facing=south": {
+      "model": "economyinc:block/block_vault2by2",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "economyinc:block/block_vault2by2",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "economyinc:block/block_vault2by2",
+      "y": 90
     }
+  }
 }

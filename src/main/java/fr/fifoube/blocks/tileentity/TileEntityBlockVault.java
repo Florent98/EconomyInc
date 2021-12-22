@@ -23,130 +23,115 @@ import java.util.UUID;
 
 public class TileEntityBlockVault extends TileEntity implements INamedContainerProvider {
 
-	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault");
-	ItemStackHandler inventory = new ItemStackHandler(27);
-	private UUID owner;
-	private byte direction;
-	private boolean isOpen;
+    private static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault");
+    ItemStackHandler inventory = new ItemStackHandler(27);
+    private UUID owner;
+    private byte direction;
+    private boolean isOpen;
     private ITextComponent customName;
-	
-    public TileEntityBlockVault() 
-    {
-		this(TileEntityRegistery.TILE_BLOCKVAULT);
-	}
-    
+
+    public TileEntityBlockVault() {
+        this(TileEntityRegistery.TILE_BLOCKVAULT);
+    }
+
     public TileEntityBlockVault(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
-	}
-	public ItemStackHandler getHandler()
-	{
-		return inventory;
-	}
-	
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
+        super(tileEntityTypeIn);
+    }
+
+    public ItemStackHandler getHandler() {
+        return inventory;
+    }
+
+    public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(this.pos, 1, this.getUpdateTag());
     }
 
-    public CompoundNBT getUpdateTag()
-    {
+    public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
     }
-    
+
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) 
-    {
-    	read(null, pkt.getNbtCompound());
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        read(null, pkt.getNbtCompound());
     }
     // ANIMATION
-	
-	public boolean getIsOpen()
-	{
-		return this.isOpen;
-	}
-	
-	public void setIsOpen(boolean isOpenIn)
-	{
-		this.isOpen = isOpenIn;
-	}
-	
-	// AUTRES
-    public void setOwner(UUID uuid)
-    {
-        this.owner = uuid;
-    }
-    
-    public UUID getOwner()
-    {
-        return this.owner;
-    }
-    
-    public Boolean hasItems()
-    {
-    	for(int i = 0; i < 27; i++)
-    	{
-    		if(inventory.getStackInSlot(i) != ItemStack.EMPTY)
-    		{
-    			return true;
-    		}
-    	}
-		return false;	
-    }
-    
-    public byte getDirection()
-    {
-    	return this.direction;
+
+    public boolean getIsOpen() {
+        return this.isOpen;
     }
 
-	public void setDirection(byte direction) 
-	{
-		this.direction = direction;
-	}
-	
-	
+    public void setIsOpen(boolean isOpenIn) {
+        this.isOpen = isOpenIn;
+    }
+
+    public UUID getOwner() {
+        return this.owner;
+    }
+
+    // AUTRES
+    public void setOwner(UUID uuid) {
+        this.owner = uuid;
+    }
+
+    public Boolean hasItems() {
+        for (int i = 0; i < 27; i++) {
+            if (inventory.getStackInSlot(i) != ItemStack.EMPTY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public byte getDirection() {
+        return this.direction;
+    }
+
+    public void setDirection(byte direction) {
+        this.direction = direction;
+    }
+
+
     @Override
-    public CompoundNBT write(CompoundNBT compound) 
-    {
+    public CompoundNBT write(CompoundNBT compound) {
         compound.put("inventory", inventory.serializeNBT());
-        compound.putByte("direction", this.direction);     
-        if(this.owner != null) {
-        	compound.putUniqueId("ownerUUID", this.owner);
-        }  	
+        compound.putByte("direction", this.direction);
+        if (this.owner != null) {
+            compound.putUniqueId("ownerUUID", this.owner);
+        }
         if (this.getDisplayName() != null) {
-        	compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
+            compound.putString("CustomName", ITextComponent.Serializer.toJson(this.getDisplayName()));
         }
         return super.write(compound);
     }
-    
+
     @Override
     public void read(BlockState state, CompoundNBT compound) {
 
-    	super.read(state, compound);
-    	 inventory.deserializeNBT(compound.getCompound("inventory"));
-         this.owner = compound.getUniqueId("ownerUUID");
-         this.direction = compound.getByte("direction");
-         if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
-             this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
-          }
+        super.read(state, compound);
+        inventory.deserializeNBT(compound.getCompound("inventory"));
+        this.owner = compound.getUniqueId("ownerUUID");
+        this.direction = compound.getByte("direction");
+        if (compound.contains("CustomName", Constants.NBT.TAG_STRING)) {
+            this.customName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
+        }
     }
-    
-    
-	@Override
-	public void markDirty() 
-	{
-		 BlockState state = this.world.getBlockState(getPos());
-	     this.world.notifyBlockUpdate(getPos(), state, state, 3);
-	}
 
-	@Override
-	public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-		return new ContainerVault(id, playerInventory, getPos());
-	}
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return NAME;
-	}
+    @Override
+    public void markDirty() {
+        BlockState state = this.world.getBlockState(getPos());
+        this.world.notifyBlockUpdate(getPos(), state, state, 3);
+    }
+
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerVault(id, playerInventory, getPos());
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return NAME;
+    }
 
 
 }

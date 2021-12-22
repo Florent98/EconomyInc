@@ -1,16 +1,16 @@
 {
- "type": "minecraft:crafting_shaped",
- "pattern": [
-   "XXX",
-   "XXX",
-   "XXX"
- ],
- "key": {
-   "X": {
-    "item": "economyinc:item_fiveb"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "economyinc:item_fiveb"
     }
-   },
-   "result": {
+  },
+  "result": {
     "item": "economyinc:item_packetfive"
-   }
+  }
 }

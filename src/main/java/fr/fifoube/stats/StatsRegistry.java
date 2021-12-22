@@ -14,21 +14,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class StatsRegistry {
 
-	 public static ResourceLocation CHANGED_GOLD_TO_MONEY;
-	
-	 @SubscribeEvent
-	 public static void registerAll(RegistryEvent.Register<StatType<?>> event) 
-	 { 
-	    if (event.getName().equals(ForgeRegistries.STAT_TYPES.getRegistryName())) {
-	       CHANGED_GOLD_TO_MONEY = register("changed_gold_money", IStatFormatter.DEFAULT);
-	    }
-	 }
+    public static ResourceLocation CHANGED_GOLD_TO_MONEY;
 
-	    private static ResourceLocation register(String name, IStatFormatter formatter) {
-	        ResourceLocation id = new ResourceLocation(ModEconomyInc.MOD_ID, name);
-	        Registry.register(Registry.CUSTOM_STAT, name, id);
-	        Stats.CUSTOM.get(id, formatter);
-	        return id;
-	    }
-	
+    @SubscribeEvent
+    public static void registerAll(RegistryEvent.Register<StatType<?>> event) {
+        if (event.getName().equals(ForgeRegistries.STAT_TYPES.getRegistryName())) {
+            CHANGED_GOLD_TO_MONEY = register("changed_gold_money", IStatFormatter.DEFAULT);
+        }
+    }
+
+    private static ResourceLocation register(String name, IStatFormatter formatter) {
+        ResourceLocation id = new ResourceLocation(ModEconomyInc.MOD_ID, name);
+        Registry.register(Registry.CUSTOM_STAT, name, id);
+        Stats.CUSTOM.get(id, formatter);
+        return id;
+    }
+
 }

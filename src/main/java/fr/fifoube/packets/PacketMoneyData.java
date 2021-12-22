@@ -15,42 +15,37 @@ import java.util.function.Supplier;
 
 public class PacketMoneyData {
 
-	private double money;
+    private double money;
 
-	
-	public PacketMoneyData(IMoney instance) {
-		this.money = instance.getMoney();
-	}
-	
-	public PacketMoneyData(double money)
-	{
-		this.money = money;
-	}
-    
-    public static void encode(PacketMoneyData pck, PacketBuffer buf)
-    {
+
+    public PacketMoneyData(IMoney instance) {
+        this.money = instance.getMoney();
+    }
+
+    public PacketMoneyData(double money) {
+        this.money = money;
+    }
+
+    public static void encode(PacketMoneyData pck, PacketBuffer buf) {
         buf.writeDouble(pck.money);
     }
- 
-    public static PacketMoneyData decode(PacketBuffer buf)
-    {
+
+    public static PacketMoneyData decode(PacketBuffer buf) {
         return new PacketMoneyData(buf.readDouble());
     }
- 
-    public static void handle(PacketMoneyData pck, Supplier<NetworkEvent.Context> ctxSupplier)
-    {
-        if(ctxSupplier.get().getDirection().getReceptionSide() == LogicalSide.CLIENT)
+
+    public static void handle(PacketMoneyData pck, Supplier<NetworkEvent.Context> ctxSupplier) {
+        if (ctxSupplier.get().getDirection().getReceptionSide() == LogicalSide.CLIENT)
             ctxSupplier.get().enqueueWork(() -> handleClientUpdate(pck));
         ctxSupplier.get().setPacketHandled(true);
     }
- 
+
     @OnlyIn(Dist.CLIENT)
-    private static void handleClientUpdate(PacketMoneyData pck)
-    {
+    private static void handleClientUpdate(PacketMoneyData pck) {
         Minecraft.getInstance().player.getCapability(CapabilityMoney.MONEY_CAPABILITY)
                 .ifPresent(capa -> {
-                	capa.setMoney(pck.money);
-                }
+                            capa.setMoney(pck.money);
+                        }
                 );
     }
 }

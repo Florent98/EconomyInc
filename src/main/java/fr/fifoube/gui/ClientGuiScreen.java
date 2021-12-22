@@ -11,23 +11,23 @@ import net.minecraft.tileentity.TileEntity;
 
 public class ClientGuiScreen {
 
-	
-	public static void openGui(int id, TileEntity te) {
-		switch (id) {
-		case 0:
-			Minecraft.getInstance().displayGuiScreen(new GuiCreditCard());
-			break;
-		case 1:
-			Minecraft.getInstance().displayGuiScreen(new GuiSellerBuy((TileEntityBlockSeller) te));
-			break;
-		case 2:
-			Minecraft.getInstance().displayGuiScreen(new GuiVaultSettings2by2((TileEntityBlockVault2by2)te));
-			break;
-		case 3:
-			Minecraft.getInstance().displayGuiScreen(new GuiBuyerSell((TileEntityBlockBuyer) te));
-			break;
-		default:
-			break;
-		}
-	}
+
+    public static void openGui(int id, TileEntity te) {
+        switch (id) {
+            case 0:
+                Minecraft.getInstance().displayGuiScreen(new GuiCreditCard());
+                break;
+            case 1:
+                Minecraft.getInstance().displayGuiScreen(new GuiSellerBuy((TileEntityBlockSeller) te));
+                break;
+            case 2:
+                Minecraft.getInstance().displayGuiScreen(new GuiVaultSettings2by2((TileEntityBlockVault2by2) te));
+                break;
+            case 3:
+                Minecraft.getInstance().displayGuiScreen(new GuiBuyerSell((TileEntityBlockBuyer) te));
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -9,15 +9,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemGroupEIC extends ItemGroup {
-   
-	public ItemGroupEIC(String label) {
-		super(label);
-	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public ItemStack createIcon() {
-		return new ItemStack(ItemsRegistery.ITEM_CREDITCARD);
-	}
+    public ItemGroupEIC(String label) {
+        super(label);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public ItemStack createIcon() {
+        return new ItemStack(ItemsRegistery.ITEM_CREDITCARD);
+    }
 
 }

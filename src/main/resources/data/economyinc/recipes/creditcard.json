@@ -1,25 +1,25 @@
 {
- "type": "minecraft:crafting_shaped",
- "pattern": [
-   "XXX",
-   "WYZ",
-   "XXX"
- ],
- "key": {
-   "X": {
-    "item": "minecraft:iron_ingot"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "WYZ",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
     },
-   "Y": {
-    "item": "minecraft:paper"
+    "Y": {
+      "item": "minecraft:paper"
     },
-   "Z": {
-    "item": "minecraft:redstone"
+    "Z": {
+      "item": "minecraft:redstone"
     },
-   "W": {
-    "item": "minecraft:gold_nugget"
+    "W": {
+      "item": "minecraft:gold_nugget"
     }
-   },
-   "result": {
+  },
+  "result": {
     "item": "economyinc:item_creditcard"
-   }
+  }
 }

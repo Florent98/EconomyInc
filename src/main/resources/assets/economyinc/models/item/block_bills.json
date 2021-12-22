@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "economyinc:items/block_bills"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "economyinc:items/block_bills"
+  }
 }

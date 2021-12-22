@@ -1,301 +1,1397 @@
 {
-    "textures": {
-        "pad": "economyinc:blocks/pad",
-        "anvil": "economyinc:blocks/anvil",
-	"particle": "economyinc:blocks/anvil"
+  "textures": {
+    "pad": "economyinc:blocks/pad",
+    "anvil": "economyinc:blocks/anvil",
+    "particle": "economyinc:blocks/anvil"
+  },
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
     },
-    "display": {
-        "gui": {
-            "rotation": [ 30, 45, 0 ],
-            "translation": [ 0, 0, 0 ],
-            "scale": [ 0.625, 0.625, 0.625 ]
-        },
-        "ground": {
-            "rotation": [ 0, 0, 0 ],
-            "translation": [ 0, 3, 0 ],
-            "scale": [ 0.25, 0.25, 0.25 ]
-        },
-        "fixed": {
-            "rotation": [ 0, 180, 0 ],
-            "translation": [ 0, 0, 0 ],
-            "scale": [ 1, 1, 1 ]
-        },
-        "head": {
-            "rotation": [ 0, 180, 0 ],
-            "translation": [ 0, 0, 0 ],
-            "scale": [ 1, 1, 1 ]
-        },
-        "firstperson_righthand": {
-            "rotation": [ 0, 315, 0 ],
-            "translation": [ 0, 2.5, 0 ],
-            "scale": [ 0.4, 0.4, 0.4 ]
-        },
-        "thirdperson_righthand": {
-            "rotation": [ 75, 315, 0 ],
-            "translation": [ 0, 2.5, 0 ],
-            "scale": [ 0.375, 0.375, 0.375 ]
-        }
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
     },
-    "elements": [
-        {
-            "name": "Bottom_vault",
-            "from": [ 0, 0, 0 ], 
-            "to": [ 32, 1, 16 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 15, 16, 16 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 15, 15, 16 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 15, 16, 16 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 15, 16, 16 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 16, 16 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 16, 16 ] }
-            }
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        315,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        315,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    }
+  },
+  "elements": [
+    {
+      "name": "Bottom_vault",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        32,
+        1,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ]
         },
-        {
-            "name": "Back_vault",
-            "from": [ 1, 1, 15 ], 
-            "to": [ 31, 31, 16 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 1, 1, 16, 16 ] },
-                "south": { "texture": "#anvil", "uv": [ 1, 1, 16, 16 ] }
-            }
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            15,
+            15,
+            16
+          ]
         },
-        {
-            "name": "Right_vault",
-            "from": [ 0, 1, 0 ], 
-            "to": [ 1, 31, 16 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 15, 1, 16, 16 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 1, 16, 16 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 1, 1, 16 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 1, 16, 16 ] }
-            }
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ]
         },
-        {
-            "name": "Left_vault",
-            "from": [ 31, 1, 0 ], 
-            "to": [ 32, 31, 16 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 1, 1, 16 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 1, 16, 16 ] },
-                "south": { "texture": "#anvil", "uv": [ 15, 1, 16, 16 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 1, 16, 16 ] }
-            }
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ]
         },
-        {
-            "name": "Top_vault",
-            "from": [ 0, 31, 0 ], 
-            "to": [ 32, 32, 16 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 16, 1 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 16, 1 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 16, 1 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 16, 1 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 16, 16 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 16, 16 ] }
-            }
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
         },
-        {
-            "name": "Front_vault",
-            "from": [ 1, 1, 1 ], 
-            "to": [ 31, 31, 2 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 1, 1, 16, 16 ] },
-                "south": { "texture": "#anvil", "uv": [ 1, 1, 16, 16 ] }
-            }
-        },
-        {
-            "name": "Knob_front_vault",
-            "from": [ 13.5, 13.5, 0 ], 
-            "to": [ 17.5, 17.5, 1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 4, 4 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 1, 4 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 1, 4 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 4, 1 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 4, 1 ] }
-            }
-        },
-        {
-            "name": "Knob2_front_vault",
-            "from": [ 14.5, 14.5, -1 ], 
-            "to": [ 16.5, 16.5, 0 ], 
-            "faces": {
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] }
-            }
-        },
-        {
-            "name": "Knob3_front_vault",
-            "from": [ 13.5, 13.5, -3 ], 
-            "to": [ 17.5, 17.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 4, 4 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 4 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 4, 4 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 4 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 4, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 4, 2 ] }
-            }
-        },
-        {
-            "name": "Handle_front_vault",
-            "from": [ 7.5, 14.5, -3 ], 
-            "to": [ 13.5, 16.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] }
-            }
-        },
-        {
-            "name": "Handle2_front_vault",
-            "from": [ 17.5, 14.5, -3 ], 
-            "to": [ 23.5, 16.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 6, 2 ] }
-            }
-        },
-        {
-            "name": "Handle3_front_vault",
-            "from": [ 14.5, 17.5, -3 ], 
-            "to": [ 16.5, 23.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Handle4_front_vault",
-            "from": [ 14.5, 7.5, -3 ], 
-            "to": [ 16.5, 13.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 6 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Handle3_1_front_vault",
-            "from": [ 6, 15, -2.5 ], 
-            "to": [ 8, 16, -1.5 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] }
-            }
-        },
-        {
-            "name": "Handle3_2_front_vault",
-            "from": [ 4.5, 14.5, -3 ], 
-            "to": [ 6.5, 16.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Handle_1_front_vault",
-            "from": [ 15, 23, -2.5 ], 
-            "to": [ 16, 25, -1.5 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] }
-            }
-        },
-        {
-            "name": "Handle_2_front_vault",
-            "from": [ 14.5, 24.5, -3 ], 
-            "to": [ 16.5, 26.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Handle2_1_front_vault",
-            "from": [ 23, 15, -2.5 ], 
-            "to": [ 25, 16, -1.5 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 1 ] }
-            }
-        },
-        {
-            "name": "Handle2_2_front_vault",
-            "from": [ 24.5, 14.5, -3 ], 
-            "to": [ 26.5, 16.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Handle4_1_front_vault",
-            "from": [ 15, 5.5, -2.5 ], 
-            "to": [ 16, 7.5, -1.5 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 1, 2 ] }
-            }
-        },
-        {
-            "name": "Handle4_2_front_vault",
-            "from": [ 14.5, 4.5, -3 ], 
-            "to": [ 16.5, 6.5, -1 ], 
-            "faces": {
-                "north": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 2, 2 ] }
-            }
-        },
-        {
-            "name": "Pad",
-            "from": [ 3, 0, 1.7 ], 
-            "to": [ 7.5, 5, 3.7 ], 
-            "rotation": { "origin": [ 8, 8, 8 ], "axis": "x", "angle": 22.5 },
-            "faces": {
-                "north": { "texture": "#pad", "uv": [ 0, 0, 16, 16 ] },
-                "east": { "texture": "#anvil", "uv": [ 0, 0, 2, 5 ] },
-                "south": { "texture": "#anvil", "uv": [ 0, 0, 4.5, 5 ] },
-                "west": { "texture": "#anvil", "uv": [ 0, 0, 2, 5 ] },
-                "up": { "texture": "#anvil", "uv": [ 0, 0, 4.5, 2 ] },
-                "down": { "texture": "#anvil", "uv": [ 0, 0, 4.5, 2 ] }
-            }
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
         }
-    ]
+      }
+    },
+    {
+      "name": "Back_vault",
+      "from": [
+        1,
+        1,
+        15
+      ],
+      "to": [
+        31,
+        31,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Right_vault",
+      "from": [
+        0,
+        1,
+        0
+      ],
+      "to": [
+        1,
+        31,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            15,
+            1,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            1,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Left_vault",
+      "from": [
+        31,
+        1,
+        0
+      ],
+      "to": [
+        32,
+        31,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            1,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            15,
+            1,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            1,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Top_vault",
+      "from": [
+        0,
+        31,
+        0
+      ],
+      "to": [
+        32,
+        32,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Front_vault",
+      "from": [
+        1,
+        1,
+        1
+      ],
+      "to": [
+        31,
+        31,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            1,
+            1,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "Knob_front_vault",
+      "from": [
+        13.5,
+        13.5,
+        0
+      ],
+      "to": [
+        17.5,
+        17.5,
+        1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            1
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "Knob2_front_vault",
+      "from": [
+        14.5,
+        14.5,
+        -1
+      ],
+      "to": [
+        16.5,
+        16.5,
+        0
+      ],
+      "faces": {
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "Knob3_front_vault",
+      "from": [
+        13.5,
+        13.5,
+        -3
+      ],
+      "to": [
+        17.5,
+        17.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle_front_vault",
+      "from": [
+        7.5,
+        14.5,
+        -3
+      ],
+      "to": [
+        13.5,
+        16.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle2_front_vault",
+      "from": [
+        17.5,
+        14.5,
+        -3
+      ],
+      "to": [
+        23.5,
+        16.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            6,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle3_front_vault",
+      "from": [
+        14.5,
+        17.5,
+        -3
+      ],
+      "to": [
+        16.5,
+        23.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle4_front_vault",
+      "from": [
+        14.5,
+        7.5,
+        -3
+      ],
+      "to": [
+        16.5,
+        13.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            6
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle3_1_front_vault",
+      "from": [
+        6,
+        15,
+        -2.5
+      ],
+      "to": [
+        8,
+        16,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle3_2_front_vault",
+      "from": [
+        4.5,
+        14.5,
+        -3
+      ],
+      "to": [
+        6.5,
+        16.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle_1_front_vault",
+      "from": [
+        15,
+        23,
+        -2.5
+      ],
+      "to": [
+        16,
+        25,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle_2_front_vault",
+      "from": [
+        14.5,
+        24.5,
+        -3
+      ],
+      "to": [
+        16.5,
+        26.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle2_1_front_vault",
+      "from": [
+        23,
+        15,
+        -2.5
+      ],
+      "to": [
+        25,
+        16,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle2_2_front_vault",
+      "from": [
+        24.5,
+        14.5,
+        -3
+      ],
+      "to": [
+        26.5,
+        16.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle4_1_front_vault",
+      "from": [
+        15,
+        5.5,
+        -2.5
+      ],
+      "to": [
+        16,
+        7.5,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Handle4_2_front_vault",
+      "from": [
+        14.5,
+        4.5,
+        -3
+      ],
+      "to": [
+        16.5,
+        6.5,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "Pad",
+      "from": [
+        3,
+        0,
+        1.7
+      ],
+      "to": [
+        7.5,
+        5,
+        3.7
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "x",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "texture": "#pad",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4.5,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            2,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4.5,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#anvil",
+          "uv": [
+            0,
+            0,
+            4.5,
+            2
+          ]
+        }
+      }
+    }
+  ]
 }
