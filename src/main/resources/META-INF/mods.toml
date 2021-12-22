@@ -1,12 +1,12 @@
 modLoader="javafml"
 loaderVersion="[31,)"
 issueTrackerURL="https://github.com/FifouBE/EconomyInc/issues" #optional
-credits="FifouBE" 
+credits="FifouBE, MarcusSlover"
 license="All right reserved"
 
 [[mods]] #mandatory
 	modId="economyinc" #mandatory
-	version="1.6.8" #mandatory
+	version="1.7" #mandatory
 	displayName="Economy Inc." #mandatory
 	displayURL="https://www.curseforge.com/minecraft/mc-mods/economy-inc" #optional
 	description='''
