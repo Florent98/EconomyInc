@@ -37,7 +37,7 @@ public class ServerEvents {
             ServerWorld worldIn = player.getServerWorld();
             List<ChunkPos> listPos = new ArrayList<ChunkPos>();
             DimensionSavedDataManager storage = worldIn.getSavedData();
-            ChunksWorldSavedData data = (ChunksWorldSavedData) storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
+            ChunksWorldSavedData data = storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
             if (data != null) {
                 List<PlotsChunkData> listC = data.getListContainer();
                 for (int i = 0; i < listC.size(); i++) {
@@ -54,7 +54,7 @@ public class ServerEvents {
                 if (new ChunkPos(event.getPos()).equals(pos)) {
                     Vector3d vec = new Vector3d(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
                     List<AxisAlignedBB> listAABB = new ArrayList<AxisAlignedBB>();
-                    PlotsWorldSavedData plotsDataWSD = (PlotsWorldSavedData) storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+                    PlotsWorldSavedData plotsDataWSD = storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
                     UUID uuidOwner = null;
                     if (plotsDataWSD != null) {
                         List<PlotsData> listC = plotsDataWSD.getListContainer();
@@ -74,11 +74,7 @@ public class ServerEvents {
                         if (checker.contains(vec)) {
                             if (uuidOwner != null)
                                 if (!player.getUniqueID().equals(uuidOwner)) {
-                                    if (player.hasPermissionLevel(4)) {
-                                        event.setCanceled(false);
-                                    } else {
-                                        event.setCanceled(true);
-                                    }
+                                    event.setCanceled(!player.hasPermissionLevel(4));
                                 }
                         }
                     }
@@ -97,7 +93,7 @@ public class ServerEvents {
             ServerWorld worldIn = player.getServerWorld();
             List<ChunkPos> listPos = new ArrayList<ChunkPos>();
             DimensionSavedDataManager storage = worldIn.getSavedData();
-            ChunksWorldSavedData data = (ChunksWorldSavedData) storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
+            ChunksWorldSavedData data = storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
             if (data != null) {
                 List<PlotsChunkData> listC = data.getListContainer();
                 for (int i = 0; i < listC.size(); i++) {
@@ -114,7 +110,7 @@ public class ServerEvents {
                 if (new ChunkPos(event.getPos()).equals(pos)) {
                     Vector3d vec = new Vector3d(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
                     List<AxisAlignedBB> listAABB = new ArrayList<AxisAlignedBB>();
-                    PlotsWorldSavedData plotsDataWSD = (PlotsWorldSavedData) storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+                    PlotsWorldSavedData plotsDataWSD = storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
                     UUID uuidOwner = null;
                     if (plotsDataWSD != null) {
                         List<PlotsData> listC = plotsDataWSD.getListContainer();
@@ -134,11 +130,7 @@ public class ServerEvents {
                         if (checker.contains(vec)) {
                             if (uuidOwner != null)
                                 if (!event.getPlayer().getUniqueID().equals(uuidOwner)) {
-                                    if (player.hasPermissionLevel(4)) {
-                                        event.setCanceled(false);
-                                    } else {
-                                        event.setCanceled(true);
-                                    }
+                                    event.setCanceled(!player.hasPermissionLevel(4));
                                 }
 
                         }

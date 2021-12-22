@@ -31,7 +31,7 @@ public class GuiSellerBuy extends Screen {
     protected int ySize = 124;
     protected int guiLeft;
     protected int guiTop;
-    private TileEntityBlockSeller tile;
+    private final TileEntityBlockSeller tile;
     private Button slot1;
     private Button takeFunds;
     private String owner = "";
@@ -55,11 +55,7 @@ public class GuiSellerBuy extends Screen {
         fundsTotalRecovery = tile.getFundsTotal();
         tile.setFundsTotal(fundsTotalRecovery);
         tile.markDirty();
-        if (tile.getTime() != 0) {
-            slot1.active = false;
-        } else {
-            slot1.active = true;
-        }
+        slot1.active = tile.getTime() == 0;
     }
 
     @Override

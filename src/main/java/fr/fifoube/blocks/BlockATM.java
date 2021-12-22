@@ -81,7 +81,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
             BlockState blockstate1 = worldIn.getBlockState(pos.south());
             BlockState blockstate2 = worldIn.getBlockState(pos.west());
             BlockState blockstate3 = worldIn.getBlockState(pos.east());
-            Direction dir = (Direction) state.get(FACING);
+            Direction dir = state.get(FACING);
 
             if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock()) {
                 dir = Direction.SOUTH;
@@ -114,7 +114,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
      * Convert the BlockState into the correct metadata value
      */
     public int getMetaFromState(BlockState state) {
-        return ((Direction) state.get(FACING)).getIndex();
+        return state.get(FACING).getIndex();
     }
 
     @Override
@@ -125,7 +125,7 @@ public class BlockATM extends Block implements INamedContainerProvider {
 
     @Override
     public ITextComponent getDisplayName() {
-        return this.NAME;
+        return NAME;
     }
 
     @Override

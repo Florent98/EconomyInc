@@ -9,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,7 +58,7 @@ public class BlockChanger extends ContainerBlock {
 
                     }
                     if (canOpen) {
-                        NetworkHooks.openGui((ServerPlayerEntity) playerIn, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                        NetworkHooks.openGui((ServerPlayerEntity) playerIn, te, buf -> buf.writeBlockPos(pos));
                         te.setNumbUse(1);
                         te.setEntityPlayer(playerIn);
                         te.markDirty();
@@ -134,7 +133,7 @@ public class BlockChanger extends ContainerBlock {
             BlockState blockstate1 = worldIn.getBlockState(pos.south());
             BlockState blockstate2 = worldIn.getBlockState(pos.west());
             BlockState blockstate3 = worldIn.getBlockState(pos.east());
-            Direction dir = (Direction) state.get(FACING);
+            Direction dir = state.get(FACING);
 
             if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock()) {
                 dir = Direction.SOUTH;
@@ -156,12 +155,12 @@ public class BlockChanger extends ContainerBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate((Direction) state.get(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation((Direction) state.get(FACING)));
+        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override

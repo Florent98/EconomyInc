@@ -38,7 +38,7 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation> {
     protected int ySize = 168;
     protected int guiLeft;
     protected int guiTop;
-    private TileEntityBlockBuyer tile;
+    private final TileEntityBlockBuyer tile;
     private TextFieldWidget costField;
     private boolean validCost = false;
 
@@ -111,7 +111,7 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation> {
             this.minecraft.player.closeScreen();
         }
 
-        return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.canWrite() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
+        return this.costField.keyPressed(keyCode, scanCode, modifiers) || this.costField.canWrite() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
 
@@ -154,10 +154,7 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation> {
         if (field != null) {
             try {
                 double value = Double.parseDouble(field);
-                if (value > 0) {
-                    return true;
-                }
-                return false;
+                return value > 0;
             } catch (NumberFormatException e) {
                 return false;
             }

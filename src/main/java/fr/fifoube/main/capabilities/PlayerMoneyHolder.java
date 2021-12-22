@@ -10,7 +10,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 public class PlayerMoneyHolder extends MoneyHolder {
 
-    private ServerPlayerEntity player;
+    private final ServerPlayerEntity player;
 
     public PlayerMoneyHolder(ServerPlayerEntity player) {
         this.player = player;

@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class PacketMoneyData {
 
-    private double money;
+    private final double money;
 
 
     public PacketMoneyData(IMoney instance) {

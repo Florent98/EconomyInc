@@ -44,7 +44,7 @@ public class GuiCreditCard extends Screen {
     private Button twoHundreedBMinus;
     private Button fiveHundreedBMinus;
     private double funds_s;
-    private String name = Minecraft.getInstance().player.getDisplayName().getString();
+    private final String name = Minecraft.getInstance().player.getDisplayName().getString();
 
     public GuiCreditCard() {
         super(new TranslationTextComponent("gui.creditcard"));
@@ -97,7 +97,7 @@ public class GuiCreditCard extends Screen {
     }
 
     public void actionPerformed(int buttonId) {
-        int listNumber[] = {-1, -5, -10, -20, -50, -100, -200, -500, 1, 5, 10, 20, 50, 100, 200, 500};
+        int[] listNumber = {-1, -5, -10, -20, -50, -100, -200, -500, 1, 5, 10, 20, 50, 100, 200, 500};
         PacketsRegistery.CHANNEL.sendToServer(new PacketCardChange(listNumber[buttonId]));
     }
 
@@ -110,7 +110,7 @@ public class GuiCreditCard extends Screen {
         InventoryScreen.drawEntityOnScreen(this.guiLeft + 25, this.guiTop + 58, 25, (float) (this.guiLeft + 51) - mouseX, (float) (this.guiTop + 75 - 50) - mouseY, this.getMinecraft().player);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.font.drawString(matrixStack, I18n.format("title.ownerCard") + ": " + name, (this.width / 2) - 75, (this.height / 2) - 55, Color.DARK_GRAY.getRGB());
-        this.font.drawString(matrixStack, I18n.format("title.fundsCard") + ": " + String.valueOf(funds_s), (this.width / 2) - 75, (this.height / 2) - 45, Color.DARK_GRAY.getRGB());
+        this.font.drawString(matrixStack, I18n.format("title.fundsCard") + ": " + funds_s, (this.width / 2) - 75, (this.height / 2) - 45, Color.DARK_GRAY.getRGB());
 
     }
 

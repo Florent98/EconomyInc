@@ -116,7 +116,7 @@ public class CommandsPlots {
             ServerPlayerEntity playerTarget = player;
             ServerWorld worldIn = player.getServerWorld();
             DimensionSavedDataManager storage = worldIn.getSavedData();
-            PlotsWorldSavedData dataWorld = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+            PlotsWorldSavedData dataWorld = storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
             if (dataWorld != null) {
                 for (int i = 0; i < dataWorld.getListContainer().size(); i++) {
                     PlotsData plotsData = dataWorld.getListContainer().get(i);
@@ -163,7 +163,7 @@ public class CommandsPlots {
         if (player != null) {
             ServerWorld worldIn = player.getServerWorld();
             DimensionSavedDataManager storage = worldIn.getSavedData();
-            PlotsWorldSavedData dataWorld = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+            PlotsWorldSavedData dataWorld = storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
             if (dataWorld != null) {
                 for (int i = 0; i < dataWorld.getListContainer().size(); i++) {
                     PlotsData plotsData = dataWorld.getListContainer().get(i);
@@ -203,7 +203,7 @@ public class CommandsPlots {
 
         if (player != null) {
             DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
-            PlotsWorldSavedData data = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+            PlotsWorldSavedData data = storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
             List<String> namePlot = new ArrayList<String>();
             if (data != null) {
                 for (int i = 0; i < data.getListContainer().size(); i++) {
@@ -245,7 +245,7 @@ public class CommandsPlots {
             if (Math.abs(to.getX() - from.getX()) < 26 && Math.abs(to.getZ() - from.getZ()) < 26) {
                 DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
                 ServerWorld worldIn = player.getServerWorld();
-                PlotsWorldSavedData data = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+                PlotsWorldSavedData data = storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
                 if (data != null) {
                     for (int i = 0; i < data.getListContainer().size(); i++) {
                         PlotsData plotsData = data.getListContainer().get(i);
@@ -283,7 +283,7 @@ public class CommandsPlots {
         }
 
         DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
-        PlotsWorldSavedData data = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+        PlotsWorldSavedData data = storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
         if (player != null)
             if (data != null) {
 
@@ -391,7 +391,7 @@ public class CommandsPlots {
         if (signTe != null) {
             signTe.setText(0, new StringTextComponent("[" + name + "]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLUE));
             signTe.setText(1, new StringTextComponent(senderName).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
-            signTe.setText(2, new StringTextComponent(String.valueOf(priceIn) + "$").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
+            signTe.setText(2, new StringTextComponent(priceIn + "$").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
             signTe.setText(3, new StringTextComponent("[BUY]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.GREEN));
             signTe.markDirty();
         }

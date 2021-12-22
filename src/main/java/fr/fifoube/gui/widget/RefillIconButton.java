@@ -63,7 +63,7 @@ public class RefillIconButton extends Button {
     }
 
     @OnlyIn(Dist.CLIENT)
-    static enum Icon {
+    enum Icon {
 
         REFILL(176, 0),
         REFILL_HOVER(176, 20),
@@ -73,7 +73,7 @@ public class RefillIconButton extends Button {
         private final int x;
         private final int y;
 
-        private Icon(int xIn, int yIn) {
+        Icon(int xIn, int yIn) {
             this.x = xIn;
             this.y = yIn;
         }

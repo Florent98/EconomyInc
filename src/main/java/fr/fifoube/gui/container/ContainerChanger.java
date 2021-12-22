@@ -122,7 +122,7 @@ public class ContainerChanger extends Container {
             int z = te.getPos().getZ();
             if (te.getNumbUse() > 0) {
                 te.setNumbUse(0);
-                te.setEntityPlayer((PlayerEntity) null);
+                te.setEntityPlayer(null);
                 te.markDirty();
             }
 

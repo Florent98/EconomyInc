@@ -119,7 +119,7 @@ public class BlockVault2by2 extends ContainerBlock {
                         te.markDirty();
                         return ActionResultType.SUCCESS;
                     } else if (player.hasPermissionLevel(4)) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                        NetworkHooks.openGui((ServerPlayerEntity) player, te, buf -> buf.writeBlockPos(pos));
                         te.markDirty();
                         return ActionResultType.SUCCESS;
                     } else {
@@ -177,7 +177,7 @@ public class BlockVault2by2 extends ContainerBlock {
             BlockState blockstate1 = worldIn.getBlockState(pos.south());
             BlockState blockstate2 = worldIn.getBlockState(pos.west());
             BlockState blockstate3 = worldIn.getBlockState(pos.east());
-            Direction dir = (Direction) state.get(FACING);
+            Direction dir = state.get(FACING);
 
             if (dir == Direction.NORTH && blockstate.isSolid() && blockstate1.isSolid()) {
                 dir = Direction.SOUTH;
@@ -199,12 +199,12 @@ public class BlockVault2by2 extends ContainerBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate((Direction) state.get(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation((Direction) state.get(FACING)));
+        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override
@@ -221,7 +221,7 @@ public class BlockVault2by2 extends ContainerBlock {
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
     }
 
 
@@ -248,7 +248,7 @@ public class BlockVault2by2 extends ContainerBlock {
     }
 
     public VoxelShape getShapeMainFromDir(BlockState state) {
-        Direction dir = (Direction) state.get(FACING);
+        Direction dir = state.get(FACING);
         switch (dir) {
             case NORTH:
                 shapeMain = VoxelShapes.create(NORTH_AABB);

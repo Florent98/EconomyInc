@@ -32,7 +32,7 @@ public class TileEntityBlockVault2by2 extends TileEntity implements INamedContai
     public UUID owner;
     ItemStackHandler inventory = new ItemStackHandler(54);
     private byte direction;
-    private List<String> allowedPlayers = new ArrayList<String>();
+    private final List<String> allowedPlayers = new ArrayList<String>();
     private int maxAllowedPlayers = 0;
     private ITextComponent customName;
 

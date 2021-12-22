@@ -38,7 +38,7 @@ public class GuiBuyerSell extends Screen {
     protected int ySize = 124;
     protected int guiLeft;
     protected int guiTop;
-    private TileEntityBlockBuyer tile;
+    private final TileEntityBlockBuyer tile;
     private Button sellOne;
     private Button sellAll;
 

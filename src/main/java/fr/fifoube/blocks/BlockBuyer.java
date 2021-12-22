@@ -20,7 +20,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
@@ -71,10 +70,10 @@ public class BlockBuyer extends ContainerBlock {
             if (tileentity instanceof TileEntityBlockBuyer) {
                 TileEntityBlockBuyer te = (TileEntityBlockBuyer) tileentity;
                 if (!te.isCreated()) {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                    NetworkHooks.openGui((ServerPlayerEntity) player, te, buf -> buf.writeBlockPos(pos));
                 } else {
                     if (player.getHeldItemMainhand().getItem() == ItemsRegistery.ITEM_REMOVER && te.getOwner().equals(player.getUniqueID())) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                        NetworkHooks.openGui((ServerPlayerEntity) player, te, buf -> buf.writeBlockPos(pos));
                     } else {
                         ClientGuiScreen.openGui(3, te);
                     }
@@ -125,7 +124,7 @@ public class BlockBuyer extends ContainerBlock {
             BlockState blockstate1 = worldIn.getBlockState(pos.south());
             BlockState blockstate2 = worldIn.getBlockState(pos.west());
             BlockState blockstate3 = worldIn.getBlockState(pos.east());
-            Direction dir = (Direction) state.get(FACING);
+            Direction dir = state.get(FACING);
 
             if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock()) {
                 dir = Direction.SOUTH;
@@ -147,12 +146,12 @@ public class BlockBuyer extends ContainerBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate((Direction) state.get(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation((Direction) state.get(FACING)));
+        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override

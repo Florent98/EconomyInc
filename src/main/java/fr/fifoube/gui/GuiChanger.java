@@ -22,7 +22,7 @@ public class GuiChanger extends ContainerScreen<ContainerChanger> {
     protected int ySize = 168;
     protected int guiLeft;
     protected int guiTop;
-    private TileEntityBlockChanger tile;
+    private final TileEntityBlockChanger tile;
     private boolean isProcessing;
 
     public GuiChanger(ContainerChanger container, PlayerInventory playerInventory, ITextComponent name) {

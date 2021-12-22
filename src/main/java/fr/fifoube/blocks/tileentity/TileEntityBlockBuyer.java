@@ -39,7 +39,7 @@ public class TileEntityBlockBuyer extends TileEntity implements INamedContainerP
     private static final TranslationTextComponent NAME = new TranslationTextComponent("container.buyer");
     ItemStackHandler inventory_buyer = new ItemStackHandler(27);
     ItemStackHandler money_handler = new ItemStackHandler(1);
-    private ArrayList<ItemStack> stackList = new ArrayList<ItemStack>();
+    private final ArrayList<ItemStack> stackList = new ArrayList<ItemStack>();
     private ITextComponent customName;
     private String ownerName = "";
     private UUID owner;

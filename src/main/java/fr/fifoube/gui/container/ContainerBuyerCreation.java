@@ -34,7 +34,7 @@ public class ContainerBuyerCreation extends Container {
 
     private final Item[] bills = {ItemsRegistery.ITEM_ONEB, ItemsRegistery.ITEM_FIVEB, ItemsRegistery.ITEM_TENB, ItemsRegistery.ITEM_TWENTYB, ItemsRegistery.ITEM_FIFTYB, ItemsRegistery.ITEM_HUNDREEDB, ItemsRegistery.ITEM_TWOHUNDREEDB, ItemsRegistery.ITEM_FIVEHUNDREEDB};
     private TileEntityBlockBuyer tile;
-    private Inventory inventorySlot = new Inventory(1);
+    private final Inventory inventorySlot = new Inventory(1);
 
     public ContainerBuyerCreation(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
         this(windowId, playerInv, extraData.readBlockPos());

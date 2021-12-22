@@ -54,7 +54,7 @@ public class ClientEvents {
                         ItemRenderer renderM = Minecraft.getInstance().getItemRenderer();
                         MatrixStack matrixStack = event.getMatrix();
                         IRenderTypeBuffer buffer = event.getBuffers();
-                        Direction direction = (Direction) world.getBlockState(pos).get(BlockSeller.FACING);
+                        Direction direction = world.getBlockState(pos).get(BlockSeller.FACING);
                         matrixStack.push();
                         ItemStack stack = new ItemStack(te.getStackInSlot(0).getItem(), 1);
                         if (te.getAmount() == 0) {
@@ -98,7 +98,7 @@ public class ClientEvents {
                         ItemRenderer renderM = Minecraft.getInstance().getItemRenderer();
                         MatrixStack matrixStack = event.getMatrix();
                         IRenderTypeBuffer buffer = event.getBuffers();
-                        Direction direction = (Direction) world.getBlockState(pos).get(BlockSeller.FACING);
+                        Direction direction = world.getBlockState(pos).get(BlockSeller.FACING);
                         matrixStack.push();
                         ItemStack stack = new ItemStack(te.getItemStackToBuy().getItem(), 1);
                         Vector3d vec = event.getInfo().getProjectedView();

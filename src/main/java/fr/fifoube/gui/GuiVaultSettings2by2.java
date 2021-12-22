@@ -91,11 +91,7 @@ public class GuiVaultSettings2by2 extends Screen {
         for (int j = 0; j < 5; j++) {
 
             if (!tile.getAllowedPlayers().isEmpty()) {
-                if (tile.getAllowedPlayers().size() > j) {
-                    buttonList.get(j).active = true;
-                } else {
-                    buttonList.get(j).active = false;
-                }
+                buttonList.get(j).active = tile.getAllowedPlayers().size() > j;
             } else {
                 buttonList.get(j).active = false;
             }
@@ -137,7 +133,7 @@ public class GuiVaultSettings2by2 extends Screen {
                         boolean flag = checkForSamePlayer(playerUUID);
                         if (flag) {
                             String playerName = playerList.get(i).getDisplayName().getString();
-                            PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));
+                            PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID, false, i));
                         }
                     }
                 }

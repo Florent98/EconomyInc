@@ -97,7 +97,7 @@ public class ItemCreditCard extends Item {
 
             String ownerName = stack.getTag().getString("Owner");
             tooltip.add(new StringTextComponent(I18n.format("title.ownerCard") + " : " + ownerName));
-            tooltip.add(new StringTextComponent(I18n.format("title.fundsCard") + " : " + String.valueOf(funds)));
+            tooltip.add(new StringTextComponent(I18n.format("title.fundsCard") + " : " + funds));
             tooltip.add(new StringTextComponent(I18n.format("title.linkdCard") + " : " + linkedValue));
 
         });
@@ -106,8 +106,6 @@ public class ItemCreditCard extends Item {
 
     @Override
     public boolean hasEffect(ItemStack stack) {
-        if (stack.hasTag())
-            return true;
-        return false;
+        return stack.hasTag();
     }
 }

@@ -207,7 +207,7 @@ public class BlockBills extends ContainerBlock {
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
     }
 
 

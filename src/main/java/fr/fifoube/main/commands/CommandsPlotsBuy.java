@@ -58,7 +58,7 @@ public class CommandsPlotsBuy {
             String uuid = player.getUniqueID().toString();
             ServerWorld worldIn = player.getServerWorld();
             DimensionSavedDataManager storage = worldIn.getSavedData();
-            PlotsWorldSavedData dataWorld = (PlotsWorldSavedData) storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+            PlotsWorldSavedData dataWorld = storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
             if (dataWorld != null) {
                 for (int i = 0; i < dataWorld.getListContainer().size(); i++) {
                     PlotsData plotsData = dataWorld.getListContainer().get(i);

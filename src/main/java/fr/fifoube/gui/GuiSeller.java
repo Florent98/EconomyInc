@@ -32,7 +32,7 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
     protected int ySize = 168;
     protected int guiLeft;
     protected int guiTop;
-    private TileEntityBlockSeller tile;
+    private final TileEntityBlockSeller tile;
     private Button validate;
     private Button unlimitedStack;
     private RefillIconButton autoRefill;
@@ -104,7 +104,7 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
             this.minecraft.player.closeScreen();
         }
 
-        return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.canWrite() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
+        return this.costField.keyPressed(keyCode, scanCode, modifiers) || this.costField.canWrite() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     protected void actionPerformed(Button button) {
@@ -119,11 +119,7 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
                     tile.setAdmin(false);
                 }
             } else if (button == this.autoRefill) {
-                if (this.autoRefill.isRefillEnabled()) {
-                    this.autoRefill.setRefillMode(false);
-                } else {
-                    this.autoRefill.setRefillMode(true);
-                }
+                this.autoRefill.setRefillMode(!this.autoRefill.isRefillEnabled());
             } else if (button == this.validate) {
                 if (this.validCost) {
                     this.cost = Double.valueOf(this.costField.getText());
@@ -221,10 +217,7 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
         if (field != null) {
             try {
                 double value = Double.parseDouble(field);
-                if (value > 0) {
-                    return true;
-                }
-                return false;
+                return value > 0;
             } catch (NumberFormatException e) {
                 return false;
             }

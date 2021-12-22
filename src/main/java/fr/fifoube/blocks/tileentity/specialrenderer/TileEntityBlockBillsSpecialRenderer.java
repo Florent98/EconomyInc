@@ -18,7 +18,7 @@ import net.minecraft.util.math.vector.Vector3f;
 public class TileEntityBlockBillsSpecialRenderer extends TileEntityRenderer<TileEntityBlockBills> {
 
     private static ResourceLocation texture = new ResourceLocation(ModEconomyInc.MOD_ID, "textures/blocks_models/block_bills_0.png");
-    private static ModelBills modelBlock = new ModelBills(RenderType::getEntitySolid);
+    private static final ModelBills modelBlock = new ModelBills(RenderType::getEntitySolid);
 
     public TileEntityBlockBillsSpecialRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);

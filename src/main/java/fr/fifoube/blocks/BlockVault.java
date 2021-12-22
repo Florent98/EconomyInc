@@ -10,7 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -274,13 +273,13 @@ public class BlockVault extends ContainerBlock {
                     UUID checkOBA = player.getUniqueID();
 
                     if (checkONBT.equals(checkOBA)) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                        NetworkHooks.openGui((ServerPlayerEntity) player, te, buf -> buf.writeBlockPos(pos));
                         te.setIsOpen(true);
                         te.markDirty();
                         return ActionResultType.SUCCESS;
 
                     } else if (player.hasPermissionLevel(4)) {
-                        NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, buf -> buf.writeBlockPos(pos));
+                        NetworkHooks.openGui((ServerPlayerEntity) player, te, buf -> buf.writeBlockPos(pos));
                         te.setIsOpen(true);
                         te.markDirty();
                         return ActionResultType.SUCCESS;
@@ -359,7 +358,7 @@ public class BlockVault extends ContainerBlock {
             BlockState blockstate1 = worldIn.getBlockState(pos.south());
             BlockState blockstate2 = worldIn.getBlockState(pos.west());
             BlockState blockstate3 = worldIn.getBlockState(pos.east());
-            Direction dir = (Direction) state.get(FACING);
+            Direction dir = state.get(FACING);
 
             if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock()) {
                 dir = Direction.SOUTH;
@@ -381,12 +380,12 @@ public class BlockVault extends ContainerBlock {
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate((Direction) state.get(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation((Direction) state.get(FACING)));
+        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override
@@ -404,7 +403,7 @@ public class BlockVault extends ContainerBlock {
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
     }
 
 
