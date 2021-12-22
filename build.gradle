@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.7'
+version = '1.8'
 group = 'fr.fifoube.economyinc' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'economyinc'
 
@@ -122,10 +122,10 @@ jar {
         attributes([
             "Specification-Title": "Economy Inc.",
             "Specification-Vendor": "FifouBE",
-            "Specification-Version": "1.7", // We are version 1 of ourselves
+            "Specification-Version": "1.8", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"FifouBE",
+            "Implementation-Vendor" :"FifouBE, MarcusSlover",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
