@@ -3,12 +3,12 @@
  "ingredients": [
    {
      "type": "minecraft:item",
-     "item": "economyinc:item_packetfivehundreed"
+     "item": "economyinc:item_packetfivehundred"
    }
  ],
  "result": {
    "type": "minecraft:item",
-   "item": "economyinc:item_fivehundreedb",
+   "item": "economyinc:item_fivehundredb",
    "count": 9
  }
 }

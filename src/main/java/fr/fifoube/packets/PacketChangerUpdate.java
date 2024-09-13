@@ -2,15 +2,15 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
+import fr.fifoube.blocks.blockentity.BlockEntityChanger;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 public class PacketChangerUpdate {
 
@@ -26,14 +26,14 @@ public class PacketChangerUpdate {
 		this.pos = pos;
 	}	
 	
-	public static PacketChangerUpdate decode(PacketBuffer buf) 
+	public static PacketChangerUpdate decode(FriendlyByteBuf buf) 
 	{
 		BlockPos pos = buf.readBlockPos();
 		return new PacketChangerUpdate(pos);
 	}
 
 
-	public static void encode(PacketChangerUpdate packet, PacketBuffer buf) 
+	public static void encode(PacketChangerUpdate packet, FriendlyByteBuf buf) 
 	{
 		buf.writeBlockPos(packet.pos);
 		
@@ -42,12 +42,12 @@ public class PacketChangerUpdate {
 	public static void handle(PacketChangerUpdate packet, Supplier<NetworkEvent.Context> ctx)
 	{
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender();
-			World world = player.world;
-			TileEntity tile = world.getTileEntity(packet.pos);
-			if(tile instanceof TileEntityBlockChanger)
+			Player player = ctx.get().getSender();
+			Level world = player.level;
+			BlockEntity tile = world.getBlockEntity(packet.pos);
+			if(tile instanceof BlockEntityChanger)
 			{
-				TileEntityBlockChanger te = (TileEntityBlockChanger)tile;
+				BlockEntityChanger te = (BlockEntityChanger)tile;
 				te.setNumbUse(0);
 			}
 		ctx.get().setPacketHandled(true);

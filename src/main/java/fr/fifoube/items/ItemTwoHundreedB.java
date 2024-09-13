@@ -2,7 +2,7 @@
  *******************************************************************************/
 package fr.fifoube.items;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemTwoHundreedB extends Item implements IValue{
 
@@ -12,7 +12,6 @@ public class ItemTwoHundreedB extends Item implements IValue{
 	
 	@Override
 	public int getValue() {
-		
 		return 200;
 	}
 

@@ -2,133 +2,121 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.gui.container.ContainerSeller;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntitySeller;
+import fr.fifoube.gui.container.MenuSeller;
+import fr.fifoube.gui.utilities.GuiUtilities;
 import fr.fifoube.gui.widget.RefillIconButton;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketSellerCreated;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.LockIconButton;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 
-public class GuiSeller extends ContainerScreen<ContainerSeller> {
+import java.awt.*;
 
-	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID , "textures/gui/container/gui_seller.png");
-	private TileEntityBlockSeller tile;
+public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
+
+	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_seller.png");
+	private BlockEntitySeller tile;
 	protected int xSize = 176;
 	protected int ySize = 168;
-	protected int guiLeft;
-	protected int guiTop;
-	
+
 	private Button validate;
 	private Button unlimitedStack;
 	private RefillIconButton autoRefill;
-	private TextFieldWidget costField;
+	private EditBox costField;
 
 	private double cost;
 	private boolean admin = false;
-	
 	private boolean validCost = false;
-	
-	public GuiSeller(ContainerSeller container, PlayerInventory playerInventory, ITextComponent name) 
+
+	public GuiSeller(MenuSeller container, Inventory playerInventory, Component name) 
 	{
 		super(container, playerInventory, name);
-		this.tile = getContainer().getTile();
+		this.tile = container.getTile();
 	}
-	
 	
 	@Override
-	public void tick() 
-	{
-		super.tick();
-		this.validCost = checkIfTextCanBeParsedToPositiveDouble(this.costField.getText());
+	protected void containerTick() {
+		
+		super.containerTick();
+		this.validCost = GuiUtilities.parseToDouble(this.costField.getValue());
+
 	}
-	
+
 	@Override
 	protected void init() {
-		
 		super.init();
-		this.fieldInit();
-		PlayerEntity player = minecraft.player;
+		Player player = minecraft.player;
+		int i = (this.width - this.xSize) / 2;
+		int j = (this.height - this.ySize) / 2;
 		if(!tile.getCreated())
 		{
-            this.autoRefill = this.addButton(new RefillIconButton(width / 2 + 87, height / 2 - 75, (onPress) -> { actionPerformed(this.autoRefill); }, background)); 
-            this.validate = this.addButton(new Button(width / 2 + 26, height / 2 + 83, 55, 20, new TranslationTextComponent("title.validate"), (onPress) -> { actionPerformed(this.validate);}));
-			if(player.isCreative() == true)
+			this.autoRefill = this.addRenderableWidget(new RefillIconButton(width / 2 + 87, height / 2 - 75, (onPress) -> { actionPerformed(this.autoRefill); }, background));
+			this.validate = this.addRenderableWidget(new Button(width / 2 + 26, height / 2 + 83, 55, 20, new TranslatableComponent("title.validate"), (onPress) -> { actionPerformed(this.validate); }));
+			if(player.isCreative())
 			{
-				this.unlimitedStack = this.addButton(new Button(width /2 + 2, height / 2 - 96, 80, 13, new TranslationTextComponent(""), (onPress) -> { actionPerformed(this.unlimitedStack); }));
+				this.unlimitedStack = this.addRenderableWidget(new Button(width /2 + 2, height / 2 - 96, 80, 13, new TranslatableComponent("title.unlimited"), (onPress) -> { actionPerformed(this.unlimitedStack); }));
 			}
 		}
+		this.fieldInit();
 	}
-	
-	protected void fieldInit()
-	{
-	      this.minecraft.keyboardListener.enableRepeatEvents(true);
-	      int i = (this.width - this.xSize) / 2;
-	      int j = (this.height - this.ySize) / 2;
-	      this.costField = new TextFieldWidget(this.font, i + 121, j + 15, 38, 12, new TranslationTextComponent("title.cost"));
-	      this.costField.setCanLoseFocus(false);
-	      this.costField.setTextColor(-1);
-	      this.costField.setDisabledTextColour(-1);
-	      this.costField.setEnableBackgroundDrawing(false);
-	      this.costField.setMaxStringLength(35);
-	      this.children.add(this.costField);
-	      this.setFocusedDefault(this.costField);
+
+	protected void fieldInit() {
+
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+		int i = (this.width - this.xSize) / 2;
+		int j = (this.height - this.ySize) / 2;
+		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, new TranslatableComponent("title.cost"));
+		this.costField.setMaxLength(35);
+		this.costField.setBordered(false);
+		this.costField.setVisible(true);
+		this.setFocused(this.costField);
+		if(!tile.getCreated()) {
+			this.addRenderableWidget(this.costField);
+		}
 	}
-	
+
 	@Override
 	public void resize(Minecraft minecraft, int width, int height) {
-		
-		String s = this.costField.getText();
+
+		String s = this.costField.getValue();
 		this.init(minecraft, width, height);
-		this.costField.setText(s);
+		this.costField.setValue(s);
 	}
-	
+
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		      if (keyCode == 256) {
-		         this.minecraft.player.closeScreen();
-		      }
-
-		      return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.canWrite() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
+		if (keyCode == 256) {
+			onClose();
+		}
+		return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.isFocused() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
 	}
-	   
+
 	protected void actionPerformed(Button button)
 	{
-		PlayerEntity playerIn = minecraft.player;
+		Player playerIn = minecraft.player;
 		if(tile != null)
 		{
 			if(button == this.unlimitedStack)
 			{
-				if(this.admin == false)
+				if(!this.admin)
 				{
 					this.admin = true;
-					tile.setAdmin(true);
 				}
-				else if(this.admin == true)
+				else
 				{
 					this.admin = false;
-					tile.setAdmin(false);
 				}
 			}
 			else if(button == this.autoRefill)
@@ -146,57 +134,13 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 			{
 				if(this.validCost)
 				{
-					this.cost = Double.valueOf(this.costField.getText());
-					tile.setCost(Double.valueOf(this.costField.getText()));
-					if(!(tile.getCost() == 0)) // IF TILE HAS NOT A COST OF 0 THEN WE PASS TO THE OTHER
-					{
-						if(tile.getStackInSlot(0).getItem() != Items.AIR) // IF SLOT 0 IS NOT BLOCKS.AIR, WE PASS
-						{
-							if(!this.admin) //ADMIN HASN'T SET : UNLIMITED STACK
-							{
-								tile.setAdmin(false);
-								tile.setCreated(true); // CLIENT SET CREATED AT TRUE
-								final int x = tile.getPos().getX(); // GET X
-								final int y = tile.getPos().getY(); // GET Y
-								final int z = tile.getPos().getZ(); // GET Z
-								int amount = tile.getStackInSlot(0).getCount(); // GET COUNT IN TILE THANKS TO STACK IN SLOT
-								String name = tile.getStackInSlot(0).getDisplayName().getString(); // GET ITEM NAME IN TILE THANKS TO STACK IN SLOT
-								tile.setItem(name); // CLIENT SET ITEM NAME
-								tile.setAutoRefill(this.autoRefill.isRefillEnabled());
-								tile.markDirty();
-								PacketsRegistery.CHANNEL.sendToServer(new PacketSellerCreated(true, this.cost, name, amount, x, y, z, false, tile.getAutoRefill())); // SEND SERVER PACKET FOR CREATED, COST, NAME, AMOUNT, X,Y,Z ARE TILE COORDINATES
-								playerIn.closeScreen(); // CLOSE SCREEN
-							}
-							else if(this.admin) //ADMIN HAS SET : UNLIMITED STACK
-							{
-								tile.setAdmin(true);
-								tile.setCreated(true); // CLIENT SET CREATED AT TRUE
-								final int x = tile.getPos().getX(); // GET X
-								final int y = tile.getPos().getY(); // GET Y
-								final int z = tile.getPos().getZ(); // GET Z
-								int amount = tile.getStackInSlot(0).getCount(); // GET COUNT IN TILE THANKS TO STACK IN SLOT
-								String name = tile.getStackInSlot(0).getDisplayName().getString(); // GET ITEM NAME IN TILE THANKS TO STACK IN SLOT
-								tile.setItem(name); // CLIENT SET ITEM NAME
-								tile.setAutoRefill(this.autoRefill.isRefillEnabled());
-								tile.markDirty();
-								PacketsRegistery.CHANNEL.sendToServer(new PacketSellerCreated(true, this.cost, name, amount, x, y, z, true, tile.getAutoRefill())); // SEND SERVER PACKET FOR CREATED, COST, NAME, AMOUNT, X,Y,Z ARE TILE COORDINATES
-								playerIn.closeScreen(); // CLOSE SCREEN
-							}
-							
-						}
-						else // PROVIDE PLAYER TO SELL AIR
-						{
-							playerIn.sendMessage(new StringTextComponent(I18n.format("title.sellAir")), playerIn.getUniqueID());	
-						}
-					}
-					else // IT MEANS THAT PLAYER HAS NOT SELECTED A COST
-					{
-						playerIn.sendMessage(new StringTextComponent(I18n.format("title.noCost")), playerIn.getUniqueID());
-					}
+					this.cost = Double.valueOf(this.costField.getValue());
+					PacketsRegistery.CHANNEL.sendToServer(new PacketSellerCreated(this.cost, tile.getBlockPos(), this.admin, this.autoRefill.isRefillEnabled())); // SEND SERVER PACKET
+					playerIn.closeContainer(); // CLOSE SCREEN
 				}
 				else
 				{
-					playerIn.sendMessage(new StringTextComponent(I18n.format("title.noValidCost")), playerIn.getUniqueID());
+					playerIn.sendMessage(new TranslatableComponent("title.noValidCost"), playerIn.getUUID());
 				}
 			}
 		}
@@ -207,64 +151,40 @@ public class GuiSeller extends ContainerScreen<ContainerSeller> {
 			return false;
 		}
 	
+
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) 
-	{  
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+
+		this.renderBackground(stack);
 		if(!tile.getCreated())
 		{
-			this.font.drawStringWithShadow(matrixStack, this.admin ? I18n.format("title.unlimited") :  I18n.format("title.limited"), this.xSize - 82, this.ySize - 177,  Color.WHITE.getRGB());
+			this.autoRefill.render(stack, mouseX, mouseY, partialTicks);
+			this.costField.render(stack, mouseX, mouseY, partialTicks);
 		}
-		this.font.drawString(matrixStack, I18n.format("title.block_seller"), 8.0F, 5, Color.DARK_GRAY.getRGB());
-	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 94), 4210752);
-	}
-	
-	
-	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
-	{
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		super.render(stack, mouseX, mouseY, partialTicks);
+		TranslatableComponent s = this.admin ? new TranslatableComponent("title.unlimitedStack") : new TranslatableComponent("title.limitedStack");
+		this.font.draw(stack, new TranslatableComponent("title.cost",  tile.getCost()), this.getGuiLeft() + 100, this.getGuiTop() + 33, Color.DARK_GRAY.getRGB());
+		this.font.draw(stack, new TranslatableComponent("title.mode", s), this.getGuiLeft() + 100, this.getGuiTop() + 44, Color.DARK_GRAY.getRGB());
 		RenderSystem.disableBlend();
-		if(!tile.getCreated())
-		{
-			this.costField.render(matrixStack, mouseX, mouseY, partialTicks);
-		}
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(stack, mouseX, mouseY);
 	}
 	
+	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) 
-	{
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
 		
-	    this.minecraft.getTextureManager().bindTexture(background); 
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+	    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+	    RenderSystem.setShaderTexture(0, background);
 	    int k = (this.width - this.xSize) / 2; 
 	    int l = (this.height - this.ySize) / 2;
-	    this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
-	    this.blit(matrixStack, k + 117, l + 11, 0, this.ySize + 32, 110, 16);
+	    this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
 		if(!tile.getCreated())
 		{
-			this.blit(matrixStack, k + 117, l + 11, 0, this.ySize + (this.validCost ? 0 : 16), 110, 16);
+			this.blit(stack, k + 117, l + 11, 0, this.ySize + 32, 110, 16);
+			this.blit(stack, k + 117, l + 11, 0, this.ySize + (this.validCost ? 0 : 16), 110, 16);
 		}
-
 	}
 	
-	private boolean checkIfTextCanBeParsedToPositiveDouble(String field)
-	{
-		if(field != null) {
-			try
-			{	
-				double value = Double.parseDouble(field);
-				if(value > 0)
-				{
-					return true;
-				}
-				return false;
-			}
-			catch(NumberFormatException e)
-			{
-			  return false;
-			}
-		}
-		return false;
-	}
+	
 }

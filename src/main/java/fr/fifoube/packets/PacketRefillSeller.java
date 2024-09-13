@@ -13,19 +13,19 @@
 
 package fr.fifoube.packets;
 
+import fr.fifoube.blocks.blockentity.BlockEntitySeller;
+import fr.fifoube.blocks.blockentity.BlockEntityVault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 public class PacketRefillSeller {
 
@@ -45,35 +45,35 @@ public class PacketRefillSeller {
 		this.stackToMatch = stack;
 	}	
 	
-	public static PacketRefillSeller decode(PacketBuffer buf) 
+	public static PacketRefillSeller decode(FriendlyByteBuf buf)
 	{
 		BlockPos posSeller = buf.readBlockPos();
 		BlockPos posVault = buf.readBlockPos();
-		ItemStack stackToMatch = buf.readItemStack();
+		ItemStack stackToMatch = buf.readItem();
 		return new PacketRefillSeller(posSeller, posVault, stackToMatch);
 	}
 
 
-	public static void encode(PacketRefillSeller packet, PacketBuffer buf) 
+	public static void encode(PacketRefillSeller packet, FriendlyByteBuf buf)
 	{
 		buf.writeBlockPos(packet.posSeller);
 		buf.writeBlockPos(packet.posVault);
-		buf.writeItemStack(packet.stackToMatch);
+		buf.writeItem(packet.stackToMatch);
 	}
 	
 	public static void handle(PacketRefillSeller packet, Supplier<NetworkEvent.Context> ctx)
 	{
 		ctx.get().enqueueWork(() -> {
 			
-			PlayerEntity player = ctx.get().getSender();
-			World world = player.world;
-			TileEntity tileS = world.getTileEntity(packet.posSeller);
-			TileEntity tileV = world.getTileEntity(packet.posVault);
+			Player player = ctx.get().getSender();
+			Level world = player.level;
+			BlockEntity tileS = world.getBlockEntity(packet.posSeller);
+			BlockEntity tileV = world.getBlockEntity(packet.posVault);
 			
-			if(tileS instanceof TileEntityBlockSeller && tileV instanceof TileEntityBlockVault)
+			if(tileS instanceof BlockEntitySeller && tileV instanceof BlockEntityVault)
 			{
-				TileEntityBlockSeller teS = (TileEntityBlockSeller) tileS;
-				TileEntityBlockVault teV = (TileEntityBlockVault) tileV;
+				BlockEntitySeller teS = (BlockEntitySeller) tileS;
+				BlockEntityVault teV = (BlockEntityVault) tileV;
 				
 				int maxToTake = teS.getStackInSlot(0).getMaxStackSize() - teS.getStackInSlot(0).getCount();
 				boolean air = packet.stackToMatch.getItem().equals(Items.AIR);
@@ -85,15 +85,15 @@ public class PacketRefillSeller {
 					{
 						if(!air)
 						{
-							if(packet.stackToMatch.isItemEqual(teV.getHandler().getStackInSlot(i))) //IF STACKTOMATCH IS EQUAL TO ANY STACK IN THE INVENTORY
+							if(packet.stackToMatch.equals(teV.getHandler().getStackInSlot(i))) //IF STACKTOMATCH IS EQUAL TO ANY STACK IN THE INVENTORY
 							{
 								if(teV.getHandler().getStackInSlot(i).getCount() >= maxToTake) //IF THE STACK IN THE INVENTORY IS GREATER OR EQUAL TO THE MAX TO TAKE TO FILL THE SELLER
 								{	
 									teS.getHandler().getStackInSlot(0).setCount(teS.getHandler().getStackInSlot(0).getCount() + maxToTake); //WE PUT THE VALUE OF THE SELLER TO (MAX TO TAKE + ACTUAL COUNT) = MAXSTACKSIZE OF OBJECT
 									teV.getHandler().getStackInSlot(i).setCount(teS.getHandler().getStackInSlot(i).getCount() - maxToTake); //WE TAKE THE MAX TO TAKE FROM THE INVENTORY FOUND SLOT
 									maxToTake = 0; //WE SAY THAT MAX TO TAKE IS NOW 0 SINCE IT'S FILLED
-									teV.markDirty(); //WE FORCE UPDATE VAULT
-									teS.markDirty(); //WE FORCE UPDATE SELLER
+									teV.setChanged(); //WE FORCE UPDATE VAULT
+									teS.setChanged(); //WE FORCE UPDATE SELLER
 								}
 								else if(teV.getHandler().getStackInSlot(i).getCount() < maxToTake) // IF THE STACK IN THE INVENTORY IS LESS THAN THE MAX TO TAKE TO FILL THE SELLER
 								{
@@ -102,8 +102,8 @@ public class PacketRefillSeller {
 										teS.getHandler().getStackInSlot(0).setCount(teS.getHandler().getStackInSlot(0).getCount() + teV.getHandler().getStackInSlot(i).getCount()); // WE SET THE NEW COUNT TO BE THE PREVIOUS COUNT + THE COUNT OF THE STACK FOUND
 										teV.getHandler().getStackInSlot(i).setCount(0); // WE SET TO 0 THE COUNT OF THE STACK TAKEN
 										maxToTake = maxToTake - teV.getHandler().getStackInSlot(i).getCount(); // WE UPDATE THE NEW MAX TO TAKE TO CONTINUE LOOPING TROUGH INVENTORY
-										teV.markDirty(); //WE FORCE UPDATE VAULT
-										teS.markDirty(); //WE FORCE UPDATE SELLER
+										teV.setChanged(); //WE FORCE UPDATE VAULT
+										teS.setChanged(); //WE FORCE UPDATE SELLER
 										
 									}
 								}
@@ -118,9 +118,9 @@ public class PacketRefillSeller {
 								if(teS.getOwner().equals(teV.getOwner()))
 								{
 									teS.getHandler().setStackInSlot(0, teV.getHandler().getStackInSlot(i));
-									teS.markDirty();			
+									teS.setChanged();
 									teV.getHandler().setStackInSlot(i, ItemStack.EMPTY);
-									teV.markDirty();
+									teV.setChanged();
 								}
 							}
 						}

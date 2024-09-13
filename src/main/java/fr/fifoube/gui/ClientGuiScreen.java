@@ -2,31 +2,31 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
+import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-
+@OnlyIn(Dist.CLIENT)
 public class ClientGuiScreen {
 
 	
-	public static void openGui(int id, TileEntity te) {
+	public static void openGui(int id, BlockEntity te) {
+
+		Minecraft mc = Minecraft.getInstance();
 		switch (id) {
 		case 0:
-			Minecraft.getInstance().displayGuiScreen(new GuiCreditCard());
+			mc.setScreen(new GuiCreditCard());
 			break;
 		case 1:
-			Minecraft.getInstance().displayGuiScreen(new GuiSellerBuy((TileEntityBlockSeller) te));
 			break;
 		case 2:
-			Minecraft.getInstance().displayGuiScreen(new GuiVaultSettings2by2((TileEntityBlockVault2by2)te));
+			mc.setScreen(new GuiVaultSettings2by2((BlockEntityVault2by2)te));
 			break;
 		case 3:
-			Minecraft.getInstance().displayGuiScreen(new GuiBuyerSell((TileEntityBlockBuyer) te));
-			break;
+			mc.setScreen(new GuiBuyerSell((BlockEntityBuyer)te));
 		default:
 			break;
 		}

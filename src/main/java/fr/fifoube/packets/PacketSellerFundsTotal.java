@@ -2,180 +2,121 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import fr.fifoube.blocks.BlockSeller;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
+import fr.fifoube.blocks.blockentity.BlockEntitySeller;
+import fr.fifoube.items.ItemCreditCard;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketSellerFundsTotal {
 
-	private double funds;
-	private double cost;
-	private double fundstotal;
-	private int x;
-	private int y;
-	private int z;
-	private int amount;
+	private BlockPos pos;
 	private boolean recovery;
+	
 	public PacketSellerFundsTotal() 
 	{
 		
 	}
 	
-	public PacketSellerFundsTotal(double funds, double cost, int xS, int yS, int zS, int amountS, boolean recoveryS)
+	public PacketSellerFundsTotal(BlockPos pos, boolean recoveryS)
 	{
-		this.funds= funds;
-		this.cost = cost;
-		this.x = xS;
-		this.y = yS;
-		this.z = zS;
-		this.amount = amountS;
+		this.pos = pos;
 		this.recovery = recoveryS;
-		
-		this.fundstotal = funds + cost;
 
 	}
 	
-	public static PacketSellerFundsTotal decode(PacketBuffer buf) 
+	public static void encode(PacketSellerFundsTotal packet, FriendlyByteBuf buf) 
 	{
-		double funds = buf.readDouble();
-		double cost = buf.readDouble();
-		int x = buf.readInt();
-		int y = buf.readInt();
-		int z = buf.readInt();
-		int amount = buf.readInt();
-		boolean recovery = buf.readBoolean();
-		return new PacketSellerFundsTotal(funds, cost, x, y, z, amount, recovery);
-
-	}
-	
-	public static void encode(PacketSellerFundsTotal packet, PacketBuffer buf) 
-	{
-		buf.writeDouble(packet.funds);
-		buf.writeDouble(packet.cost);
-		buf.writeInt(packet.x);
-		buf.writeInt(packet.y);
-		buf.writeInt(packet.z);
-		buf.writeInt(packet.amount);
+		buf.writeBlockPos(packet.pos);
 		buf.writeBoolean(packet.recovery);
+	}
+	
+	public static PacketSellerFundsTotal decode(FriendlyByteBuf buf) 
+	{
+		BlockPos pos = buf.readBlockPos();
+		Boolean recovery = buf.readBoolean();
+		return new PacketSellerFundsTotal(pos, recovery);
+
 	}
 	
 	public static void handle(PacketSellerFundsTotal packet, Supplier<NetworkEvent.Context> ctx)
 	{
 			ctx.get().enqueueWork(() -> {
 				
-				ServerPlayerEntity player = ctx.get().getSender(); // GET PLAYER
-				World worldIn = player.world; // GET WORLD
-				BlockPos pos = new BlockPos(packet.x, packet.y, packet.z); // NEW BLOCK POS FOR TILE ENTITY COORDINATES
-				TileEntity tileentity = worldIn.getTileEntity(pos); // GET THE TILE ENTITY IN WORLD THANKS TO COORDINATES
-				if(!worldIn.isRemote)
-				if(tileentity instanceof TileEntityBlockSeller)
+				ServerPlayer player = ctx.get().getSender(); // GET PLAYER
+				Level worldIn = player.level; // GET WORLD
+				BlockPos pos = packet.pos;
+				BlockEntity tileentity = worldIn.getBlockEntity(pos); // GET THE TILE ENTITY IN WORLD THANKS TO COORDINATES
+				BlockSeller seller = (BlockSeller) worldIn.getBlockState(pos).getBlock();
+				if(!worldIn.isClientSide)
+				if(tileentity instanceof BlockEntitySeller)
 				{
-					TileEntityBlockSeller te = (TileEntityBlockSeller)tileentity;
-					if(te != null) // IF TILE ENTITY EXIST
+					BlockEntitySeller te = (BlockEntitySeller)tileentity;
+					if(te != null)
 					{
+						ItemStack stackInSlot = new ItemStack(te.getInventory().getStackInSlot(0).getItem(), 1);
+						player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
 						if(!packet.recovery)
 						{
-							if(!te.getStackInSlot(0).isEmpty()) // IF THE SLOT IS NOT EMPTY
+							for(int i = 0; i < player.getInventory().getContainerSize(); i++) //CHECKING INVENTORY TO SEE IF CREDIT CARD IS THERE
 							{
-								boolean admin = te.getAdmin();
-								if(!admin) // NOT UNLIMITED STACK
+								if(player.getInventory().getItem(i).getItem() instanceof ItemCreditCard) //IF AN ITEM CREDIT CARD IS FOUND WE ACCEPT THE ACTION PERFORMED
 								{
-									CompoundNBT nbt = te.getStackInSlot(0).getTag();
-									ItemStack stack = new ItemStack(te.getStackInSlot(0).getItem(), 1);
-									if(nbt != null)
+									ItemStack creditCard = player.getInventory().getItem(i); //SET THE SLOT FOUND TO BE THE CREDIT CARD
+									if(creditCard.hasTag()) //IF IT HAS TAG 
+									if(player.getStringUUID().equals(creditCard.getTag().getString("OwnerUUID"))) //AND IT'S THE SAME OWNER 
 									{
-										stack.getOrCreateTag().merge(nbt);
-									}
-									boolean flag = player.inventory.addItemStackToInventory(stack);
-									if(flag)
-									{
-										te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
-										te.markDirty();
-										player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
-										.ifPresent(data -> {
-											ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " for " + packet.cost + "." + " Balance was " + data.getMoney() + ", balance is now " + (data.getMoney() - packet.cost) + "." + "[UUID: " + player.getUniqueID() + "," + te.getPos() + "]");
-											data.setMoney(data.getMoney() - packet.cost);
-										});
-										te.getStackInSlot(0).split(1);
-										te.setTime(ConfigFile.cooldownSeller);
-										BlockState state = worldIn.getBlockState(pos);
-										if(state.getBlock() instanceof BlockSeller)
+										if(creditCard.getTag().getBoolean("Linked")) //IF IT'S A LINKED CREDIT CARD THEN WE ACCEPT 
 										{
-											BlockSeller seller = (BlockSeller) state.getBlock();
-											seller.scheduleTick(state, worldIn, pos);
+											if(data.getMoney() >= te.getCost()) //IF THE PLAYER HAS ENOUGH MONEY
+											{
+												if(te.getAmount() >= 1)
+												{
+													boolean admin = te.getAdmin();
+													boolean flag = player.getInventory().add(stackInSlot);
+													if(flag)
+													{
+														ModEconomyInc.LOGGER_MONEY.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " from : " + te.getOwnerName() + "[UUID : " + te.getOwner() + "]. Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + te.getCost()) + "." + "[UUID: " + player.getUUID() + "]");
+														data.setMoney(data.getMoney() - te.getCost());
+														te.increaseFundsTotal();
+														if(!admin)
+														{
+															te.getInventory().getStackInSlot(0).split(1);
+														}
+														te.setTime(ConfigFile.cooldownSeller);
+														seller.signalPower(worldIn, pos);
+														te.setChanged();
+													}
+												}
+											}
 										}
-									}
-									else
-									{
-										player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
-									}
-								}
-								else if(admin) // UNLIMITED STACK
-								{
-									CompoundNBT nbt = te.getStackInSlot(0).getTag();
-									ItemStack stack = new ItemStack(te.getStackInSlot(0).getItem(), 1);
-									if(nbt != null)
-									{
-										stack.getOrCreateTag().merge(nbt);
-									}
-									boolean flag = player.inventory.addItemStackToInventory(stack);
-									if(flag)
-									{
-										te.setFundsTotal(packet.fundstotal); // SERVER SET THE FUNDS TOTAL FROM WHAT WE SENT
-										te.markDirty();	
-										//
-										player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
-										.ifPresent(data -> {
-											ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " for " + packet.cost + "." + " Balance was " + data.getMoney() + ", balance is now " + (data.getMoney() - packet.cost) + "." + "[UUID: " + player.getUniqueID() + "," + te.getPos() + "]");
-											data.setMoney(data.getMoney() - packet.cost);
-										});
-										te.setTime(ConfigFile.cooldownSeller);
-										BlockState state = worldIn.getBlockState(pos);
-										if(state.getBlock() instanceof BlockSeller)
-										{
-											BlockSeller seller = (BlockSeller) state.getBlock();
-											seller.scheduleTick(state, worldIn, pos);
-										}
-									}
-									else
-									{
-										player.sendMessage(new StringTextComponent(I18n.format("title.noInventoryPlace")), player.getUniqueID());
-									}
+									} 
 								}
 							}
 						}
 						else if(packet.recovery)
 						{
-							player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null)
-								.ifPresent(data -> { 			
-										   ModEconomyInc.LOGGER.info(player.getDisplayName().getString() + " has recovered funds for a total of " + packet.fundstotal + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + packet.fundstotal) + "." + "[UUID: " + player.getUniqueID() + "," + te.getPos() + "]");
-										   data.setMoney(data.getMoney() + packet.fundstotal);	
-										   te.setFundsTotal(0);
-										   te.markDirty();		
-								
-								});
-			
+							if(te.getFundsTotal() > 0)
+							{
+								if(te.getOwner().equals(player.getUUID()))
+								{
+									data.addMoney(te.getFundsTotal());
+									te.setFundsTotal(0);
+									te.setChanged();
+								}
+							}
 						}
+						});
 					}
 				}
 			});

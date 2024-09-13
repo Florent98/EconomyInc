@@ -2,50 +2,44 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
-import fr.fifoube.gui.container.ContainerChanger;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntityChanger;
+import fr.fifoube.gui.container.MenuChanger;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.packets.PacketChangerUpdate;
 import fr.fifoube.packets.PacketsRegistery;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
-public class GuiChanger extends ContainerScreen<ContainerChanger> {
+public class GuiChanger extends AbstractContainerScreen<MenuChanger> {
 
-	private TileEntityBlockChanger tile;
 
-	public GuiChanger(ContainerChanger container, PlayerInventory playerInventory, ITextComponent name) 
-	{
-		super(container, playerInventory, name);
-		this.tile = getContainer().getTile();
-	}
-	
+	private BlockEntityChanger tile;
+	private MenuChanger menu;
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_changer.png");
 	protected int xSize = 176;
 	protected int ySize = 168;
 	protected int guiLeft;
 	protected int guiTop;
-	private boolean isProcessing;
+	
+	public GuiChanger(MenuChanger menu, Inventory inv, Component comp) {
+		super(menu, inv, comp);
+		this.menu = menu;
+		this.tile = menu.getBlockEntity();
+	}
 	
 	@Override
-	public void tick() {
-		super.tick();
+	protected void containerTick() {
+		super.containerTick();
 	}
 	
 	@Override
 	protected void init() {
 		super.init();
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
 	}
 	
 	@Override
@@ -54,48 +48,44 @@ public class GuiChanger extends ContainerScreen<ContainerChanger> {
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-
-		this.font.drawString(matrixStack, I18n.format("title.block_changer"), 8.0F, 5, 4210752);
-	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 95), 4210752);
+	public void render(PoseStack stack, int x, int y, float partialTicks) {
 		
+		this.renderBackground(stack);
+		super.render(stack, x, y, partialTicks);
+        this.renderTooltip(stack, x, y);
+
 	}
+	
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	protected void renderBg(PoseStack stack, float mouseX, int mouseY, int partialTicks) {
 		
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+	    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+	    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+	    RenderSystem.setShaderTexture(0, background);
+		int k = (this.width - this.xSize) / 2; 
+		int l = (this.height - this.ySize) / 2;
+		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize); 
+		//BURNING
+		if(tile != null)
+		{
+			float display = (this.menu.getTimePassed() / Float.valueOf(this.menu.getProcessTime())) * 56;
+			if(this.menu.isProcessing() == 1)
+			{	   
+				this.blit(stack, k + 55, l + 34, 176, 0, Math.round(display), this.ySize);
+			}
+		}					
 	}
 	
-	
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		  
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
-	       this.getMinecraft().getTextureManager().bindTexture(background); 
-	       int k = (this.width - this.xSize) / 2; 
-	       int l = (this.height - this.ySize) / 2;
-	       this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
-	       //BURNING
-	       if(tile != null)
-	       {
-	    	   float display = (tile.getTimePassed() / Float.valueOf(tile.timeProcess)) * 56;
-	    	   if(tile.isProcessing)
-	    	   {	   
-	    		   this.blit(matrixStack, k + 55, l + 34, 176, 0, Math.round(display), this.ySize);
-	    	   }
-	       }		
-	}
-	
-	
+
 	@Override
 	public void onClose() {
 		
+		super.onClose();
 		tile.setNumbUse(0);
-		PacketsRegistery.CHANNEL.sendToServer(new PacketChangerUpdate(tile.getPos()));
+		PacketsRegistery.CHANNEL.sendToServer(new PacketChangerUpdate(tile.getBlockPos()));
 	}
+
 	
 
 }

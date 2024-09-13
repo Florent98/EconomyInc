@@ -13,34 +13,34 @@
 
 package fr.fifoube.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.gui.container.ContainerBuyer;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
+import fr.fifoube.gui.container.MenuBuyer;
 import fr.fifoube.main.ModEconomyInc;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
-public class GuiBuyerContainer extends ContainerScreen<ContainerBuyer>
+
+public class GuiBuyerContainer extends AbstractContainerScreen<MenuBuyer>
 {
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_vault.png");
 	protected int xSize = 176;
 	protected int ySize = 168;
 	protected int guiLeft;
 	protected int guiTop;
-	protected TileEntityBlockBuyer tile;
-	protected PlayerInventory inv;
+	protected BlockEntityBuyer tile;
+	protected Inventory inv;
 
-	public GuiBuyerContainer(ContainerBuyer container, PlayerInventory playerInventory, ITextComponent name) 
+
+	public GuiBuyerContainer(MenuBuyer menu, Inventory inv, Component name)
 	{
-		super(container, playerInventory, name);
-		this.tile = getContainer().getTile();
-		this.inv = playerInventory;	
+		super(menu, inv, name);
+		this.tile = menu.getTile();
+		this.inv = inv;
 	}
 	
    
@@ -62,30 +62,32 @@ public class GuiBuyerContainer extends ContainerScreen<ContainerBuyer>
 			break;
 		}
 	}
-	
+
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(stack);
+		super.render(stack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(stack, mouseX, mouseY);
 	}
-	
+
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) 
-	{
-		this.font.drawString(matrixStack, I18n.format("block.economyinc.block_buyer"), 8.0F, 5, 4210752);
-	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 94), 4210752);
-		
+	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+
+		this.font.draw(matrixStack, this.tile.getDisplayName(), 8.0F, 5, 4210752);
+		this.font.draw(matrixStack, this.inv.getDisplayName().getString(), 8.0F, (float)(this.ySize - 94), 4210752);
+
 	}
-				
+
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) 
-	{
-	       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
-	       this.getMinecraft().getTextureManager().bindTexture(background); 
-	       int k = (this.width - this.xSize) / 2; 
-	       int l = (this.height - this.ySize) / 2;
-	       this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
-	}	
-	
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, background);
+		int k = (this.width - this.xSize) / 2;
+		int l = (this.height - this.ySize) / 2;
+		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
+	}
+
+
 }

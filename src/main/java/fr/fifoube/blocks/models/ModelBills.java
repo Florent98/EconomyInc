@@ -1,885 +1,884 @@
-/*******************************************************************************
- *******************************************************************************/
 package fr.fifoube.blocks.models;
 
-import java.util.function.Function;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import fr.fifoube.blocks.blockentity.BlockEntityBills;
+import fr.fifoube.main.ModEconomyInc;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
-@OnlyIn(Dist.CLIENT)
-public class ModelBills extends Model
+public class ModelBills<T extends Entity> extends Model
 {
-	TileEntityBlockBills te;
-	ModelRenderer Bills01;
-	ModelRenderer Bills02;
-	ModelRenderer Bills03;
-	ModelRenderer Bills04;
-	ModelRenderer Bills05;
-	ModelRenderer Bills06;
-	ModelRenderer Bills07;
-    ModelRenderer Bills08;
-    ModelRenderer Bills09;
-    ModelRenderer Bills10;
-    ModelRenderer Bills11;
-    ModelRenderer Bills12;
-    ModelRenderer Bills13;
-    ModelRenderer Bills14;
-    ModelRenderer Bills15;
-    ModelRenderer Bills16;
-    ModelRenderer Bills17;
-    ModelRenderer Bills18;
-    ModelRenderer Bills19;
-    ModelRenderer Bills20;
-    ModelRenderer Bills21;
-    ModelRenderer Bills22;
-    ModelRenderer Bills23;
-    ModelRenderer Bills24;
-    ModelRenderer Bills25;
-    ModelRenderer Bills26;
-    ModelRenderer Bills27;
-    ModelRenderer Bills28;
-    ModelRenderer Bills29;
-    ModelRenderer Bills30;
-    ModelRenderer Bills31;
-    ModelRenderer Bills32;
-    ModelRenderer Bills33;
-    ModelRenderer Bills34;
-    ModelRenderer Bills35;
-    ModelRenderer Bills36;
-    ModelRenderer Bills37;
-    ModelRenderer Bills38;
-    ModelRenderer Bills39;
-    ModelRenderer Bills40;
-    ModelRenderer Bills41;
-    ModelRenderer Bills42;
-    ModelRenderer Bills43;
-    ModelRenderer Bills44;
-    ModelRenderer Bills45;
-    ModelRenderer Bills46;
-    ModelRenderer Bills47;
-    ModelRenderer Bills48;
-    ModelRenderer Bills49;
-    ModelRenderer Bills50;
-    ModelRenderer Bills51;
-    ModelRenderer Bills52;
-    ModelRenderer Bills53;
-    ModelRenderer Bills54;
-    ModelRenderer Bills55;
-    ModelRenderer Bills56;
-    ModelRenderer Bills57;
-    ModelRenderer Bills58;
-    ModelRenderer Bills59;
-    ModelRenderer Bills60;
-    ModelRenderer Bills61;
-    ModelRenderer Bills62;
-    ModelRenderer Bills63;
-    ModelRenderer Bills64;
-    ModelRenderer Platform;
-  
-    
-    public ModelBills(Function<ResourceLocation, RenderType> f) {
-    	
-    	super(f);
-    	Bills01 = new ModelRenderer( this, 0, 0 );
-    	Bills01.setTextureSize( 256, 128 );
-    	Bills01.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-    	Bills01.setRotationPoint( 0F, 21F, 0F );
-        Bills02 = new ModelRenderer( this, 0, 0 );
-        Bills02.setTextureSize( 256, 128 );
-        Bills02.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills02.setRotationPoint( 12F, 21F, 0F );
-        Bills03 = new ModelRenderer( this, 0, 0 );
-        Bills03.setTextureSize( 256, 128 );
-        Bills03.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills03.setRotationPoint( 24F, 21F, 0F );
-        Bills04 = new ModelRenderer( this, 0, 0 );
-        Bills04.setTextureSize( 256, 128 );
-        Bills04.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills04.setRotationPoint( 36F, 21F, 0F );
-        Bills05 = new ModelRenderer( this, 0, 0 );
-        Bills05.setTextureSize( 256, 128 );
-        Bills05.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills05.setRotationPoint( 0F, 21F, -24F );
-        Bills06 = new ModelRenderer( this, 0, 0 );
-        Bills06.setTextureSize( 256, 128 );
-        Bills06.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills06.setRotationPoint( 12F, 21F, -24F );
-        Bills07 = new ModelRenderer( this, 0, 0 );
-        Bills07.setTextureSize( 256, 128 );
-        Bills07.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills07.setRotationPoint( 24F, 21F, -24F );
-        Bills08 = new ModelRenderer( this, 0, 0 );
-        Bills08.setTextureSize( 256, 128 );
-        Bills08.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills08.setRotationPoint( 36F, 21F, -24F );
-        Bills09 = new ModelRenderer( this, 0, 0 );
-        Bills09.setTextureSize( 256, 128 );
-        Bills09.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills09.setRotationPoint( 0F, 18F, 0F );
-        Bills10 = new ModelRenderer( this, 0, 0 );
-        Bills10.setTextureSize( 256, 128 );
-        Bills10.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills10.setRotationPoint( 12F, 18F, 0F );
-        Bills11 = new ModelRenderer( this, 0, 0 );
-        Bills11.setTextureSize( 256, 128 );
-        Bills11.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills11.setRotationPoint( 24F, 18F, 0F );
-        Bills12 = new ModelRenderer( this, 0, 0 );
-        Bills12.setTextureSize( 256, 128 );
-        Bills12.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills12.setRotationPoint( 36F, 18F, 0F );
-        Bills13 = new ModelRenderer( this, 0, 0 );
-        Bills13.setTextureSize( 256, 128 );
-        Bills13.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills13.setRotationPoint( 0F, 18F, -24F );
-        Bills14 = new ModelRenderer( this, 0, 0 );
-        Bills14.setTextureSize( 256, 128 );
-        Bills14.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills14.setRotationPoint( 12F, 18F, -24F );
-        Bills15 = new ModelRenderer( this, 0, 0 );
-        Bills15.setTextureSize( 256, 128 );
-        Bills15.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills15.setRotationPoint( 24F, 18F, -24F );
-        Bills16 = new ModelRenderer( this, 0, 0 );
-        Bills16.setTextureSize( 256, 128 );
-        Bills16.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills16.setRotationPoint( 36F, 18F, -24F );
-        Bills17 = new ModelRenderer( this, 0, 0 );
-        Bills17.setTextureSize( 256, 128 );
-        Bills17.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills17.setRotationPoint( 0F, 15F, 0F );
-        Bills18 = new ModelRenderer( this, 0, 0 );
-        Bills18.setTextureSize( 256, 128 );
-        Bills18.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills18.setRotationPoint( 12F, 15F, 0F );
-        Bills19 = new ModelRenderer( this, 0, 0 );
-        Bills19.setTextureSize( 256, 128 );
-        Bills19.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills19.setRotationPoint( 24F, 15F, 0F );
-        Bills20 = new ModelRenderer( this, 0, 0 );
-        Bills20.setTextureSize( 256, 128 );
-        Bills20.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills20.setRotationPoint( 36F, 15F, 0F );
-        Bills21 = new ModelRenderer( this, 0, 0 );
-        Bills21.setTextureSize( 256, 128 );
-        Bills21.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills21.setRotationPoint( 0F, 15F, -24F );
-        Bills22 = new ModelRenderer( this, 0, 0 );
-        Bills22.setTextureSize( 256, 128 );
-        Bills22.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills22.setRotationPoint( 12F, 15F, -24F );
-        Bills23 = new ModelRenderer( this, 0, 0 );
-        Bills23.setTextureSize( 256, 128 );
-        Bills23.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills23.setRotationPoint( 24F, 15F, -24F );
-        Bills24 = new ModelRenderer( this, 0, 0 );
-        Bills24.setTextureSize( 256, 128 );
-        Bills24.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills24.setRotationPoint( 36F, 15F, -24F );
-        Bills25 = new ModelRenderer( this, 0, 0 );
-        Bills25.setTextureSize( 256, 128 );
-        Bills25.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills25.setRotationPoint( 0F, 12F, 0F );
-        Bills26 = new ModelRenderer( this, 0, 0 );
-        Bills26.setTextureSize( 256, 128 );
-        Bills26.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills26.setRotationPoint( 12F, 12F, 0F );
-        Bills27 = new ModelRenderer( this, 0, 0 );
-        Bills27.setTextureSize( 256, 128 );
-        Bills27.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills27.setRotationPoint( 24F, 12F, 0F );
-        Bills28 = new ModelRenderer( this, 0, 0 );
-        Bills28.setTextureSize( 256, 128 );
-        Bills28.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills28.setRotationPoint( 36F, 12F, 0F );
-        Bills29 = new ModelRenderer( this, 0, 0 );
-        Bills29.setTextureSize( 256, 128 );
-        Bills29.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills29.setRotationPoint( 0F, 12F, -24F );
-        Bills30 = new ModelRenderer( this, 0, 0 );
-        Bills30.setTextureSize( 256, 128 );
-        Bills30.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills30.setRotationPoint( 12F, 12F, -24F );
-        Bills31 = new ModelRenderer( this, 0, 0 );
-        Bills31.setTextureSize( 256, 128 );
-        Bills31.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills31.setRotationPoint( 24F, 12F, -24F );
-        Bills32 = new ModelRenderer( this, 0, 0 );
-        Bills32.setTextureSize( 256, 128 );
-        Bills32.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills32.setRotationPoint( 36F, 12F, -24F );
-        Bills33 = new ModelRenderer( this, 0, 0 );
-        Bills33.setTextureSize( 256, 128 );
-        Bills33.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills33.setRotationPoint( 0F, 9F, 0F );
-        Bills34 = new ModelRenderer( this, 0, 0 );
-        Bills34.setTextureSize( 256, 128 );
-        Bills34.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills34.setRotationPoint( 12F, 9F, 0F );
-        Bills35 = new ModelRenderer( this, 0, 0 );
-        Bills35.setTextureSize( 256, 128 );
-        Bills35.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills35.setRotationPoint( 24F, 9F, 0F );
-        Bills36 = new ModelRenderer( this, 0, 0 );
-        Bills36.setTextureSize( 256, 128 );
-        Bills36.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills36.setRotationPoint( 36F, 9F, 0F );
-        Bills37 = new ModelRenderer( this, 0, 0 );
-        Bills37.setTextureSize( 256, 128 );
-        Bills37.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills37.setRotationPoint( 0F, 9F, -24F );
-        Bills38 = new ModelRenderer( this, 0, 0 );
-        Bills38.setTextureSize( 256, 128 );
-        Bills38.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills38.setRotationPoint( 12F, 9F, -24F );
-        Bills39 = new ModelRenderer( this, 0, 0 );
-        Bills39.setTextureSize( 256, 128 );
-        Bills39.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills39.setRotationPoint( 24F, 9F, -24F );
-        Bills40 = new ModelRenderer( this, 0, 0 );
-        Bills40.setTextureSize( 256, 128 );
-        Bills40.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills40.setRotationPoint( 36F, 9F, -24F );
-        Bills41 = new ModelRenderer( this, 0, 0 );
-        Bills41.setTextureSize( 256, 128 );
-        Bills41.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills41.setRotationPoint( 0F, 6F, 0F );
-        Bills42 = new ModelRenderer( this, 0, 0 );
-        Bills42.setTextureSize( 256, 128 );
-        Bills42.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills42.setRotationPoint( 12F, 6F, 0F );
-        Bills43 = new ModelRenderer( this, 0, 0 );
-        Bills43.setTextureSize( 256, 128 );
-        Bills43.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills43.setRotationPoint( 24F, 6F, 0F );
-        Bills44 = new ModelRenderer( this, 0, 0 );
-        Bills44.setTextureSize( 256, 128 );
-        Bills44.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills44.setRotationPoint( 36F, 6F, 0F );
-        Bills45 = new ModelRenderer( this, 0, 0 );
-        Bills45.setTextureSize( 256, 128 );
-        Bills45.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills45.setRotationPoint( 0F, 6F, -24F );
-        Bills46 = new ModelRenderer( this, 0, 0 );
-        Bills46.setTextureSize( 256, 128 );
-        Bills46.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills46.setRotationPoint( 12F, 6F, -24F );
-        Bills47 = new ModelRenderer( this, 0, 0 );
-        Bills47.setTextureSize( 256, 128 );
-        Bills47.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills47.setRotationPoint( 24F, 6F, -24F );
-        Bills48 = new ModelRenderer( this, 0, 0 );
-        Bills48.setTextureSize( 256, 128 );
-        Bills48.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills48.setRotationPoint( 36F, 6F, -24F );
-        Bills49 = new ModelRenderer( this, 0, 0 );
-        Bills49.setTextureSize( 256, 128 );
-        Bills49.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills49.setRotationPoint( 0F, 3F, 0F );
-        Bills50 = new ModelRenderer( this, 0, 0 );
-        Bills50.setTextureSize( 256, 128 );
-        Bills50.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills50.setRotationPoint( 12F, 3F, 0F );
-        Bills51 = new ModelRenderer( this, 0, 0 );
-        Bills51.setTextureSize( 256, 128 );
-        Bills51.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills51.setRotationPoint( 24F, 3F, 0F );
-        Bills52 = new ModelRenderer( this, 0, 0 );
-        Bills52.setTextureSize( 256, 128 );
-        Bills52.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills52.setRotationPoint( 0F, 3F, -24F );
-        Bills53 = new ModelRenderer( this, 0, 0 );
-        Bills53.setTextureSize( 256, 128 );
-        Bills53.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills53.setRotationPoint( 24F, 3F, -24F );
-        Bills54 = new ModelRenderer( this, 0, 0 );
-        Bills54.setTextureSize( 256, 128 );
-        Bills54.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills54.setRotationPoint( 36F, 3F, -24F );
-        Bills55 = new ModelRenderer( this, 0, 0 );
-        Bills55.setTextureSize( 256, 128 );
-        Bills55.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills55.setRotationPoint( 0F, 0F, 0F );
-        Bills56 = new ModelRenderer( this, 0, 0 );
-        Bills56.setTextureSize( 256, 128 );
-        Bills56.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills56.setRotationPoint( 12F, 0F, 0F );
-        Bills57 = new ModelRenderer( this, 0, 0 );
-        Bills57.setTextureSize( 256, 128 );
-        Bills57.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills57.setRotationPoint( 24F, 0F, 0F );
-        Bills58 = new ModelRenderer( this, 0, 0 );
-        Bills58.setTextureSize( 256, 128 );
-        Bills58.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills58.setRotationPoint( 0F, 0F, -24F );
-        Bills59 = new ModelRenderer( this, 0, 0 );
-        Bills59.setTextureSize( 256, 128 );
-        Bills59.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills59.setRotationPoint( 24F, 0F, -24F );
-        Bills60 = new ModelRenderer( this, 0, 0 );
-        Bills60.setTextureSize( 256, 128 );
-        Bills60.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills60.setRotationPoint( 36F, 0F, -24F );
-        Bills61 = new ModelRenderer( this, 0, 0 );
-        Bills61.setTextureSize( 256, 128 );
-        Bills61.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills61.setRotationPoint( 0F, -3F, 0F );
-        Bills62 = new ModelRenderer( this, 0, 0 );
-        Bills62.setTextureSize( 256, 128 );
-        Bills62.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills62.setRotationPoint( 24F, -3F, 0F );
-        Bills63 = new ModelRenderer( this, 0, 0 );
-        Bills63.setTextureSize( 256, 128 );
-        Bills63.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills63.setRotationPoint( 0F, -6F, 0F );
-        Bills64 = new ModelRenderer( this, 0, 0 );
-        Bills64.setTextureSize( 256, 128 );
-        Bills64.addBox( -6F, -1.5F, -12F, 12, 3, 24);
-        Bills64.setRotationPoint( 0F, -9F, 0F );
-        Platform = new ModelRenderer( this, 0, 77 );
-        Platform.setTextureSize( 256, 128 );
-        Platform.addBox( -24F, -1.5F, -24F, 48, 3, 48);
-        Platform.setRotationPoint( 18F, 24F, -12F );
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(ModEconomyInc.MOD_ID, "block_bills"), "main");
+    private BlockEntityBills te;
+
+    private final ModelPart root;
+    private final ModelPart bills01;
+    private final ModelPart bills02;
+    private final ModelPart bills03;
+    private final ModelPart bills04;
+    private final ModelPart bills05;
+    private final ModelPart bills06;
+    private final ModelPart bills07;
+    private final ModelPart bills08;
+    private final ModelPart bills09;
+    private final ModelPart bills10;
+    private final ModelPart bills11;
+    private final ModelPart bills12;
+    private final ModelPart bills13;
+    private final ModelPart bills14;
+    private final ModelPart bills15;
+    private final ModelPart bills16;
+    private final ModelPart bills17;
+    private final ModelPart bills18;
+    private final ModelPart bills19;
+    private final ModelPart bills20;
+    private final ModelPart bills21;
+    private final ModelPart bills22;
+    private final ModelPart bills23;
+    private final ModelPart bills24;
+    private final ModelPart bills25;
+    private final ModelPart bills26;
+    private final ModelPart bills27;
+    private final ModelPart bills28;
+    private final ModelPart bills29;
+    private final ModelPart bills30;
+    private final ModelPart bills31;
+    private final ModelPart bills32;
+    private final ModelPart bills33;
+    private final ModelPart bills34;
+    private final ModelPart bills35;
+    private final ModelPart bills36;
+    private final ModelPart bills37;
+    private final ModelPart bills38;
+    private final ModelPart bills39;
+    private final ModelPart bills40;
+    private final ModelPart bills41;
+    private final ModelPart bills42;
+    private final ModelPart bills43;
+    private final ModelPart bills44;
+    private final ModelPart bills45;
+    private final ModelPart bills46;
+    private final ModelPart bills47;
+    private final ModelPart bills48;
+    private final ModelPart bills49;
+    private final ModelPart bills50;
+    private final ModelPart bills51;
+    private final ModelPart bills52;
+    private final ModelPart bills53;
+    private final ModelPart bills54;
+    private final ModelPart bills55;
+    private final ModelPart bills56;
+    private final ModelPart bills57;
+    private final ModelPart bills58;
+    private final ModelPart bills59;
+    private final ModelPart bills60;
+    private final ModelPart bills61;
+    private final ModelPart bills62;
+    private final ModelPart bills63;
+    private final ModelPart bills64;
+    private final ModelPart platform;
+
+
+    public ModelBills(ModelPart root) {
+        super(RenderType::entitySolid);
+        this.root = root;
+        this.bills01 = root.getChild("bills01");
+        this.bills02 = root.getChild("bills02");
+        this.bills03 = root.getChild("bills03");
+        this.bills04 = root.getChild("bills04");
+        this.bills05 = root.getChild("bills05");
+        this.bills06 = root.getChild("bills06");
+        this.bills07 = root.getChild("bills07");
+        this.bills08 = root.getChild("bills08");
+        this.bills09 = root.getChild("bills09");
+        this.bills10 = root.getChild("bills10");
+        this.bills11 = root.getChild("bills11");
+        this.bills12 = root.getChild("bills12");
+        this.bills13 = root.getChild("bills13");
+        this.bills14 = root.getChild("bills14");
+        this.bills15 = root.getChild("bills15");
+        this.bills16 = root.getChild("bills16");
+        this.bills17 = root.getChild("bills17");
+        this.bills18 = root.getChild("bills18");
+        this.bills19 = root.getChild("bills19");
+        this.bills20 = root.getChild("bills20");
+        this.bills21 = root.getChild("bills21");
+        this.bills22 = root.getChild("bills22");
+        this.bills23 = root.getChild("bills23");
+        this.bills24 = root.getChild("bills24");
+        this.bills25 = root.getChild("bills25");
+        this.bills26 = root.getChild("bills26");
+        this.bills27 = root.getChild("bills27");
+        this.bills28 = root.getChild("bills28");
+        this.bills29 = root.getChild("bills29");
+        this.bills30 = root.getChild("bills30");
+        this.bills31 = root.getChild("bills31");
+        this.bills32 = root.getChild("bills32");
+        this.bills33 = root.getChild("bills33");
+        this.bills34 = root.getChild("bills34");
+        this.bills35 = root.getChild("bills35");
+        this.bills36 = root.getChild("bills36");
+        this.bills37 = root.getChild("bills37");
+        this.bills38 = root.getChild("bills38");
+        this.bills39 = root.getChild("bills39");
+        this.bills40 = root.getChild("bills40");
+        this.bills41 = root.getChild("bills41");
+        this.bills42 = root.getChild("bills42");
+        this.bills43 = root.getChild("bills43");
+        this.bills44 = root.getChild("bills44");
+        this.bills45 = root.getChild("bills45");
+        this.bills46 = root.getChild("bills46");
+        this.bills47 = root.getChild("bills47");
+        this.bills48 = root.getChild("bills48");
+        this.bills49 = root.getChild("bills49");
+        this.bills50 = root.getChild("bills50");
+        this.bills51 = root.getChild("bills51");
+        this.bills52 = root.getChild("bills52");
+        this.bills53 = root.getChild("bills53");
+        this.bills54 = root.getChild("bills54");
+        this.bills55 = root.getChild("bills55");
+        this.bills56 = root.getChild("bills56");
+        this.bills57 = root.getChild("bills57");
+        this.bills58 = root.getChild("bills58");
+        this.bills59 = root.getChild("bills59");
+        this.bills60 = root.getChild("bills60");
+        this.bills61 = root.getChild("bills61");
+        this.bills62 = root.getChild("bills62");
+        this.bills63 = root.getChild("bills63");
+        this.bills64 = root.getChild("bills64");
+        this.platform = root.getChild("platform");
     }
-    
-   public void renderAll(TileEntityBlockBills te, MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
-   {
-	   	this.te = te;
-    	render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-   }
-
-   @Override   
-   public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-	   
-	   Platform.rotateAngleX = 0F;
-       Platform.rotateAngleY = 0F;
-       Platform.rotateAngleZ = 0F;
-       Platform.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-       
-	   		if (te.getNumbBills() >= 1) 
-	   		{
-	        Bills01.rotateAngleX = 0F;
-	        Bills01.rotateAngleY = 0F;
-	        Bills01.rotateAngleZ = 0F;
-	        Bills01.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	   		}
-	        
-	        if (te.getNumbBills() >= 2) 
-	        {
-	        Bills02.rotateAngleX = 0F;
-	        Bills02.rotateAngleY = 0F;
-	        Bills02.rotateAngleZ = 0F;
-	        Bills02.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-
-	        if (te.getNumbBills() >= 3) 
-	        {
-	        Bills03.rotateAngleX = 0F;
-	        Bills03.rotateAngleY = 0F;
-	        Bills03.rotateAngleZ = 0F;
-	        Bills03.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 4) 
-	        {
-	        Bills04.rotateAngleX = 0F;
-	        Bills04.rotateAngleY = 0F;
-	        Bills04.rotateAngleZ = 0F;
-	        Bills04.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 5) 
-	        {
-	        Bills05.rotateAngleX = 0F;
-	        Bills05.rotateAngleY = 0F;
-	        Bills05.rotateAngleZ = 0F;
-	        Bills05.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 6) 
-	        {
-	        Bills06.rotateAngleX = 0F;
-	        Bills06.rotateAngleY = 0F;
-	        Bills06.rotateAngleZ = 0F;
-	        Bills06.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 7) 
-	        {
-	        Bills07.rotateAngleX = 0F;
-	        Bills07.rotateAngleY = 0F;
-	        Bills07.rotateAngleZ = 0F;
-	        Bills07.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 8) 
-	        {
-	        Bills08.rotateAngleX = 0F;
-	        Bills08.rotateAngleY = 0F;
-	        Bills08.rotateAngleZ = 0F;
-	        Bills08.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 9) 
-	        {
-	        Bills09.rotateAngleX = 0F;
-	        Bills09.rotateAngleY = 0F;
-	        Bills09.rotateAngleZ = 0F;
-	        Bills09.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 10) 
-	        {
-	        Bills10.rotateAngleX = 0F;
-	        Bills10.rotateAngleY = 0F;
-	        Bills10.rotateAngleZ = 0F;
-	        Bills10.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 11) 
-	        {
-	        Bills11.rotateAngleX = 0F;
-	        Bills11.rotateAngleY = 0F;
-	        Bills11.rotateAngleZ = 0F;
-	        Bills11.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 12) 
-	        {
-	        Bills12.rotateAngleX = 0F;
-	        Bills12.rotateAngleY = 0F;
-	        Bills12.rotateAngleZ = 0F;
-	        Bills12.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 13) 
-	        {
-	        Bills13.rotateAngleX = 0F;
-	        Bills13.rotateAngleY = 0F;
-	        Bills13.rotateAngleZ = 0F;
-	        Bills13.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 14) 
-	        {
-	        Bills14.rotateAngleX = 0F;
-	        Bills14.rotateAngleY = 0F;
-	        Bills14.rotateAngleZ = 0F;
-	        Bills14.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 15) 
-	        {
-	        Bills15.rotateAngleX = 0F;
-	        Bills15.rotateAngleY = 0F;
-	        Bills15.rotateAngleZ = 0F;
-	        Bills15.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 16) 
-	        {
-	        Bills16.rotateAngleX = 0F;
-	        Bills16.rotateAngleY = 0F;
-	        Bills16.rotateAngleZ = 0F;
-	        Bills16.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 17) 
-	        {
-	        Bills17.rotateAngleX = 0F;
-	        Bills17.rotateAngleY = 0F;
-	        Bills17.rotateAngleZ = 0F;
-	        Bills17.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 18) 
-	        {
-	        Bills18.rotateAngleX = 0F;
-	        Bills18.rotateAngleY = 0F;
-	        Bills18.rotateAngleZ = 0F;
-	        Bills18.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 19) 
-	        {
-	        Bills19.rotateAngleX = 0F;
-	        Bills19.rotateAngleY = 0F;
-	        Bills19.rotateAngleZ = 0F;
-	        Bills19.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 20) 
-	        {
-	        Bills20.rotateAngleX = 0F;
-	        Bills20.rotateAngleY = 0F;
-	        Bills20.rotateAngleZ = 0F;
-	        Bills20.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 21) 
-	        {
-	        Bills21.rotateAngleX = 0F;
-	        Bills21.rotateAngleY = 0F;
-	        Bills21.rotateAngleZ = 0F;
-	        Bills21.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 22)
-	        {
-	        Bills22.rotateAngleX = 0F;
-	        Bills22.rotateAngleY = 0F;
-	        Bills22.rotateAngleZ = 0F;
-	        Bills22.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 23) 
-	        {
-	        Bills23.rotateAngleX = 0F;
-	        Bills23.rotateAngleY = 0F;
-	        Bills23.rotateAngleZ = 0F;
-	        Bills23.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 24) 
-	        {
-	        Bills24.rotateAngleX = 0F;
-	        Bills24.rotateAngleY = 0F;
-	        Bills24.rotateAngleZ = 0F;
-	        Bills24.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 25) 
-	        {
-	        Bills25.rotateAngleX = 0F;
-	        Bills25.rotateAngleY = 0F;
-	        Bills25.rotateAngleZ = 0F;
-	        Bills25.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 26) 
-	        {
-	        Bills26.rotateAngleX = 0F;
-	        Bills26.rotateAngleY = 0F;
-	        Bills26.rotateAngleZ = 0F;
-	        Bills26.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 27)
-	        {
-	        Bills27.rotateAngleX = 0F;
-	        Bills27.rotateAngleY = 0F;
-	        Bills27.rotateAngleZ = 0F;
-	        Bills27.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 28) 
-	        {
-	        Bills28.rotateAngleX = 0F;
-	        Bills28.rotateAngleY = 0F;
-	        Bills28.rotateAngleZ = 0F;
-	        Bills28.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 29) 
-	        {
-	        Bills29.rotateAngleX = 0F;
-	        Bills29.rotateAngleY = 0F;
-	        Bills29.rotateAngleZ = 0F;
-	        Bills29.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 30) 
-	        {
-	        Bills30.rotateAngleX = 0F;
-	        Bills30.rotateAngleY = 0F;
-	        Bills30.rotateAngleZ = 0F;
-	        Bills30.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 31) 
-	        {
-	        Bills31.rotateAngleX = 0F;
-	        Bills31.rotateAngleY = 0F;
-	        Bills31.rotateAngleZ = 0F;
-	        Bills31.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 32) 
-	        {
-	        Bills32.rotateAngleX = 0F;
-	        Bills32.rotateAngleY = 0F;
-	        Bills32.rotateAngleZ = 0F;
-	        Bills32.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 33) 
-	        {
-	        Bills33.rotateAngleX = 0F;
-	        Bills33.rotateAngleY = 0F;
-	        Bills33.rotateAngleZ = 0F;
-	        Bills33.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 34) 
-	        {
-	        Bills34.rotateAngleX = 0F;
-	        Bills34.rotateAngleY = 0F;
-	        Bills34.rotateAngleZ = 0F;
-	        Bills34.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 35) 
-	        {
-	        Bills35.rotateAngleX = 0F;
-	        Bills35.rotateAngleY = 0F;
-	        Bills35.rotateAngleZ = 0F;
-	        Bills35.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 36) 
-	        {
-	        Bills36.rotateAngleX = 0F;
-	        Bills36.rotateAngleY = 0F;
-	        Bills36.rotateAngleZ = 0F;
-	        Bills36.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 37) 
-	        {
-	        Bills37.rotateAngleX = 0F;
-	        Bills37.rotateAngleY = 0F;
-	        Bills37.rotateAngleZ = 0F;
-	        Bills37.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 38) 
-	        {
-	        Bills38.rotateAngleX = 0F;
-	        Bills38.rotateAngleY = 0F;
-	        Bills38.rotateAngleZ = 0F;
-	        Bills38.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 39) 
-	        {
-	        Bills39.rotateAngleX = 0F;
-	        Bills39.rotateAngleY = 0F;
-	        Bills39.rotateAngleZ = 0F;
-	        Bills39.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 40) 
-	        {
-	        Bills40.rotateAngleX = 0F;
-	        Bills40.rotateAngleY = 0F;
-	        Bills40.rotateAngleZ = 0F;
-	        Bills40.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 41) 
-	        {
-	        Bills41.rotateAngleX = 0F;
-	        Bills41.rotateAngleY = 0F;
-	        Bills41.rotateAngleZ = 0F;
-	        Bills41.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 42) 
-	        {
-	        Bills42.rotateAngleX = 0F;
-	        Bills42.rotateAngleY = 0F;
-	        Bills42.rotateAngleZ = 0F;
-	        Bills42.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 43) 
-	        {
-	        Bills43.rotateAngleX = 0F;
-	        Bills43.rotateAngleY = 0F;
-	        Bills43.rotateAngleZ = 0F;
-	        Bills43.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 44)
-	        {
-	        Bills44.rotateAngleX = 0F;
-	        Bills44.rotateAngleY = 0F;
-	        Bills44.rotateAngleZ = 0F;
-	        Bills44.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 45) 
-	        {
-	        Bills45.rotateAngleX = 0F;
-	        Bills45.rotateAngleY = 0F;
-	        Bills45.rotateAngleZ = 0F;
-	        Bills45.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 46) 
-	        {
-	        Bills46.rotateAngleX = 0F;
-	        Bills46.rotateAngleY = 0F;
-	        Bills46.rotateAngleZ = 0F;
-	        Bills46.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 47)
-	        {
-	        Bills47.rotateAngleX = 0F;
-	        Bills47.rotateAngleY = 0F;
-	        Bills47.rotateAngleZ = 0F;
-	        Bills47.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 48) 
-	        {
-	        Bills48.rotateAngleX = 0F;
-	        Bills48.rotateAngleY = 0F;
-	        Bills48.rotateAngleZ = 0F;
-	        Bills48.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 49) 
-	        {
-	        Bills49.rotateAngleX = 0F;
-	        Bills49.rotateAngleY = 0F;
-	        Bills49.rotateAngleZ = 0F;
-	        Bills49.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 50) 
-	        {
-	        Bills50.rotateAngleX = 0F;
-	        Bills50.rotateAngleY = 0F;
-	        Bills50.rotateAngleZ = 0F;
-	        Bills50.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 51) 
-	        {
-	        Bills51.rotateAngleX = 0F;
-	        Bills51.rotateAngleY = 0F;
-	        Bills51.rotateAngleZ = 0F;
-	        Bills51.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 52) 
-	        {
-	        Bills52.rotateAngleX = 0F;
-	        Bills52.rotateAngleY = 0F;
-	        Bills52.rotateAngleZ = 0F;
-	        Bills52.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 53) 
-	        {
-	        Bills53.rotateAngleX = 0F;
-	        Bills53.rotateAngleY = 0F;
-	        Bills53.rotateAngleZ = 0F;
-	        Bills53.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 54) 
-	        {
-	        Bills54.rotateAngleX = 0F;
-	        Bills54.rotateAngleY = 0F;
-	        Bills54.rotateAngleZ = 0F;
-	        Bills54.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 55)
-	        {
-	        Bills55.rotateAngleX = 0F;
-	        Bills55.rotateAngleY = 0F;
-	        Bills55.rotateAngleZ = 0F;
-	        Bills55.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 56) 
-	        {
-	        Bills56.rotateAngleX = 0F;
-	        Bills56.rotateAngleY = 0F;
-	        Bills56.rotateAngleZ = 0F;
-	        Bills56.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 57) 
-	        {
-	        Bills57.rotateAngleX = 0F;
-	        Bills57.rotateAngleY = 0F;
-	        Bills57.rotateAngleZ = 0F;
-	        Bills57.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 58) 
-	        {
-	        Bills58.rotateAngleX = 0F;
-	        Bills58.rotateAngleY = 0F;
-	        Bills58.rotateAngleZ = 0F;
-	        Bills58.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 59) 
-	        {
-	        Bills59.rotateAngleX = 0F;
-	        Bills59.rotateAngleY = 0F;
-	        Bills59.rotateAngleZ = 0F;
-	        Bills59.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 60) 
-	        {
-	        Bills60.rotateAngleX = 0F;
-	        Bills60.rotateAngleY = 0F;
-	        Bills60.rotateAngleZ = 0F;
-	        Bills60.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 61) 
-	        {
-	        Bills61.rotateAngleX = 0F;
-	        Bills61.rotateAngleY = 0F;
-	        Bills61.rotateAngleZ = 0F;
-	        Bills61.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 62) 
-	        {
-	        Bills62.rotateAngleX = 0F;
-	        Bills62.rotateAngleY = 0F;
-	        Bills62.rotateAngleZ = 0F;
-	        Bills62.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 63) 
-	        {
-	        Bills63.rotateAngleX = 0F;
-	        Bills63.rotateAngleY = 0F;
-	        Bills63.rotateAngleZ = 0F;
-	        Bills63.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-	        if (te.getNumbBills() >= 64) 
-	        {
-	        Bills64.rotateAngleX = 0F;
-	        Bills64.rotateAngleY = 0F;
-	        Bills64.rotateAngleZ = 0F;
-	        Bills64.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	        }
-
-   }
 
+    public static LayerDefinition createDefinition()
+    {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        PartDefinition platform = partdefinition.addOrReplaceChild("platform", CubeListBuilder.create().texOffs(0, 15).mirror().addBox(-8.0F, 5.5F, -8.0F, 16.0F, 1.0F, 16.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 17.5F, 0.0F));
 
+        PartDefinition bills64 = partdefinition.addOrReplaceChild("bills64", CubeListBuilder.create(), PartPose.offset(-6.0F, 14.5F, 4.0F));
+
+        PartDefinition bills64_r1 = bills64.addOrReplaceChild("bills64_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills63 = partdefinition.addOrReplaceChild("bills63", CubeListBuilder.create(), PartPose.offset(-6.0F, 14.5F, 4.0F));
+
+        PartDefinition bills63_r1 = bills63.addOrReplaceChild("bills63_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(12.0F, 1.0F, -8.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills62 = partdefinition.addOrReplaceChild("bills62", CubeListBuilder.create(), PartPose.offset(-2.0F, 15.5F, -4.0F));
+
+        PartDefinition bills62_r1 = bills62.addOrReplaceChild("bills62_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills61 = partdefinition.addOrReplaceChild("bills61", CubeListBuilder.create(), PartPose.offset(-2.0F, 15.5F, -4.0F));
+
+        PartDefinition bills61_r1 = bills61.addOrReplaceChild("bills61_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills60 = partdefinition.addOrReplaceChild("bills60", CubeListBuilder.create(), PartPose.offset(6.0F, 15.5F, 4.0F));
+
+        PartDefinition bills60_r1 = bills60.addOrReplaceChild("bills60_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills59 = partdefinition.addOrReplaceChild("bills59", CubeListBuilder.create(), PartPose.offset(2.0F, 15.5F, 4.0F));
+
+        PartDefinition bills59_r1 = bills59.addOrReplaceChild("bills59_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills58 = partdefinition.addOrReplaceChild("bills58", CubeListBuilder.create(), PartPose.offset(-2.0F, 15.5F, 4.0F));
+
+        PartDefinition bills58_r1 = bills58.addOrReplaceChild("bills58_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills57 = partdefinition.addOrReplaceChild("bills57", CubeListBuilder.create(), PartPose.offset(-6.0F, 15.5F, 4.0F));
+
+        PartDefinition bills57_r1 = bills57.addOrReplaceChild("bills57_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills56 = partdefinition.addOrReplaceChild("bills56", CubeListBuilder.create(), PartPose.offset(6.0F, 16.5F, -4.0F));
+
+        PartDefinition bills56_r1 = bills56.addOrReplaceChild("bills56_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills55 = partdefinition.addOrReplaceChild("bills55", CubeListBuilder.create(), PartPose.offset(2.0F, 16.5F, -4.0F));
+
+        PartDefinition bills55_r1 = bills55.addOrReplaceChild("bills55_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills54 = partdefinition.addOrReplaceChild("bills54", CubeListBuilder.create(), PartPose.offset(-2.0F, 16.5F, -4.0F));
+
+        PartDefinition bills54_r1 = bills54.addOrReplaceChild("bills54_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills53 = partdefinition.addOrReplaceChild("bills53", CubeListBuilder.create(), PartPose.offset(-6.0F, 16.5F, -4.0F));
+
+        PartDefinition bills53_r1 = bills53.addOrReplaceChild("bills53_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills52 = partdefinition.addOrReplaceChild("bills52", CubeListBuilder.create(), PartPose.offset(6.0F, 16.5F, 4.0F));
+
+        PartDefinition bills52_r1 = bills52.addOrReplaceChild("bills52_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills51 = partdefinition.addOrReplaceChild("bills51", CubeListBuilder.create(), PartPose.offset(2.0F, 16.5F, 4.0F));
+
+        PartDefinition bills51_r1 = bills51.addOrReplaceChild("bills51_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills50 = partdefinition.addOrReplaceChild("bills50", CubeListBuilder.create(), PartPose.offset(-2.0F, 16.5F, 4.0F));
+
+        PartDefinition bills50_r1 = bills50.addOrReplaceChild("bills50_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills49 = partdefinition.addOrReplaceChild("bills49", CubeListBuilder.create(), PartPose.offset(-6.0F, 16.5F, 4.0F));
+
+        PartDefinition bills49_r1 = bills49.addOrReplaceChild("bills49_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills48 = partdefinition.addOrReplaceChild("bills48", CubeListBuilder.create(), PartPose.offset(6.0F, 17.5F, -4.0F));
+
+        PartDefinition bills48_r1 = bills48.addOrReplaceChild("bills48_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills47 = partdefinition.addOrReplaceChild("bills47", CubeListBuilder.create(), PartPose.offset(2.0F, 17.5F, -4.0F));
+
+        PartDefinition bills47_r1 = bills47.addOrReplaceChild("bills47_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills46 = partdefinition.addOrReplaceChild("bills46", CubeListBuilder.create(), PartPose.offset(-2.0F, 17.5F, -4.0F));
+
+        PartDefinition bills46_r1 = bills46.addOrReplaceChild("bills46_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills45 = partdefinition.addOrReplaceChild("bills45", CubeListBuilder.create(), PartPose.offset(-6.0F, 17.5F, -4.0F));
+
+        PartDefinition bills45_r1 = bills45.addOrReplaceChild("bills45_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills44 = partdefinition.addOrReplaceChild("bills44", CubeListBuilder.create(), PartPose.offset(6.0F, 17.5F, 4.0F));
+
+        PartDefinition bills44_r1 = bills44.addOrReplaceChild("bills44_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills43 = partdefinition.addOrReplaceChild("bills43", CubeListBuilder.create(), PartPose.offset(2.0F, 17.5F, 4.0F));
+
+        PartDefinition bills43_r1 = bills43.addOrReplaceChild("bills43_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills42 = partdefinition.addOrReplaceChild("bills42", CubeListBuilder.create(), PartPose.offset(-2.0F, 17.5F, 4.0F));
+
+        PartDefinition bills42_r1 = bills42.addOrReplaceChild("bills42_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills41 = partdefinition.addOrReplaceChild("bills41", CubeListBuilder.create(), PartPose.offset(-6.0F, 17.5F, 4.0F));
+
+        PartDefinition bills41_r1 = bills41.addOrReplaceChild("bills41_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills40 = partdefinition.addOrReplaceChild("bills40", CubeListBuilder.create(), PartPose.offset(6.0F, 18.5F, -4.0F));
+
+        PartDefinition bills40_r1 = bills40.addOrReplaceChild("bills40_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills39 = partdefinition.addOrReplaceChild("bills39", CubeListBuilder.create(), PartPose.offset(2.0F, 18.5F, -4.0F));
+
+        PartDefinition bills39_r1 = bills39.addOrReplaceChild("bills39_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills38 = partdefinition.addOrReplaceChild("bills38", CubeListBuilder.create(), PartPose.offset(-2.0F, 18.5F, -4.0F));
+
+        PartDefinition bills38_r1 = bills38.addOrReplaceChild("bills38_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills37 = partdefinition.addOrReplaceChild("bills37", CubeListBuilder.create(), PartPose.offset(-6.0F, 18.5F, -4.0F));
+
+        PartDefinition bills37_r1 = bills37.addOrReplaceChild("bills37_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills36 = partdefinition.addOrReplaceChild("bills36", CubeListBuilder.create(), PartPose.offset(6.0F, 18.5F, 4.0F));
+
+        PartDefinition bills36_r1 = bills36.addOrReplaceChild("bills36_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills35 = partdefinition.addOrReplaceChild("bills35", CubeListBuilder.create(), PartPose.offset(2.0F, 18.5F, 4.0F));
+
+        PartDefinition bills35_r1 = bills35.addOrReplaceChild("bills35_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills34 = partdefinition.addOrReplaceChild("bills34", CubeListBuilder.create(), PartPose.offset(-2.0F, 18.5F, 4.0F));
+
+        PartDefinition bills34_r1 = bills34.addOrReplaceChild("bills34_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills33 = partdefinition.addOrReplaceChild("bills33", CubeListBuilder.create(), PartPose.offset(-6.0F, 18.5F, 4.0F));
+
+        PartDefinition bills33_r1 = bills33.addOrReplaceChild("bills33_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills32 = partdefinition.addOrReplaceChild("bills32", CubeListBuilder.create(), PartPose.offset(-6.0F, 18.5F, 4.0F));
+
+        PartDefinition bills32_r1 = bills32.addOrReplaceChild("bills32_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(12.0F, 1.0F, -8.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills31 = partdefinition.addOrReplaceChild("bills31", CubeListBuilder.create(), PartPose.offset(-6.0F, 18.5F, 4.0F));
+
+        PartDefinition bills31_r1 = bills31.addOrReplaceChild("bills31_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.0F, 1.0F, -8.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills30 = partdefinition.addOrReplaceChild("bills30", CubeListBuilder.create(), PartPose.offset(-2.0F, 19.5F, -4.0F));
+
+        PartDefinition bills30_r1 = bills30.addOrReplaceChild("bills30_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills29 = partdefinition.addOrReplaceChild("bills29", CubeListBuilder.create(), PartPose.offset(-6.0F, 19.5F, -4.0F));
+
+        PartDefinition bills29_r1 = bills29.addOrReplaceChild("bills29_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills28 = partdefinition.addOrReplaceChild("bills28", CubeListBuilder.create(), PartPose.offset(6.0F, 19.5F, 4.0F));
+
+        PartDefinition bills28_r1 = bills28.addOrReplaceChild("bills28_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills27 = partdefinition.addOrReplaceChild("bills27", CubeListBuilder.create(), PartPose.offset(2.0F, 19.5F, 4.0F));
+
+        PartDefinition bills27_r1 = bills27.addOrReplaceChild("bills27_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills26 = partdefinition.addOrReplaceChild("bills26", CubeListBuilder.create(), PartPose.offset(-2.0F, 19.5F, 4.0F));
+
+        PartDefinition bills26_r1 = bills26.addOrReplaceChild("bills26_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills25 = partdefinition.addOrReplaceChild("bills25", CubeListBuilder.create(), PartPose.offset(-6.0F, 19.5F, 4.0F));
+
+        PartDefinition bills25_r1 = bills25.addOrReplaceChild("bills25_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills24 = partdefinition.addOrReplaceChild("bills24", CubeListBuilder.create(), PartPose.offset(6.0F, 20.5F, -4.0F));
+
+        PartDefinition bills24_r1 = bills24.addOrReplaceChild("bills24_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills23 = partdefinition.addOrReplaceChild("bills23", CubeListBuilder.create(), PartPose.offset(2.0F, 20.5F, -4.0F));
+
+        PartDefinition bills23_r1 = bills23.addOrReplaceChild("bills23_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills22 = partdefinition.addOrReplaceChild("bills22", CubeListBuilder.create(), PartPose.offset(-2.0F, 20.5F, -4.0F));
+
+        PartDefinition bills22_r1 = bills22.addOrReplaceChild("bills22_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills21 = partdefinition.addOrReplaceChild("bills21", CubeListBuilder.create(), PartPose.offset(-6.0F, 20.5F, -4.0F));
+
+        PartDefinition bills21_r1 = bills21.addOrReplaceChild("bills21_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills20 = partdefinition.addOrReplaceChild("bills20", CubeListBuilder.create(), PartPose.offset(6.0F, 20.5F, 4.0F));
+
+        PartDefinition bills20_r1 = bills20.addOrReplaceChild("bills20_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills19 = partdefinition.addOrReplaceChild("bills19", CubeListBuilder.create(), PartPose.offset(2.0F, 20.5F, 4.0F));
+
+        PartDefinition bills19_r1 = bills19.addOrReplaceChild("bills19_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills18 = partdefinition.addOrReplaceChild("bills18", CubeListBuilder.create(), PartPose.offset(-2.0F, 20.5F, 4.0F));
+
+        PartDefinition bills18_r1 = bills18.addOrReplaceChild("bills18_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills17 = partdefinition.addOrReplaceChild("bills17", CubeListBuilder.create(), PartPose.offset(-6.0F, 20.5F, 4.0F));
+
+        PartDefinition bills17_r1 = bills17.addOrReplaceChild("bills17_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills16 = partdefinition.addOrReplaceChild("bills16", CubeListBuilder.create(), PartPose.offset(6.0F, 21.5F, -4.0F));
+
+        PartDefinition bills16_r1 = bills16.addOrReplaceChild("bills16_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills15 = partdefinition.addOrReplaceChild("bills15", CubeListBuilder.create(), PartPose.offset(2.0F, 21.5F, -4.0F));
+
+        PartDefinition bills15_r1 = bills15.addOrReplaceChild("bills15_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills14 = partdefinition.addOrReplaceChild("bills14", CubeListBuilder.create(), PartPose.offset(-2.0F, 21.5F, -4.0F));
+
+        PartDefinition bills14_r1 = bills14.addOrReplaceChild("bills14_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills13 = partdefinition.addOrReplaceChild("bills13", CubeListBuilder.create(), PartPose.offset(-6.0F, 21.5F, -4.0F));
+
+        PartDefinition bills13_r1 = bills13.addOrReplaceChild("bills13_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills12 = partdefinition.addOrReplaceChild("bills12", CubeListBuilder.create(), PartPose.offset(6.0F, 21.5F, 4.0F));
+
+        PartDefinition bills12_r1 = bills12.addOrReplaceChild("bills12_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills11 = partdefinition.addOrReplaceChild("bills11", CubeListBuilder.create(), PartPose.offset(2.0F, 21.5F, 4.0F));
+
+        PartDefinition bills11_r1 = bills11.addOrReplaceChild("bills11_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills10 = partdefinition.addOrReplaceChild("bills10", CubeListBuilder.create(), PartPose.offset(-2.0F, 21.5F, 4.0F));
+
+        PartDefinition bills10_r1 = bills10.addOrReplaceChild("bills10_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills09 = partdefinition.addOrReplaceChild("bills09", CubeListBuilder.create(), PartPose.offset(-6.0F, 21.5F, 4.0F));
+
+        PartDefinition bills09_r1 = bills09.addOrReplaceChild("bills09_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills08 = partdefinition.addOrReplaceChild("bills08", CubeListBuilder.create(), PartPose.offset(6.0F, 22.5F, -4.0F));
+
+        PartDefinition bills08_r1 = bills08.addOrReplaceChild("bills08_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills07 = partdefinition.addOrReplaceChild("bills07", CubeListBuilder.create(), PartPose.offset(2.0F, 22.5F, -4.0F));
+
+        PartDefinition bills07_r1 = bills07.addOrReplaceChild("bills07_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills06 = partdefinition.addOrReplaceChild("bills06", CubeListBuilder.create(), PartPose.offset(-2.0F, 22.5F, -4.0F));
+
+        PartDefinition bills06_r1 = bills06.addOrReplaceChild("bills06_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills05 = partdefinition.addOrReplaceChild("bills05", CubeListBuilder.create(), PartPose.offset(-6.0F, 22.5F, -4.0F));
+
+        PartDefinition bills05_r1 = bills05.addOrReplaceChild("bills05_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills04 = partdefinition.addOrReplaceChild("bills04", CubeListBuilder.create(), PartPose.offset(6.0F, 22.5F, 4.0F));
+
+        PartDefinition bills04_r1 = bills04.addOrReplaceChild("bills04_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills03 = partdefinition.addOrReplaceChild("bills03", CubeListBuilder.create(), PartPose.offset(2.0F, 22.5F, 4.0F));
+
+        PartDefinition bills03_r1 = bills03.addOrReplaceChild("bills03_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills02 = partdefinition.addOrReplaceChild("bills02", CubeListBuilder.create(), PartPose.offset(-2.0F, 22.5F, 4.0F));
+
+        PartDefinition bills02_r1 = bills02.addOrReplaceChild("bills02_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+
+        PartDefinition bills01 = partdefinition.addOrReplaceChild("bills01", CubeListBuilder.create(), PartPose.offset(-2.0F, 22.5F, 4.0F));
+
+        PartDefinition bills01_r1 = bills01.addOrReplaceChild("bills01_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -0.5F, -2.0F, 8.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+        return LayerDefinition.create(meshdefinition, 32, 32);
+    }
+
+    public void renderAll(BlockEntityBills tile, PoseStack stack, VertexConsumer vertex, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        this.te = tile;
+        renderToBuffer(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    }
+    @Override
+    public void renderToBuffer(PoseStack stack, VertexConsumer vertex, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+
+        platform.render(stack, vertex, packedLightIn, packedOverlayIn);
+        if (this.te != null) {
+            if (te.getNumbBills() >= 1) {
+                bills01.xRot = 0F;
+                bills01.yRot = 0F;
+                bills01.zRot = 0F;
+                bills01.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+
+            if (te.getNumbBills() >= 2) {
+                bills02.xRot = 0F;
+                bills02.yRot = 0F;
+                bills02.zRot = 0F;
+                bills02.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+
+            if (te.getNumbBills() >= 3) {
+                bills03.xRot = 0F;
+                bills03.yRot = 0F;
+                bills03.zRot = 0F;
+                bills03.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 4) {
+                bills04.xRot = 0F;
+                bills04.yRot = 0F;
+                bills04.zRot = 0F;
+                bills04.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 5) {
+                bills05.xRot = 0F;
+                bills05.yRot = 0F;
+                bills05.zRot = 0F;
+                bills05.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 6) {
+                bills06.xRot = 0F;
+                bills06.yRot = 0F;
+                bills06.zRot = 0F;
+                bills06.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 7) {
+                bills07.xRot = 0F;
+                bills07.yRot = 0F;
+                bills07.zRot = 0F;
+                bills07.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 8) {
+                bills08.xRot = 0F;
+                bills08.yRot = 0F;
+                bills08.zRot = 0F;
+                bills08.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 9) {
+                bills09.xRot = 0F;
+                bills09.yRot = 0F;
+                bills09.zRot = 0F;
+                bills09.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 10) {
+                bills10.xRot = 0F;
+                bills10.yRot = 0F;
+                bills10.zRot = 0F;
+                bills10.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 11) {
+                bills11.xRot = 0F;
+                bills11.yRot = 0F;
+                bills11.zRot = 0F;
+                bills11.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 12) {
+                bills12.xRot = 0F;
+                bills12.yRot = 0F;
+                bills12.zRot = 0F;
+                bills12.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 13) {
+                bills13.xRot = 0F;
+                bills13.yRot = 0F;
+                bills13.zRot = 0F;
+                bills13.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 14) {
+                bills14.xRot = 0F;
+                bills14.yRot = 0F;
+                bills14.zRot = 0F;
+                bills14.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 15) {
+                bills15.xRot = 0F;
+                bills15.yRot = 0F;
+                bills15.zRot = 0F;
+                bills15.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 16) {
+                bills16.xRot = 0F;
+                bills16.yRot = 0F;
+                bills16.zRot = 0F;
+                bills16.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 17) {
+                bills17.xRot = 0F;
+                bills17.yRot = 0F;
+                bills17.zRot = 0F;
+                bills17.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 18) {
+                bills18.xRot = 0F;
+                bills18.yRot = 0F;
+                bills18.zRot = 0F;
+                bills18.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 19) {
+                bills19.xRot = 0F;
+                bills19.yRot = 0F;
+                bills19.zRot = 0F;
+                bills19.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 20) {
+                bills20.xRot = 0F;
+                bills20.yRot = 0F;
+                bills20.zRot = 0F;
+                bills20.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 21) {
+                bills21.xRot = 0F;
+                bills21.yRot = 0F;
+                bills21.zRot = 0F;
+                bills21.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 22) {
+                bills22.xRot = 0F;
+                bills22.yRot = 0F;
+                bills22.zRot = 0F;
+                bills22.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 23) {
+                bills23.xRot = 0F;
+                bills23.yRot = 0F;
+                bills23.zRot = 0F;
+                bills23.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 24) {
+                bills24.xRot = 0F;
+                bills24.yRot = 0F;
+                bills24.zRot = 0F;
+                bills24.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 25) {
+                bills25.xRot = 0F;
+                bills25.yRot = 0F;
+                bills25.zRot = 0F;
+                bills25.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 26) {
+                bills26.xRot = 0F;
+                bills26.yRot = 0F;
+                bills26.zRot = 0F;
+                bills26.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 27) {
+                bills27.xRot = 0F;
+                bills27.yRot = 0F;
+                bills27.zRot = 0F;
+                bills27.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 28) {
+                bills28.xRot = 0F;
+                bills28.yRot = 0F;
+                bills28.zRot = 0F;
+                bills28.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 29) {
+                bills29.xRot = 0F;
+                bills29.yRot = 0F;
+                bills29.zRot = 0F;
+                bills29.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 30) {
+                bills30.xRot = 0F;
+                bills30.yRot = 0F;
+                bills30.zRot = 0F;
+                bills30.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 31) {
+                bills31.xRot = 0F;
+                bills31.yRot = 0F;
+                bills31.zRot = 0F;
+                bills31.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 32) {
+                bills32.xRot = 0F;
+                bills32.yRot = 0F;
+                bills32.zRot = 0F;
+                bills32.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 33) {
+                bills33.xRot = 0F;
+                bills33.yRot = 0F;
+                bills33.zRot = 0F;
+                bills33.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 34) {
+                bills34.xRot = 0F;
+                bills34.yRot = 0F;
+                bills34.zRot = 0F;
+                bills34.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 35) {
+                bills35.xRot = 0F;
+                bills35.yRot = 0F;
+                bills35.zRot = 0F;
+                bills35.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 36) {
+                bills36.xRot = 0F;
+                bills36.yRot = 0F;
+                bills36.zRot = 0F;
+                bills36.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 37) {
+                bills37.xRot = 0F;
+                bills37.yRot = 0F;
+                bills37.zRot = 0F;
+                bills37.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 38) {
+                bills38.xRot = 0F;
+                bills38.yRot = 0F;
+                bills38.zRot = 0F;
+                bills38.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 39) {
+                bills39.xRot = 0F;
+                bills39.yRot = 0F;
+                bills39.zRot = 0F;
+                bills39.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 40) {
+                bills40.xRot = 0F;
+                bills40.yRot = 0F;
+                bills40.zRot = 0F;
+                bills40.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 41) {
+                bills41.xRot = 0F;
+                bills41.yRot = 0F;
+                bills41.zRot = 0F;
+                bills41.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 42) {
+                bills42.xRot = 0F;
+                bills42.yRot = 0F;
+                bills42.zRot = 0F;
+                bills42.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 43) {
+                bills43.xRot = 0F;
+                bills43.yRot = 0F;
+                bills43.zRot = 0F;
+                bills43.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 44) {
+                bills44.xRot = 0F;
+                bills44.yRot = 0F;
+                bills44.zRot = 0F;
+                bills44.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 45) {
+                bills45.xRot = 0F;
+                bills45.yRot = 0F;
+                bills45.zRot = 0F;
+                bills45.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 46) {
+                bills46.xRot = 0F;
+                bills46.yRot = 0F;
+                bills46.zRot = 0F;
+                bills46.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 47) {
+                bills47.xRot = 0F;
+                bills47.yRot = 0F;
+                bills47.zRot = 0F;
+                bills47.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 48) {
+                bills48.xRot = 0F;
+                bills48.yRot = 0F;
+                bills48.zRot = 0F;
+                bills48.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 49) {
+                bills49.xRot = 0F;
+                bills49.yRot = 0F;
+                bills49.zRot = 0F;
+                bills49.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 50) {
+                bills50.xRot = 0F;
+                bills50.yRot = 0F;
+                bills50.zRot = 0F;
+                bills50.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 51) {
+                bills51.xRot = 0F;
+                bills51.yRot = 0F;
+                bills51.zRot = 0F;
+                bills51.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 52) {
+                bills52.xRot = 0F;
+                bills52.yRot = 0F;
+                bills52.zRot = 0F;
+                bills52.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 53) {
+                bills53.xRot = 0F;
+                bills53.yRot = 0F;
+                bills53.zRot = 0F;
+                bills53.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 54) {
+                bills54.xRot = 0F;
+                bills54.yRot = 0F;
+                bills54.zRot = 0F;
+                bills54.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 55) {
+                bills55.xRot = 0F;
+                bills55.yRot = 0F;
+                bills55.zRot = 0F;
+                bills55.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 56) {
+                bills56.xRot = 0F;
+                bills56.yRot = 0F;
+                bills56.zRot = 0F;
+                bills56.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 57) {
+                bills57.xRot = 0F;
+                bills57.yRot = 0F;
+                bills57.zRot = 0F;
+                bills57.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 58) {
+                bills58.xRot = 0F;
+                bills58.yRot = 0F;
+                bills58.zRot = 0F;
+                bills58.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 59) {
+                bills59.xRot = 0F;
+                bills59.yRot = 0F;
+                bills59.zRot = 0F;
+                bills59.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 60) {
+                bills60.xRot = 0F;
+                bills60.yRot = 0F;
+                bills60.zRot = 0F;
+                bills60.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 61) {
+                bills61.xRot = 0F;
+                bills61.yRot = 0F;
+                bills61.zRot = 0F;
+                bills61.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 62) {
+                bills62.xRot = 0F;
+                bills62.yRot = 0F;
+                bills62.zRot = 0F;
+                bills62.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 63) {
+                bills63.xRot = 0F;
+                bills63.yRot = 0F;
+                bills63.zRot = 0F;
+                bills63.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+
+            if (te.getNumbBills() >= 64) {
+                bills64.xRot = 0F;
+                bills64.yRot = 0F;
+                bills64.zRot = 0F;
+                bills64.render(stack, vertex, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+            }
+        }
+    }
 
 }

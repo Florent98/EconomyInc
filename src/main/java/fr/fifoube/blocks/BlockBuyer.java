@@ -13,231 +13,263 @@
 
 package fr.fifoube.blocks;
 
-import java.util.Random;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
+import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
+import fr.fifoube.blocks.blockentity.BlockEntityTypeRegistery;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.AbstractBlock.Properties;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
-public class BlockBuyer extends ContainerBlock {
+import java.util.Random;
+import java.util.UUID;
+
+
+public class BlockBuyer extends Block implements EntityBlock {
 
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
- 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
-	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.buyer");
-	
+ 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	private static final TranslatableComponent NAME = new TranslatableComponent("container.buyer");
+
 	public BlockBuyer(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(POWERED, false));
-		
-	}
-	
-	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityBlockBuyer();
+		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return BlockEntityTypeRegistery.TILE_BUYER.get().create(pos, state);
 	}
-	
-	
+
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,
-			Hand handIn, BlockRayTraceResult hit) {
-		
-		if(!worldIn.isRemote)
-		{
-			TileEntity tileentity = worldIn.getTileEntity(pos);		
-			if(tileentity instanceof TileEntityBlockBuyer)
-			{
-				TileEntityBlockBuyer te = (TileEntityBlockBuyer)tileentity;
-				if(!te.isCreated())
-				{
-					NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
-				}
-				else
-				{
-					if(player.getHeldItemMainhand().getItem() == ItemsRegistery.ITEM_REMOVER && te.getOwner().equals(player.getUniqueID()))
-					{
-						NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));				
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+
+		BlockEntity tileentity = level.getBlockEntity(pos);
+		if(tileentity instanceof BlockEntityBuyer te) {
+			if (!level.isClientSide) {
+				if (!te.isCreated()) {
+					if (te.getOwner().equals(player.getUUID())) {
+						NetworkHooks.openGui((ServerPlayer) player, te, pos);
 					}
-					else
-					{				
-						ClientGuiScreen.openGui(3, te);
+				} else {
+					if (player.getMainHandItem().getItem().equals(ItemsRegistery.WRENCH.get()) && te.getOwner().equals(player.getUUID())) {
+						System.out.println(te.getAccountMoney());
+						NetworkHooks.openGui((ServerPlayer) player, te, pos);
+					}
+				}
+			} else if (level.isClientSide) {
+
+				if (te.isCreated() && !(player.getMainHandItem().getItem().equals(ItemsRegistery.WRENCH.get()))) {
+					ClientGuiScreen.openGui(3, te);
+				}
+			}
+		}
+		return InteractionResult.CONSUME;
+	}
+
+
+	@Override
+	public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+		
+		BlockEntity entity = level.getBlockEntity(pos);
+		if(entity != null)
+		if(entity instanceof BlockEntityBuyer)
+		{
+			BlockEntityBuyer te = (BlockEntityBuyer)entity;
+
+			if(te != null)
+			{
+				if(player.getMainHandItem().is(ItemsRegistery.WRENCH.get()))
+				{
+					UUID checkONBT = te.getOwner();
+					UUID checkOBA = player.getUUID();
+					
+					if(checkONBT.equals(checkOBA))
+					{
+						level.destroyBlock(pos, true);
+						level.removeBlockEntity(pos);
+						dropBlocks(te, player, level, pos);
 					}
 				}
 			}
-
 		}
-		return ActionResultType.FAIL;
 	}
+
+
+	public void dropBlocks(BlockEntityBuyer tileentity, Player player, Level level, BlockPos pos) {
+
+		if(!level.isClientSide) {
+			player.addItem(new ItemStack(BlocksRegistry.BLOCK_BUYER.get(), 1));
+			System.out.println(tileentity.getStackList());
+			for(int i = 0; i < tileentity.getStackList().size(); i++)
+			{
+				if(!player.addItem(tileentity.getStackList().get(i)))
+				{
+					player.drop(tileentity.getStackList().get(i), true);
+				}
+			}
+		}
+	}
+	
+	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		
-	    worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
-	    TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof TileEntityBlockBuyer)
+		super.setPlacedBy(level, pos, state, placer, stack);
+		level.setBlock(pos, state.setValue(FACING, placer.getDirection()), 2);
+		BlockEntity tileentity = level.getBlockEntity(pos);
+		if(tileentity instanceof BlockEntityBuyer)
 		{
-			TileEntityBlockBuyer te = (TileEntityBlockBuyer)tileentity;
-			te.setOwnerName(placer.getDisplayName().getString());
-			te.setOwner(placer.getUniqueID());
+			BlockEntityBuyer te = (BlockEntityBuyer)tileentity;
+			te.setOwner(placer.getUUID());
 			te.setFacing(state.toString().substring(38, 43));
+			te.setOwnerName(placer.getName().getString());   
 		}
 	}
-	
-	
-	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-		
-		this.setDefaultFacing(worldIn, pos, state);
-	    for(Direction direction : Direction.values()) {
-	    	worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
-	    }
-	}
-	
-	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		
-		 if (!isMoving) {
-	         for(Direction direction : Direction.values()) {
-	            worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
-	         }
 
-	      }
-	}
 	
-	private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state) {
-	        if (!worldIn.isRemote)
+	@Override
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState state2, boolean isMoving) {
+		this.setDefaultFacing(level, pos, state);
+	}
+
+
+
+	private void setDefaultFacing(Level level, BlockPos pos, BlockState state) {
+	        
+		if (!level.isClientSide)
 	        {
-	            BlockState blockstate = worldIn.getBlockState(pos.north());
-	            BlockState blockstate1 = worldIn.getBlockState(pos.south());
-	            BlockState blockstate2 = worldIn.getBlockState(pos.west());
-	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
-	            Direction dir = (Direction)state.get(FACING);
+	            BlockState blockstate = level.getBlockState(pos.north());
+	            BlockState blockstate1 = level.getBlockState(pos.south());
+	            BlockState blockstate2 = level.getBlockState(pos.west());
+	            BlockState blockstate3 = level.getBlockState(pos.east());
+	            Direction dir = (Direction)state.getValue(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock())
+	            if (dir == Direction.NORTH && blockstate.hasLargeCollisionShape() && !blockstate1.hasLargeCollisionShape())
 	            {
 	                dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isCollisionShapeLargerThanFullBlock() && !blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.hasLargeCollisionShape() && !blockstate.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isCollisionShapeLargerThanFullBlock() && !blockstate3.isCollisionShapeLargerThanFullBlock())
+	            else if (dir == Direction.WEST && blockstate2.hasLargeCollisionShape() && !blockstate3.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isCollisionShapeLargerThanFullBlock() && !blockstate2.isCollisionShapeLargerThanFullBlock())
+	            else if (dir == Direction.EAST && blockstate3.hasLargeCollisionShape() && !blockstate2.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.WEST;
 	            }
-	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
+	            level.setBlock(pos, state.setValue(FACING, dir), 2);
 	        }
 	}
-		
+	
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
+
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate((Direction)state.get(FACING)));
+		
+		return state.setValue(FACING, rot.rotate((Direction)state.getValue(FACING)));
 	}
+	
+	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.toRotation((Direction)state.get(FACING)));
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		
+		return state.rotate(mirror.getRotation((Direction)state.getValue(FACING)));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		
 		builder.add(FACING, POWERED);
 	}
-	
+
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
+	public RenderShape getRenderShape(BlockState p_60550_) {
+		
+		return RenderShape.MODEL;
+	}
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+
+		return level.isClientSide() ? null : create(type, BlockEntityTypeRegistery.TILE_BUYER.get(), BlockEntityBuyer::serverTicker);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> create(BlockEntityType<A> type, BlockEntityType<E> typeExpec, BlockEntityTicker<? super E> ticker)
 	{
-		return BlockRenderType.MODEL;
-	} 
-	
+		return typeExpec == type ? (BlockEntityTicker<A>) ticker : null;
+	}
+
+
 	//REDSTONE HANDLING
 	
 	@Override
-	public boolean canProvidePower(BlockState state) {
+	public boolean isSignalSource(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState state, IBlockReader blockAccess, BlockPos pos, Direction side) {
+	public int getSignal(BlockState state, BlockGetter get, BlockPos pos, Direction dir) {
 		
-		return state.get(POWERED) ? 15 : 0;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-		
-		super.tick(state, worldIn, pos, rand);
-			if (state.get(POWERED)) {
-				
-		          worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(false)), 3);
-		          this.updateNeighbors(state, worldIn, pos);
-
-		      }
-	}
-	
-
-	public void scheduleTick(BlockState state, World worldIn, BlockPos pos)
-	{
-		  worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(true)), 3);
-	      this.updateNeighbors(state, worldIn, pos);
-	      worldIn.getPendingBlockTicks().scheduleTick(pos, this, 20);
-	}
-
-	private void updateNeighbors(BlockState state, World worldIn, BlockPos pos) {
-		  worldIn.notifyNeighborsOfStateChange(pos, this);
-		  worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING).getOpposite()), this);
+			return state.getValue(POWERED) && state.getValue(FACING).getOpposite() == dir ? 15 : 0;
 	}
 	
 	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player,
-			boolean willHarvest, FluidState fluid) {
-		
-		world.removeTileEntity(pos);
-		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+	public boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
 	}
 	
+	@Override
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+		return state.getValue(POWERED) ? 15 : 0;
+	}
+    
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
+        if (state.getValue(POWERED)) {
+           level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(false)), 2);
+        } else {
+           level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(true)), 2);
+           level.scheduleTick(pos, this, 20);
+        }
+        this.updateNeighborsInFront(level, pos, state);
+     }
+    
+    protected void updateNeighborsInFront(Level level, BlockPos pos, BlockState state) {
+        Direction direction = state.getValue(FACING);
+        BlockPos blockpos = pos.relative(direction);
+        level.neighborChanged(blockpos, this, pos);
+        level.updateNeighborsAtExceptFromFacing(blockpos, this, direction);
+     }
 }

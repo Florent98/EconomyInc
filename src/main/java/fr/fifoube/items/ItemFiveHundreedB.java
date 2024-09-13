@@ -2,9 +2,9 @@
  *******************************************************************************/
 package fr.fifoube.items;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
-public class ItemFiveHundreedB extends Item implements IValue{
+public class ItemFiveHundreedB extends Item implements IValue {
 
 	public ItemFiveHundreedB(Properties properties) {
 		super(properties);

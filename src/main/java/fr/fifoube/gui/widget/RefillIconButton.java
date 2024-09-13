@@ -13,52 +13,51 @@
 
 package fr.fifoube.gui.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RefillIconButton extends Button{
+public class RefillIconButton extends Button {
 
 	private ResourceLocation resources = null;
 	private boolean refill = true;
 
-	public RefillIconButton(int x, int y, Button.IPressable press, ResourceLocation resource) {
-		 super(x, y, 20, 20, new TranslationTextComponent("narrator.button.restock"), press);
+	public RefillIconButton(int x, int y, Button.OnPress press, ResourceLocation resource) {
+		 super(x, y, 20, 20, new TranslatableComponent("narrator.button.restock"), press);
 		 this.resources = resource;
 	}
 
-	
 	@Override
-	protected IFormattableTextComponent getNarrationMessage() {
-		return super.getNarrationMessage().appendString(". ").appendSibling(new TranslationTextComponent("narrator.button.restock"));
+	protected MutableComponent createNarrationMessage() {
+		return super.createNarrationMessage().append(". ").append(new TranslatableComponent("narrator.button.restock"));
 	}
-		
-	
+
+
 	@Override
-	public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		
-		Minecraft.getInstance().getTextureManager().bindTexture(resources);
-	    RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    RefillIconButton.Icon refillIcon;
-	    if(this.isHovered())
-	    {
-	    	refillIcon = this.refill ? RefillIconButton.Icon.REFILL_HOVER : RefillIconButton.Icon.REFILL_HOVER_DISABLED;
-	    }
-	    else
-	    {
-	    	refillIcon = this.refill ? RefillIconButton.Icon.REFILL : RefillIconButton.Icon.REFILL_DISABLED;
-	    }
-	    this.blit(matrixStack, this.x, this.y, refillIcon.getX(), refillIcon.getY(), this.width, this.height);
+	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+
+		Minecraft.getInstance().getTextureManager().getTexture(resources);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RefillIconButton.Icon refillIcon;
+		if(this.isHovered)
+		{
+			refillIcon = this.refill ? RefillIconButton.Icon.REFILL_HOVER : RefillIconButton.Icon.REFILL_HOVER_DISABLED;
+		}
+		else
+		{
+			refillIcon = this.refill ? RefillIconButton.Icon.REFILL : RefillIconButton.Icon.REFILL_DISABLED;
+		}
+		this.blit(stack, this.x, this.y, refillIcon.getX(), refillIcon.getY(), this.width, this.height);
+
 	}
-	
+
 	public boolean isRefillEnabled() {
 		return refill;
 	}

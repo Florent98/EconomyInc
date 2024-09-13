@@ -2,151 +2,87 @@
  *******************************************************************************/
 package fr.fifoube.blocks;
 
+import fr.fifoube.blocks.blockentity.BlockEntityTypeRegistery;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import fr.fifoube.items.ItemsRegistery;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.UUID;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import fr.fifoube.items.ItemsRegistery;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.IItemHandler;
+public class BlockVault2by2 extends Block implements EntityBlock {
 
-public class BlockVault2by2 extends ContainerBlock {
+ 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+		
+	public static final VoxelShape NORTH_AABB = Block.box(0, 0, 0, 32D, 32D, 16D);
+	public static final VoxelShape SOUTH_AABB = Block.box(-16D, 0, 0, 16D, 32D, 16D);
+	public static final VoxelShape EAST_AABB = Block.box(0, 0, 0, 16D, 32D, 32D);
+	public static final VoxelShape WEST_AABB = Block.box(0, 0, -16D, 16D, 32D, 16D);
 
- 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
-	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.vault2by2");
-	
-	public static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0, 0, 0, 2D, 2, 1D);
-	public static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(-1D, 0, 0, 1D, 2, 1D);
-	public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0, 0, 0, 1D, 2, 2D);
-	public static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0, 0, -1D, 1D, 2, 1D);
-	
-	public static final VoxelShape NORTH_VOXELSHAPE = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 32.0D, 32.0D, 16.0D);
 
-	public static VoxelShape shapeMain;
-
-	
 	public BlockVault2by2(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
-		shapeMain = VoxelShapes.create(NORTH_AABB);
+		this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+	}
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		
+		return BlockEntityTypeRegistery.TILE_VAULT_2BY2.get().create(pos, state);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityBlockVault2by2();
-	}
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-	
-	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
-		
-		
-		if(tileentity instanceof TileEntityBlockVault2by2)
-		{
-			TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
-			IItemHandler inventory = te.getHandler();
-			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_VAULT, 4));
-			world.addEntity(itemBase);
-			if(inventory != null)
-			{
-				for(int i=0; i < inventory.getSlots(); i++)
-				{
-					if(inventory.getStackInSlot(i) != ItemStack.EMPTY)
-					{
-						ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, inventory.getStackInSlot(i));
-						
-						float multiplier = 0.1f;
-						float motionX = world.rand.nextFloat() - 0.5F;
-						float motionY = world.rand.nextFloat() - 0.5F;
-						float motionZ = world.rand.nextFloat() - 0.5F;
-						
-						item.lastTickPosX = motionX * multiplier;
-						item.lastTickPosY = motionY * multiplier;
-						item.lastTickPosZ = motionZ * multiplier;
-						
-						world.addEntity(item);
-					}
-				}
-			}
-		}	
-	}
-	
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		
-		worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-    	if(tileentity instanceof TileEntityBlockVault2by2)
+		Direction dir = placer.getDirection().getOpposite();
+		level.setBlock(pos, state.setValue(FACING, dir), 2);
+		BlockEntity tileentity = level.getBlockEntity(pos);
+    	if(tileentity instanceof BlockEntityVault2by2)
     	{
-    		TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
-    		te.setOwner(placer.getUniqueID());
-    		int direction = MathHelper.floor((double) (placer.rotationYaw * 4.0F / 360.0F) + 2.5D) & 3;
-    		te.setDirection((byte) direction);
+    		BlockEntityVault2by2 te = (BlockEntityVault2by2)tileentity;
+    		te.setOwner(placer.getUUID());
+			System.out.println(dir);
+    		te.setDirection(dir);
     	}
-    	
 	}
-	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if(!worldIn.isRemote)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		
+		if(!level.isClientSide)
 		{
-			TileEntity tileentity = worldIn.getTileEntity(pos);		
-			if(tileentity instanceof TileEntityBlockVault2by2)
+			BlockEntity tileentity = level.getBlockEntity(pos);		
+			if(tileentity instanceof BlockEntityVault2by2)
 			{
-				TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tileentity;
+				BlockEntityVault2by2 te = (BlockEntityVault2by2)tileentity;
 				if(te.getOwner() != null)
 				{
 					UUID checkONBT = te.getOwner();
-					UUID checkOBA = player.getUniqueID();
-					
-					if(checkONBT.equals(checkOBA))
+					UUID checkOBA = player.getUUID();
+					if(checkONBT.equals(checkOBA) || player.hasPermissions(4))
 					{
-			            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)tileentity, buf -> buf.writeBlockPos(pos));
-						te.markDirty();
-						return ActionResultType.SUCCESS;
-					}
-					else if(player.hasPermissionLevel(4))
-					{
-			            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
-						te.markDirty();
-						return ActionResultType.SUCCESS;
+						NetworkHooks.openGui((ServerPlayer)player, te, pos);
+						te.setChanged();
+						return InteractionResult.SUCCESS;
 					}
 					else
 					{
@@ -154,11 +90,11 @@ public class BlockVault2by2 extends ContainerBlock {
 						{
 							String fullString = te.getAllowedPlayers().get(i);
 							String listToCheck = fullString.substring(fullString.indexOf(",") + 1);
-							if(player.getUniqueID().equals(UUID.fromString(listToCheck)))
+							if(player.getUUID().equals(UUID.fromString(listToCheck)))
 							{
-					            NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider)tileentity, buf -> buf.writeBlockPos(pos));
-								te.markDirty();
-								return ActionResultType.SUCCESS;
+								NetworkHooks.openGui((ServerPlayer)player, te, pos);
+								te.setChanged();
+								return InteractionResult.SUCCESS;
 							}
 						}
 					}
@@ -167,151 +103,196 @@ public class BlockVault2by2 extends ContainerBlock {
 				
 			}
 		}
-         return ActionResultType.FAIL;
+         return InteractionResult.CONSUME;
 	}
-
+	
 	@Override
-	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+	public void attack(BlockState state, Level level, BlockPos pos, Player player) {
 		
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof TileEntityBlockVault2by2)
+		BlockEntity entity = level.getBlockEntity(pos);
+		if(entity != null)
+		if(entity instanceof BlockEntityVault2by2)
 		{
-			TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2) tileentity;
-			ItemStack stack = player.getHeldItemMainhand();
-			state = worldIn.getBlockState(pos);
+			BlockEntityVault2by2 te = (BlockEntityVault2by2)entity;
+			state = level.getBlockState(pos);
 			
 			if(te != null)
 			{
-				if(stack.isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
+				if(player.getMainHandItem().is(ItemsRegistery.WRENCH.get()))
 				{
 					UUID checkONBT = te.getOwner();
-					UUID checkOBA = player.getUniqueID();
+					UUID checkOBA = player.getUUID();
 					
 					if(checkONBT.equals(checkOBA))
 					{
-						worldIn.destroyBlock(pos, false);
-						dropBlocks(te, worldIn, pos);
-						worldIn.removeTileEntity(pos);
+						level.destroyBlock(pos, false);
+						dropBlocks(te, level, pos);
+						level.removeBlockEntity(pos);
 					}
 				}
 			}
 		}
 	}
-	
-	@Override
+
+	public void dropBlocks(BlockEntityVault2by2 te, Level level, BlockPos pos) {
+		
+		
+			IItemHandler inventory = te.getInventory();
+			ItemEntity itemBase = new ItemEntity(level, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_VAULT.get(), 4));
+			level.addFreshEntity(itemBase);
+			if(inventory != null)
+			{
+				for(int i=0; i < inventory.getSlots(); i++) 
+				{
+					if(inventory.getStackInSlot(i) != ItemStack.EMPTY)
+					{
+						ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, inventory.getStackInSlot(i));
+						
+						float multiplier = 0.1f;
+						float motionX = level.random.nextFloat() - 0.5F;
+						float motionY = level.random.nextFloat() - 0.5F;
+						float motionZ = level.random.nextFloat() - 0.5F;
+						
+						item.xOld = motionX * multiplier;
+						item.yOld = motionY * multiplier;
+						item.zOld = motionZ * multiplier;
+						
+						level.addFreshEntity(item);
+					}
+				}
+			}
+	}
+
+	/*@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
 		
 		this.setDefaultFacing(worldIn, pos, state);
 	}
 	
-	 private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state) {
-	        if (!worldIn.isRemote)
+	 private void setDefaultFacing(Level level, BlockPos pos, BlockState state) {
+		 
+	        if (!level.isClientSide)
 	        {
-	            BlockState blockstate = worldIn.getBlockState(pos.north());
-	            BlockState blockstate1 = worldIn.getBlockState(pos.south());
-	            BlockState blockstate2 = worldIn.getBlockState(pos.west());
-	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
-	            Direction dir = (Direction)state.get(FACING);
+	            BlockState blockstate = level.getBlockState(pos.north());
+	            BlockState blockstate1 = level.getBlockState(pos.south());
+	            BlockState blockstate2 = level.getBlockState(pos.west());
+	            BlockState blockstate3 = level.getBlockState(pos.east());
+	            Direction dir = (Direction)state.getValue(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isSolid() && blockstate1.isSolid())
+	            if (dir == Direction.NORTH && blockstate.hasLargeCollisionShape() && blockstate1.hasLargeCollisionShape())
 	            {
 	                dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isSolid() && blockstate.isSolid())
+	            else if (dir == Direction.SOUTH && blockstate1.hasLargeCollisionShape() && blockstate.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isSolid() && blockstate3.isSolid())
+	            else if (dir == Direction.WEST && blockstate2.hasLargeCollisionShape() && blockstate3.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isSolid() && blockstate2.isSolid())
+	            else if (dir == Direction.EAST && blockstate3.hasLargeCollisionShape() && blockstate2.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.WEST;
 	            }
-	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
+	            level.setBlock(pos, state.setValue(FACING, dir), 2);
 	        }
 	    }
-		
+		*/
+
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate((Direction)state.get(FACING)));
+		
+		return state.setValue(FACING, rot.rotate((Direction)state.getValue(FACING)));
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.rotate(mirrorIn.toRotation((Direction)state.get(FACING)));
+	public BlockState mirror(BlockState state, Mirror mirror) {
+
+		return state.rotate(mirror.getRotation((Direction)state.getValue(FACING)));
 	}
-	
+
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		
 		builder.add(FACING);
 	}
 	
+    @Override
     
+    public RenderShape getRenderShape(BlockState state) {
+    	return RenderShape.MODEL;
+    }
+	
+    @Override
+    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+    	
+		 BlockEntity tileentity = level.getBlockEntity(pos);
+	     return tileentity == null ? false : tileentity.triggerEvent(id, param);
+    }
+
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
-	{
-		return BlockRenderType.MODEL;
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+
+		return getShapeFromDirection(state);
+
 	}
-	
+
 	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+	public VoxelShape getInteractionShape(BlockState state, BlockGetter getter, BlockPos pos) {
+
+		return getShapeFromDirection(state);
+
 	}
-	
-	
+
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		
-		return getShapeMainFromDir(state);
+	public VoxelShape getOcclusionShape(BlockState state, BlockGetter getter, BlockPos pos) {
+
+		return getShapeFromDirection(state);
+
 	}
-	
+
 	@Override
-	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return getShapeMainFromDir(state);
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext ctx) {
+
+		return getShapeFromDirection(state);
+
 	}
-	
+
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos,
-			ISelectionContext context) {
-		return getShapeMainFromDir(state);
+	public VoxelShape getVisualShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext ctx) {
+		return getShapeFromDirection(state);
 	}
-	
+
 	@Override
-	public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return getShapeMainFromDir(state);
+	public VoxelShape getBlockSupportShape(BlockState state, BlockGetter getter, BlockPos pos) {
+
+		return getShapeFromDirection(state);
 	}
-	
-	public VoxelShape getShapeMainFromDir(BlockState state)
-	{
-    	Direction dir = (Direction)state.get(FACING);
-		switch (dir) {
-		case NORTH:
-			shapeMain = VoxelShapes.create(NORTH_AABB);
-			break;
-		case SOUTH:
-			shapeMain = VoxelShapes.create(SOUTH_AABB);
-			break;
-		case WEST:
-			shapeMain = VoxelShapes.create(WEST_AABB);
-			break;
-		case EAST:
-			shapeMain = VoxelShapes.create(EAST_AABB);
-			break;
-		default:
-			shapeMain = VoxelShapes.create(NORTH_AABB);
-			break;
-		}
-		return shapeMain;
+
+	public VoxelShape getShapeFromDirection(BlockState state){
+
+		return switch (state.getValue(FACING)) {
+			case NORTH -> NORTH_AABB;
+			case SOUTH -> SOUTH_AABB;
+			case EAST -> EAST_AABB;
+			case WEST -> WEST_AABB;
+			default -> NORTH_AABB;
+		};
+
 	}
-	
-	
-	
+
+	@Override
+	public boolean collisionExtendsVertically(BlockState state, BlockGetter level, BlockPos pos, Entity collidingEntity) {
+		return true;
+	}
+
+
 }

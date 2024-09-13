@@ -2,13 +2,13 @@
  *******************************************************************************/
 package fr.fifoube.main.config;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import fr.fifoube.main.ModEconomyInc;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import org.apache.commons.lang3.tuple.Pair;
 
 @EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigHolder {
@@ -31,7 +31,7 @@ public class ConfigHolder {
 	}
  
 	@SubscribeEvent
-	public static void onModConfigEvent(final ModConfig.ModConfigEvent event) {
+	public static void onModConfigEvent(final ModConfigEvent event) {
 		
 		final ModConfig config = event.getConfig();
 		if (config.getSpec() == ConfigHolder.CLIENT_SPEC) {

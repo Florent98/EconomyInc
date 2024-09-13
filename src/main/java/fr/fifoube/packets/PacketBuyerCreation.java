@@ -13,52 +13,45 @@
 
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
+import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 
-import fr.fifoube.blocks.BlockBuyer;
-import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.gui.container.ContainerBuyer;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 public class PacketBuyerCreation {
 
 	private double cost;
 	private BlockPos pos;
 	private ItemStack stack;
-	private double moneyBudget;
-	
+
 	public PacketBuyerCreation() {}
 	
-	public PacketBuyerCreation(double cost, BlockPos pos, ItemStack stack, double moneyBudget)
+	public PacketBuyerCreation(double cost, BlockPos pos, ItemStack stack)
 	{
 		this.cost = cost;
 		this.pos = pos;
 		this.stack = stack;
-		this.moneyBudget = moneyBudget;
 	}
 	
-	public static PacketBuyerCreation decode(PacketBuffer buf) 
+	public static PacketBuyerCreation decode(FriendlyByteBuf buf)
 	{
 		double cost = buf.readDouble();
 		BlockPos pos = buf.readBlockPos();
-		ItemStack stack = buf.readItemStack();
-		double budget = buf.readDouble();
-		return new PacketBuyerCreation(cost, pos, stack, budget);
+		ItemStack stack = buf.readItem();
+		return new PacketBuyerCreation(cost, pos, stack);
 	}
 
 
-	public static void encode(PacketBuyerCreation packet, PacketBuffer buf) 
+	public static void encode(PacketBuyerCreation packet, FriendlyByteBuf buf)
 	{
 		buf.writeDouble(packet.cost);
 		buf.writeBlockPos(packet.pos);
-		buf.writeItemStack(packet.stack);
-		buf.writeDouble(packet.moneyBudget);
+		buf.writeItem(packet.stack);
 	}
 	
     
@@ -67,20 +60,17 @@ public class PacketBuyerCreation {
 
 		ctx.get().enqueueWork(() -> {
 			
-				PlayerEntity player = ctx.get().getSender(); // GET PLAYER
-	  			World world = player.world;  
-				TileEntityBlockBuyer te = (TileEntityBlockBuyer)world.getTileEntity(packet.pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
-				BlockState state = world.getBlockState(packet.pos);
+				Player player = ctx.get().getSender(); // GET PLAYER
+	  			Level world = player.level;
+				BlockEntityBuyer te = (BlockEntityBuyer)world.getBlockEntity(packet.pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
 				if(te != null) // CHECK IF PLAYER HAS NOT DESTROYED TILE ENTITY IN THE SHORT TIME OF SENDING PACKET
 				{
 					if(packet.cost != 0 && packet.stack != ItemStack.EMPTY)
 					{
 						te.setCreated(true);
-						te.setAccount(packet.moneyBudget);
 						te.setCost(packet.cost);
 						te.setItemStackToBuy(packet.stack);
-						te.markDirty();
-						
+						te.setChanged();
 					}
 				}
 		});

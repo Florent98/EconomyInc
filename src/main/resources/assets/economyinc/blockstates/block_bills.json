@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "": { "model": "economyinc:block/block_bills" }
-    }
+    "multipart": [
+        {
+            "apply": {
+                "model": "economyinc:block/block_bills"
+            }
+        }
+    ]
 }

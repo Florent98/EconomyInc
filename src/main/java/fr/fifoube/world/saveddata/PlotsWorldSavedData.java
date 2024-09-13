@@ -2,38 +2,28 @@
  *******************************************************************************/
 package fr.fifoube.world.saveddata;
 
+import fr.fifoube.main.ModEconomyInc;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.saveddata.SavedData;
+
 import java.util.ArrayList;
 import java.util.List;
-import fr.fifoube.main.ModEconomyInc;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.common.util.Constants.NBT;
 
-public class PlotsWorldSavedData extends WorldSavedData {
+public class PlotsWorldSavedData extends SavedData {
 
 	public static final String DATA_NAME = ModEconomyInc.MOD_ID + "_PlotsData";
 	List<PlotsData> listContainer = new ArrayList<PlotsData>();
 	
 	public PlotsWorldSavedData() 
 	{
-		super(DATA_NAME);
 	}
 	
-	public PlotsWorldSavedData(String name) 
+	public PlotsWorldSavedData(CompoundTag nbt) 
 	{
-		super(name);
-	}
-
-	@Override
-	public void read(CompoundNBT nbt) 
-	{
-		 /** PLOTS DATA **/
-		 ListNBT tagListContainer = nbt.getList("listContainer", NBT.TAG_LIST);
+		 ListTag tagListContainer = nbt.getList("listContainer", Tag.TAG_LIST);
 		 String name = "";
 		 String owner = "";
 		 int xPosFirst = 0;
@@ -45,7 +35,7 @@ public class PlotsWorldSavedData extends WorldSavedData {
 		 boolean bought = false;
 		 for(int i = 0; i < tagListContainer.size(); i++)
 		 {
-			ListNBT tagList = (ListNBT)tagListContainer.get(i);
+			 ListTag tagList = (ListTag)tagListContainer.get(i);
 		    name = tagList.getString(0);
 		    owner = tagList.getString(1);
 		    xPosFirst = Integer.valueOf(tagList.getString(2));
@@ -61,19 +51,18 @@ public class PlotsWorldSavedData extends WorldSavedData {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) 
-	{
+	public CompoundTag save(CompoundTag compound) {
 		/** PLOTS DATA **/
-		ListNBT tagListContainer = new ListNBT(); 
+		ListTag tagListContainer = new ListTag(); 
 		for(int i = 0; i < listContainer.size(); i++)
 		{		
-			ListNBT tagList = new ListNBT(); 
+			ListTag tagList = new ListTag(); 
 			for(int j = 0; j < listContainer.get(i).getList().size(); j++)
 			{
 		        String s = listContainer.get(i).getList().get(j);
 		        if(s != null)
 		        {
-	                tagList.add(StringNBT.valueOf(s));
+	                tagList.add(StringTag.valueOf(s));
 		        }
 			}
 	        tagListContainer.add(tagList);

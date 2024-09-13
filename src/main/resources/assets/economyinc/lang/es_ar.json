@@ -4,11 +4,11 @@
 "item.economyinc.item_fiveb":"Cinco dolares",
 "item.economyinc.item_tenb":"Diez dolares",
 "item.economyinc.item_twentyb":"Veinte dolares",
-"item.economyinc.item_fiftybe":"Cincuenta dolares",
-"item.economyinc.item_hundreedb":"Cien dolares",
-"item.economyinc.item_twohundreedb":"Doscientos dolares",
-"item.economyinc.item_fivehundreedb":"Qunientos dolares",
-"item.economyinc.item_remover":"Llave inglesa",
+"item.economyinc.item_fiftyb":"Cincuenta dolares",
+"item.economyinc.item_hundredb":"Cien dolares",
+"item.economyinc.item_twohundredb":"Doscientos dolares",
+"item.economyinc.item_fivehundredb":"Qunientos dolares",
+"item.economyinc.item_wrench":"Llave inglesa",
 "item.economyinc.item_gear":"Engranaje",
 "item.economyinc.item_gearmechanism":"Mecanismo de engranajes",
 "item.economyinc.item_wireless":"Microchip",
@@ -18,25 +18,42 @@
 "item.economyinc.item_packetten":"Paquete de diez dolares",
 "item.economyinc.item_packettwenty":"Paquete de veinte dolares",
 "item.economyinc.item_packetfifty":"Paquete de cincuenta dolares",
-"item.economyinc.item_packethundreed":"Paquete de cien dolares",
-"item.economyinc.item_packettwohundreed":"Paquete de doscientos dolares",
-"item.economyinc.item_packetfivehundreed":"Paquete de quinientos dolares",
+"item.economyinc.item_packethundred":"Paquete de cien dolares",
+"item.economyinc.item_packettwohundred":"Paquete de doscientos dolares",
+"item.economyinc.item_packetfivehundred":"Paquete de quinientos dolares",
 "item.economyinc.item_vault_cracker": "Descifrador caja de seguridad",
 
 "block.economyinc.block_vault":"Caja de seguridad",
 "block.economyinc.block_seller":"Maquina expenderdora",
 "block.economyinc.block_changer":"Cambio de oro",
 "block.economyinc.block_atm":"Cajero",
+"block.economyinc.block_village":"Caja de seguridad",
 "block.economyinc.block_bills":"Almacenador de billetes",
 
-"title.ownerCard":"Propietario",
-"title.fundsCard":"Fondos",
 
-"title.linkdCard":"Mejorar",
+"entity.entityInformater":"Informador",
+
+"title.ownerCard":"Propietario : %s",
+"title.fundsCard":"Fondos : %s",
+
+"title.deleteC1":"Eliminas tu tarjeta",
+
 "title.yes":"Si",
 "title.no":"No",
 
+"title.block_vault":"Caja de seguridad",
+
+"title.linkdCard":"Mejorar : %s",
+
 "title.wireless":"Microchip",
+
+"title.stranger":"Hey extranjero !",
+"title.informations":"Tengo informacion para ti.",
+"title.seevault":"Ves la caja de seguridad",
+"title.codevault":"en el banco ? Tengo su codigo",
+"title.onlyhundred":"para solamente 100 dolares...",
+"title.deal":"Trato?",
+"title.accept":"Hecho!",
 
 "commands.plot.samename": "Una parcela con este nombre ya existe.",
 "commands.plot.success": "Parcela creada con éxito.",
@@ -74,20 +91,23 @@
 "title.noUpgrade":"Necesita la microchip para comprar.",
 "title.noEnoughFunds":"Sin fondos suficientes.",
 "title.noSameCardBuy":"No te puede comprar cosas con la tarjeta de una otra personna.",
-"title.seller":"Vendedor : ",
-"title.cost":"Costo : ",
-"title.amount":"Cantidad : ",
-"title.fundsToRecover":"Fondos par recuperar : ",
-"title.item":"Item : ",
+"title.seller":"Vendedor : %s",
+"title.cost":"Costo : %s",
+"title.mode":"Modo : %s",
+"title.amount":"Cantidad : %s",
+"title.fundsToRecover":"Fondos par recuperar : %s",
+"title.item":"Item : %s",
 "title.unlimited":"Pila ilimitada",
-"title.limited":"Pila limitada",
-"title.weight":"Peso : ",
+"title.unlimitedStack":"ilimitada",
+"title.limitedStack":"limitada",
+"title.weight":"Peso : %s",
 "title.alreadyUsed":"La maquina ya es usado por alguien mas.",
 "title.block_changer":"Cambio de oro",
+"title.exchange": "Aceptar la interaccion ?",
 "title.noCardFoundAndNoLink":"No encontra niguna tarjeta de credito y no te tenes la tecnologia microchip.",
 "title.noMoreQuantity":"la maquina es vacio, contacto el vendedor.",
 
 "stat.economyinc.changed_gold_money": "Oro transformado",
 
-"itemGroup.eic": "Economy Inc."
+"itemGroup.economyinc": "Economy Inc."
 }

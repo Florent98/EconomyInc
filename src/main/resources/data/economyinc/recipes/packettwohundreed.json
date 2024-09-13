@@ -7,10 +7,10 @@
  ],
  "key": {
    "X": {
-    "item": "economyinc:item_twohundreedb"
+    "item": "economyinc:item_twohundredb"
     }
    },
    "result": {
-    "item": "economyinc:item_packettwohundreed"
+    "item": "economyinc:item_packettwohundred"
    }
 }

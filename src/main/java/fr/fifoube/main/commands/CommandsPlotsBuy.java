@@ -2,44 +2,40 @@
  *******************************************************************************/
 package fr.fifoube.main.commands;
 
-import java.util.UUID;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
-import fr.fifoube.main.capabilities.IMoney;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.UUID;
 
 public class CommandsPlotsBuy {
 
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		
 		dispatcher.register(
-				LiteralArgumentBuilder.<CommandSource>literal("plotbuy")
+				LiteralArgumentBuilder.<CommandSourceStack>literal("plotbuy")
 				.then(
 						Commands.literal("buy")
-						.requires(src -> src.hasPermissionLevel(0))
+						.requires(src -> src.hasPermission(0))
 						.then(
 							Commands.argument("plotname", StringArgumentType.string())
 							.executes(ctx -> requireBuy(ctx.getSource(), StringArgumentType.getString(ctx, "plotname")))
@@ -48,23 +44,23 @@ public class CommandsPlotsBuy {
 		);
 	}
 	
-	public static int requireBuy(CommandSource src, String plotName)
+	public static int requireBuy(CommandSourceStack src, String plotName)
 	{
     	boolean canProceedBuy = false;
     	int indexToProceedBuy = -1;
-    	ServerPlayerEntity player = null;
+    	ServerPlayer player = null;
     	
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 			} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 			}
     	if(player != null)
     	{	
-    		String uuid = player.getUniqueID().toString();
-    		ServerWorld worldIn = player.getServerWorld();
-    		DimensionSavedDataManager storage = worldIn.getSavedData();
-			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+    		String uuid = player.getStringUUID();
+    		ServerLevel worldIn = player.getLevel();
+    		DimensionDataStorage storage = worldIn.getDataStorage();
+			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 			if(dataWorld != null)
 			{
 				for (int i = 0; i < dataWorld.getListContainer().size(); i++) 
@@ -81,68 +77,73 @@ public class CommandsPlotsBuy {
 						}
 						else
 						{
-							src.sendFeedback(new TranslationTextComponent("commands.plotbuy.alreadybought"), false);
+							src.sendFailure(new TranslatableComponent("commands.plotbuy.alreadybought"));
 						}
 					}
 				}
 			}
 			if(canProceedBuy && indexToProceedBuy != -1)
 			{
-				ServerPlayerEntity s = player;
+				ServerPlayer s = player;
 				PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
-				player.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
+				player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
 				
 					double playerMoney = data.getMoney();
-					ModEconomyInc.LOGGER.info(s.getDisplayName().getString() + " has bought plot " + plotsData.name + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - plotsData.price) + "." + "[UUID: " + s.getUniqueID() + ",PlotID: " + plotsData.name +"]");
 					if(playerMoney >= plotsData.price)
 					{
 						plotsData.bought = true;
 						plotsData.owner = uuid;		
-						dataWorld.markDirty();
+						dataWorld.setDirty();
 						double newMoney = playerMoney - plotsData.price;
 						data.setMoney(newMoney);
 						replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);
+						ModEconomyInc.LOGGER_MONEY.info(s.getDisplayName().getString() + " has bought plot " + plotsData.name + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - plotsData.price) + "." + "[UUID: " + s.getUUID() + ",PlotID: " + plotsData.name +"]");
+						src.sendSuccess(new TranslatableComponent("commands.plotbuy.success"), false);
 					}	
+					else
+					{
+			    		src.sendFailure(new TranslatableComponent("commands.plot.noEnoughMoney"));
+					}
 				});		
-				src.sendFeedback(new TranslationTextComponent("commands.plotbuy.success"), false);
 			}
     	}
     	else
     	{
-    		src.sendFeedback(new TranslationTextComponent("commands.plot.noplayer"), false);
+    		src.sendFailure(new TranslatableComponent("commands.plot.noplayer"));
     	}
 		return 0;
 	}
 	
-	public static Vector3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
+	public static Vec3 getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
 	{
-		return new Vector3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
+		return new Vec3(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
 	}
 	
-	public static void replaceSign(ServerWorld worldIn, int xPosFirst, int yPos, int zPosFirst, int xPosSecond, int zPosSecond, String name, String owner)
+	public static void replaceSign(ServerLevel worldIn, int xPosFirst, int yPos, int zPosFirst, int xPosSecond, int zPosSecond, String name, String owner)
 	{
-		PlayerEntity playerIn = worldIn.getPlayerByUuid(UUID.fromString(owner));
+		Player playerIn = worldIn.getPlayerByUUID(UUID.fromString(owner));
 		if(playerIn != null)
 		{
-			Vector3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
-			BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
+			Vec3 vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
+			BlockPos posSign = new BlockPos(vec);
+			
 			worldIn.destroyBlock(posSign, false);
-			worldIn.setBlockState(posSign, Blocks.OAK_SIGN.getDefaultState(), 2);
+			worldIn.setBlock(posSign, Blocks.OAK_SIGN.defaultBlockState(), 2);
 			
-			TileEntity tileEntityIn = new SignTileEntity();
-			tileEntityIn.validate();
+			BlockEntity tileEntityIn = new SignBlockEntity(posSign, Blocks.OAK_SIGN.defaultBlockState());
+			tileEntityIn.clearRemoved();
 			
-			worldIn.setTileEntity(posSign, tileEntityIn);
+			worldIn.setBlockEntity(tileEntityIn);
 			
-			SignTileEntity signTe = (SignTileEntity)worldIn.getTileEntity(posSign);
+			SignBlockEntity signTe = (SignBlockEntity)worldIn.getBlockEntity(posSign);
 			
 			if(signTe != null)
 			{
-				signTe.setText(0 , new StringTextComponent("[" + name + "]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLUE));
-				signTe.setText(1 , new StringTextComponent("Owned by").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
-				signTe.setText(2 , new StringTextComponent(playerIn.getDisplayName().getString()).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
-				signTe.setText(3 , new StringTextComponent("[SOLD]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.RED));
-				signTe.markDirty();
+				signTe.setMessage(0 , new TextComponent("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE));
+				signTe.setMessage(1 , new TextComponent("Owned by").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+				signTe.setMessage(2 , new TextComponent(playerIn.getDisplayName().getString()).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+				signTe.setMessage(3 , new TextComponent("[SOLD]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED));
+				signTe.setChanged();
 			}
 		}
 		

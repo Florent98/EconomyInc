@@ -13,38 +13,35 @@
 
 package fr.fifoube.gui;
 
-import java.awt.Color;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockBuyer;
-import fr.fifoube.gui.container.ContainerBuyer;
-import fr.fifoube.gui.container.ContainerBuyerCreation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
+import fr.fifoube.gui.container.MenuBuyerCreation;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketBuyerCreation;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
-public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
+import java.awt.*;
+
+public class GuiBuyerCreation extends AbstractContainerScreen<MenuBuyerCreation>
 {
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID , "textures/gui/container/gui_buyer.png");
-	private TileEntityBlockBuyer tile;
+	private BlockEntityBuyer tile;
 	protected int xSize = 176;
 	protected int ySize = 168;
 	protected int guiLeft;
 	protected int guiTop;
-	private TextFieldWidget costField;
+	private EditBox costField;
 	private boolean validCost = false;
 
 	private ItemStack stackInSlot = ItemStack.EMPTY;
@@ -52,27 +49,26 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
 	
 	private Button validate;
 	
-	public GuiBuyerCreation(ContainerBuyerCreation screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-		super(screenContainer, inv, titleIn);
-		this.tile = getContainer().getTile();
+	public GuiBuyerCreation(MenuBuyerCreation menu, Inventory inv, Component comp) {
+		super(menu, inv, comp);
+		this.tile = menu.getBlockEntity();
 	}
 	
 	@Override
-	public void tick() 
-	{
-		super.tick();
-		stackInSlot = container.inventorySlots.get(0).getStack();
+	protected void containerTick() {
+		super.containerTick();
+		stackInSlot = menu.slots.get(0).getItem();
 		moneyInTile = tile.getAccountMoney();
-		this.validCost = checkIfTextCanBeParsedToPositiveDouble(this.costField.getText());
-
+		this.validCost = checkIfTextCanBeParsedToPositiveDouble(this.costField.getValue());
 	}
+
 	
 	@Override
 	protected void init() {
 		
 	    super.init();
 		this.fieldInit();
-		this.validate = this.addButton(new Button(width / 2 - 50, height / 2 + 83, 100, 20, new TranslationTextComponent("title.validate"),(press) -> actionPerformed(0))); 
+		this.validate = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 83, 100, 20, new TranslatableComponent("title.validate"),(press) -> actionPerformed(0))); 
 
 
 	}
@@ -83,9 +79,8 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
 		{
 			if(this.validCost && stackInSlot != ItemStack.EMPTY)
 			{
-				PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerCreation(Double.valueOf(costField.getText()), tile.getPos(), stackInSlot, moneyInTile));
-				getContainer().closeContainer(playerInventory.player, false);
-				closeScreen();
+				PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerCreation(Double.valueOf(costField.getValue()), tile.getBlockPos(), stackInSlot));
+				onClose();
 			}
 		}
 	}
@@ -94,34 +89,29 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
 	@Override
 	public void resize(Minecraft minecraft, int width, int height) {
 		
-		String s = this.costField.getText();
+		String s = this.costField.getValue();
 		this.init(minecraft, width, height);
-		this.costField.setText(s);
+		this.costField.setValue(s);
 	}
 	
-	protected void fieldInit()
-	{
-	      this.minecraft.keyboardListener.enableRepeatEvents(true);
-	      int i = (this.width - this.xSize) / 2;
-	      int j = (this.height - this.ySize) / 2;
-	      this.costField = new TextFieldWidget(this.font, i + 121, j + 15, 38, 12, new TranslationTextComponent("title.cost"));
-	      this.costField.setCanLoseFocus(false);
-	      this.costField.setTextColor(-1);
-	      this.costField.setDisabledTextColour(-1);
-	      this.costField.setEnableBackgroundDrawing(false);
-	      this.costField.setMaxStringLength(35);
-	      this.children.add(this.costField);
-	      this.setFocusedDefault(this.costField);
+	protected void fieldInit() {
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+		int i = (this.width - this.xSize) / 2;
+		int j = (this.height - this.ySize) / 2;
+		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, new TranslatableComponent("title.cost"));
+		this.costField.setMaxLength(35);
+		this.costField.setBordered(false);
+		this.costField.setVisible(true);
+		this.setFocused(this.costField);
+		this.addRenderableWidget(this.costField);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-		      if (keyCode == 256) {
-				getContainer().closeContainer(playerInventory.player, true);
-		         this.minecraft.player.closeScreen();
-		      }
-
-		      return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.canWrite() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
+		if (keyCode == 256) {
+			onClose();
+		}
+		return !this.costField.keyPressed(keyCode, scanCode, modifiers) && !this.costField.isFocused() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
 	}
 	   
 	
@@ -130,36 +120,40 @@ public class GuiBuyerCreation extends ContainerScreen<ContainerBuyerCreation>
 			return false;
 		}
 	
-	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
 
-	    if(stackInSlot != ItemStack.EMPTY)
-	    {
-	    	this.font.drawString(matrixStack, stackInSlot.getDisplayName().getString(), 30.0f, 29.0f, Color.DARK_GRAY.getRGB());
-	    }
-	    this.font.drawString(matrixStack, I18n.format("title.fundsCard") +  ": " + moneyInTile, 30.0f, 44.0f, Color.DARK_GRAY.getRGB());
-		super.drawGuiContainerForegroundLayer(matrixStack, x, y);
+	@Override
+	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
+
+		if(stackInSlot != ItemStack.EMPTY)
+		{
+			this.font.draw(matrixStack, stackInSlot.getDisplayName().getString(), 30.0f, 29.0f, Color.DARK_GRAY.getRGB());
+		}
+		this.font.draw(matrixStack, new TranslatableComponent("title.fundsCard").getString() + moneyInTile, 30.0f, 44.0f, Color.DARK_GRAY.getRGB());
+		super.renderLabels(matrixStack, mouseX, mouseY);
 	}
 
+
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
-	{
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		RenderSystem.disableBlend();
 		this.costField.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
-	}
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+		this.renderTooltip(matrixStack, mouseX, mouseY);	}
 
-		this.minecraft.getTextureManager().bindTexture(background); 
-	    int k = (this.width - this.xSize) / 2; 
-	    int l = (this.height - this.ySize) / 2;
-	    this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
-	    this.blit(matrixStack, k + 117, l + 11, 0, this.ySize + 32, 110, 16);
-		this.blit(matrixStack, k + 117, l + 11, 0, this.ySize + (this.validCost ? 0 : 16), 110, 16);
+	@Override
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, background);
+		int k = (this.width - this.xSize) / 2;
+		int l = (this.height - this.ySize) / 2;
+		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
+		this.blit(stack, k + 117, l + 11, 0, this.ySize + 32, 110, 16);
+		this.blit(stack, k + 117, l + 11, 0, this.ySize + (this.validCost ? 0 : 16), 110, 16);
 	}
+
 	
 	private boolean checkIfTextCanBeParsedToPositiveDouble(String field)
 	{

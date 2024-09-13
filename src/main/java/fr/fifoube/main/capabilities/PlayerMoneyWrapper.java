@@ -1,39 +1,38 @@
-/*******************************************************************************
- *******************************************************************************/
 package fr.fifoube.main.capabilities;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerMoneyWrapper implements ICapabilitySerializable<INBT>{
+public class PlayerMoneyWrapper implements ICapabilitySerializable<CompoundTag> {
 
-	private IMoney holder;
-	private final LazyOptional<IMoney> lazyOptional = LazyOptional.of(() -> this.holder);
-	    
-	public PlayerMoneyWrapper(IMoney money) {
-		
-		this.holder = money;
-	}
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		
-		return CapabilityMoney.MONEY_CAPABILITY.orEmpty(cap, lazyOptional);
-	}
+    private MoneyHolder holder = new MoneyHolder();
+    private final LazyOptional<MoneyHolder> lazyOptional = LazyOptional.of(() -> this.holder);
 
-	@Override
-	public INBT serializeNBT() {
-		
-		return CapabilityMoney.MONEY_CAPABILITY.writeNBT(this.holder, null);
-	}
+	public PlayerMoneyWrapper(MoneyHolder holder) {
 
-	@Override
-	public void deserializeNBT(INBT nbt) {
-		
-		CapabilityMoney.MONEY_CAPABILITY.readNBT(holder, null, nbt);
-	}
+        this.holder = holder;
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction direction) {
+        return cap == CapabilityMoney.MONEY_CAPABILITY ? (LazyOptional<T>) this.lazyOptional : LazyOptional.empty();
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+
+        return this.holder.serializeNBT();
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+
+        this.holder.deserializeNBT(nbt);
+    }
 
 }

@@ -1,6 +1,179 @@
 {
-    "parent": "item/generated",
     "textures": {
-        "layer0": "economyinc:items/item_packettwenty"
-    }
+        "4": "economyinc:items/item_twentyb",
+        "8": "block/acacia_planks"
+    },
+    "elements": [
+        {
+            "name": "bill04",
+            "from": [6, 1.05, 3],
+            "to": [10, 1.3, 13],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 3]},
+            "faces": {
+                "north": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "east": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "south": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "west": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "up": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"},
+                "down": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"}
+            }
+        },
+        {
+            "name": "bill01",
+            "from": [6, 0, 3],
+            "to": [10, 0.25, 13],
+            "rotation": {"angle": 0, "axis": "y", "origin": [6, 0, 3]},
+            "faces": {
+                "north": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "east": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "south": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "west": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "up": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"},
+                "down": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"}
+            }
+        },
+        {
+            "name": "bill02",
+            "from": [6, 0.35, 3],
+            "to": [10, 0.6, 13],
+            "rotation": {"angle": 0, "axis": "y", "origin": [6, 1, 3]},
+            "faces": {
+                "north": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "east": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "south": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "west": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "up": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"},
+                "down": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"}
+            }
+        },
+        {
+            "name": "bill03",
+            "from": [6, 0.7, 3],
+            "to": [10, 0.95, 13],
+            "rotation": {"angle": 0, "axis": "y", "origin": [6, 1, 3]},
+            "faces": {
+                "north": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "east": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "south": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "west": {"uv": [0, 4.75, 16, 5], "texture": "#4"},
+                "up": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"},
+                "down": {"uv": [0, 4.75, 16, 11.25], "rotation": 90, "texture": "#4"}
+            }
+        },
+        {
+            "name": "rope_04",
+            "from": [10, 0, 7.75],
+            "to": [10.1, 1.3, 8.25],
+            "rotation": {"angle": 0, "axis": "y", "origin": [11.1, 1, 8]},
+            "faces": {
+                "north": {"uv": [0, 0, 0.1, 1.3], "texture": "#8"},
+                "east": {"uv": [0, 0, 0.5, 1.3], "texture": "#8"},
+                "south": {"uv": [0, 0, 0.1, 1.3], "texture": "#8"},
+                "west": {"uv": [0, 0, 0.5, 1.3], "texture": "#8"},
+                "up": {"uv": [0, 0, 0.1, 0.5], "texture": "#8"},
+                "down": {"uv": [0, 0, 0.1, 0.5], "texture": "#8"}
+            }
+        },
+        {
+            "name": "rope_01",
+            "from": [5.9, 1.3, 7.75],
+            "to": [10.1, 1.4, 8.25],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 2, 8]},
+            "faces": {
+                "north": {"uv": [0, 0, 14, 1], "texture": "#8"},
+                "east": {"uv": [0, 0, 0.5, 0.1], "texture": "#8"},
+                "south": {"uv": [0, 0, 4.2, 0.1], "texture": "#8"},
+                "west": {"uv": [0, 0, 0.5, 0.1], "texture": "#8"},
+                "up": {"uv": [0, 0, 4.2, 0.5], "texture": "#8"},
+                "down": {"uv": [0, 0, 4.2, 0.5], "texture": "#8"}
+            }
+        },
+        {
+            "name": "rope_02",
+            "from": [5.9, -0.1, 7.75],
+            "to": [10.1, 0, 8.25],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 8]},
+            "faces": {
+                "north": {"uv": [0, 0, 4.2, 0.1], "texture": "#8"},
+                "east": {"uv": [0, 0, 0.5, 0.1], "texture": "#8"},
+                "south": {"uv": [0, 0, 4.2, 0.1], "texture": "#8"},
+                "west": {"uv": [0, 0, 0.5, 0.1], "texture": "#8"},
+                "up": {"uv": [0, 0, 4.2, 0.5], "texture": "#8"},
+                "down": {"uv": [0, 0, 4.2, 0.5], "texture": "#8"}
+            }
+        },
+        {
+            "name": "rope_03",
+            "from": [5.9, 0, 7.75],
+            "to": [6, 1.3, 8.25],
+            "rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 8]},
+            "faces": {
+                "north": {"uv": [0, 0, 0.1, 1.3], "texture": "#8"},
+                "east": {"uv": [0, 0, 0.5, 1.3], "texture": "#8"},
+                "south": {"uv": [0, 0, 0.1, 1.3], "texture": "#8"},
+                "west": {"uv": [0, 0, 0.5, 1.3], "texture": "#8"},
+                "up": {"uv": [0, 0, 0.1, 0.5], "texture": "#8"},
+                "down": {"uv": [0, 0, 0.1, 0.5], "texture": "#8"}
+            }
+        }
+    ],
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [-156.51, 88.17, -121.13],
+            "translation": [0, 1.75, 6.25],
+            "scale": [0.7, 0.7, 0.7]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [-156.51, 88.17, -121.13],
+            "translation": [0, 1.75, 6.25],
+            "scale": [0.7, 0.7, 0.7]
+        },
+        "firstperson_righthand": {
+            "rotation": [-156.51, 99, -121.13],
+            "translation": [-2, 2.75, 6.25],
+            "scale": [0.7, 0.7, 0.7]
+        },
+        "firstperson_lefthand": {
+            "rotation": [180, -82, 97],
+            "translation": [-2.75, 3, 6.5],
+            "scale": [0.7, 0.7, 0.7]
+        },
+        "ground": {
+            "translation": [0, 4.25, 0]
+        },
+        "gui": {
+            "rotation": [-145.64, 53.87, -175.28],
+            "translation": [0.75, 7.25, 0],
+            "scale": [1.3, 1.3, 1.3]
+        },
+        "head": {
+            "rotation": [36, 90, 0],
+            "translation": [9.5, -16, -7]
+        },
+        "fixed": {
+            "rotation": [90, 90, 0],
+            "translation": [0, 0, 7.75]
+        }
+    },
+    "groups": [
+        {
+            "name": "pack_bills",
+            "origin": [6, 1, 3],
+            "color": 0,
+            "children": [
+                {
+                    "name": "Billet",
+                    "origin": [6, 1, 3],
+                    "color": 0,
+                    "children": [0, 1, 2, 3]
+                },
+                {
+                    "name": "Rope",
+                    "origin": [7, 1, 8],
+                    "color": 0,
+                    "children": [4, 5, 6, 7]
+                }
+            ]
+        }
+    ]
 }

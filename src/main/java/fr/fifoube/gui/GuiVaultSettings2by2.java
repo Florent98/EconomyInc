@@ -2,68 +2,44 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.packets.PacketVaultSettings;
+import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.packets.PacketVaultSettings;
-import fr.fifoube.packets.PacketsRegistery;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-
+@OnlyIn(Dist.CLIENT)
 public class GuiVaultSettings2by2  extends Screen
 {
-
 	private static final ResourceLocation BACKGROUND = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
+	protected BlockEntityVault2by2 tile;
+	protected EditBox commandTextField;
 	protected int xSize = 256;
 	protected int ySize = 124;
 	protected int guiLeft;
 	protected int guiTop;
-	protected TextFieldWidget commandTextField;
-	protected TileEntityBlockVault2by2 tile;
 		
 	List<Button> buttonList = new ArrayList<Button>();
 		
-	public GuiVaultSettings2by2(TileEntityBlockVault2by2 te) {
-		super(new TranslationTextComponent("gui.vaultsettings"));
+	public GuiVaultSettings2by2(BlockEntityVault2by2 te) {
+		super(new TranslatableComponent("gui.vaultsettings"));
 		this.tile = te;
-	}
-	
-
-	@Override
-	protected void init() {
-		
-		super.init();
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
-		this.commandTextField = new TextFieldWidget(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, new TranslationTextComponent("gui.vaultsettings"));
-	    this.commandTextField.setMaxStringLength(35);
-	    this.commandTextField.setText("Add other players.");
-	    this.children.add(this.commandTextField);
-	    buttonList.clear();
-	    for(int i = 0; i < 5; i++)
-	    {
-	    	int id = i;
-	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, new StringTextComponent("✖").mergeStyle(TextFormatting.DARK_RED), (press) -> this.actionPerformed(id));
-	    	buttonList.add(id, button);
-	    	button.active = false;
-	    	this.addButton(button);
-	    }
 	}
 	
 	@Override
@@ -72,32 +48,53 @@ public class GuiVaultSettings2by2  extends Screen
 		this.commandTextField.tick();
 		if(tile.getMax() == 5)
 		{
-			this.commandTextField.setEnabled(false);
-			this.commandTextField.setText("Max players allowed reached");
+			this.commandTextField.active = false;
+			this.commandTextField.insertText("Max players allowed reached");
 		}	
 	}
+
+	@Override
+	protected void init() {
+		
+		this.guiLeft = (this.width - this.xSize) / 2;
+	    this.guiTop = (this.height - this.ySize) / 2;
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+		this.commandTextField = new EditBox(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, new TranslatableComponent("gui.vaultsettings"));
+	    this.commandTextField.setMaxLength(35);
+	    this.commandTextField.insertText("Add other players.");
+	    this.addWidget(this.commandTextField);
+	    buttonList.clear();
+	    for(int i = 0; i < 5; i++)
+	    {
+	    	int id = i;
+	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, new TextComponent("✖").withStyle(ChatFormatting.DARK_RED), (press) -> this.actionPerformed(id));
+	    	buttonList.add(id, button);
+	    	button.active = false;
+	    	this.addRenderableWidget(button);
+	    }
+	    super.init();
+	}
+	
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) 
-	{
-		this.renderBackground(matrixStack);
-	    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
-	    this.minecraft.getTextureManager().bindTexture(BACKGROUND); 
-	    int k = (this.width - this.xSize) / 2; 
-	    int l = (this.height - this.ySize) / 2;
-	    this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
-	    super.render(matrixStack, mouseX, mouseY, partialTicks);
-	    if(!Minecraft.getInstance().isSingleplayer())
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		
+		this.renderBackground(stack);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, BACKGROUND);
+	    this.blit(stack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize); 
+	    super.render(stack, mouseX, mouseY, partialTicks);
+	    if(!Minecraft.getInstance().hasSingleplayerServer())
 	    {
-		    if(tile.getOwner().equals(Minecraft.getInstance().player.getUniqueID()))
+		    if(tile.getOwner().equals(Minecraft.getInstance().player.getUUID()))
 		    {
-		    	this.commandTextField.render(matrixStack, mouseX, mouseY, partialTicks);
+		    	this.commandTextField.render(stack, mouseX, mouseY, partialTicks);
 		    }
 	    }
 	    for (int i = 0; i < tile.getAllowedPlayers().size(); i++) {
 	    	
     		String playerName = tile.getAllowedPlayers().get(i).substring(0, tile.getAllowedPlayers().get(i).indexOf(","));
-    		this.font.drawString(matrixStack, playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
+    		this.font.draw(stack, playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
 		}
 	    for (int j = 0; j < 5; j++) {
 			
@@ -117,13 +114,13 @@ public class GuiVaultSettings2by2  extends Screen
     			buttonList.get(j).active = false;
 	    	}
 		}
-
 	}
+	
 	
 	
 	protected void actionPerformed(int id)
 	{		
-        PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), "", true, id));
+        PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getBlockPos(), "", true, id));
 	}
 
 	
@@ -136,12 +133,12 @@ public class GuiVaultSettings2by2  extends Screen
 	    	  if(tile.getMax() < 5)
 	        	{
 			        this.addPlayerToTileEntity();
-			        this.commandTextField.setText("");	
+			        this.commandTextField.insertText("");	
 			        return true;
 			    }
 	        	else
 	        	{
-	        		this.commandTextField.setText("Max players allowed reached ");
+	        		this.commandTextField.insertText("Max players allowed reached ");
 	        		return false;
 	        	}
 	      } 
@@ -150,22 +147,22 @@ public class GuiVaultSettings2by2  extends Screen
 	
 	private void addPlayerToTileEntity() {
 		
-		    String s = this.commandTextField.getText();
-		    List<AbstractClientPlayerEntity> playerList = Minecraft.getInstance().world.getPlayers();
+		    String s = this.commandTextField.getValue();
+		    List<AbstractClientPlayer> playerList = Minecraft.getInstance().level.players();
 		    if(playerList != null)
 		    {
 		    	for(int i = 0; i < playerList.size(); i++)
 		    	{
 		    		if(playerList.get(i).getName().getString().equals(s))
 		    		{
-		    			if(!playerList.get(i).getUniqueID().equals(tile.getOwner()))
+		    			if(!playerList.get(i).getUUID().equals(tile.getOwner()))
 		    			{
-		    				UUID playerUUID = playerList.get(i).getUniqueID();
+		    				UUID playerUUID = playerList.get(i).getUUID();
 		    				boolean flag = checkForSamePlayer(playerUUID);
 		    				if(flag)
 		    				{
 		    					String playerName = playerList.get(i).getDisplayName().getString();
-		    					PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getPos(), playerName + "," + playerUUID.toString(), false, i));			    					
+		    					PacketsRegistery.CHANNEL.sendToServer(new PacketVaultSettings(tile.getBlockPos(), playerName + "," + playerUUID.toString(), false, i));			    					
 		    				}
 		    			}
 		    		}
@@ -193,7 +190,7 @@ public class GuiVaultSettings2by2  extends Screen
 	@Override
 	public void onClose() {
 		super.onClose();
-		this.getMinecraft().keyboardListener.enableRepeatEvents(false);
+		this.getMinecraft().keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	

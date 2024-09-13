@@ -1,14 +1,16 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[39,)"
+license="All rights reserved"
+[[mods]]
+modId="economyinc"
+version="${file.jarVersion}"
+displayName= "Economy Inc."
+displayURL="https://www.curseforge.com/minecraft/mc-mods/economy-inc" #optional
+logoFile="economyinc.png"
 issueTrackerURL="https://github.com/FifouBE/EconomyInc/issues" #optional
-credits="FifouBE" 
-license="All right reserved"
-
-[[mods]] #mandatory
-	modId="economyinc" #mandatory
-	version="1.6.8" #mandatory
-	displayName="Economy Inc." #mandatory
-	displayURL="https://www.curseforge.com/minecraft/mc-mods/economy-inc" #optional
-	description='''
-	DESCRIPTION
-	'''
+credits="Florent Turrioni"
+description='''
+Economy Inc. is a minecraft mod both on client and server side that allows you to have a built in economy in minecraft.
+It adds various items, like bills and credit card that allows you to make in game purchases thanks to vending blocks.
+It also comes with a variety of commands to help admins manage people's balance but also create plot to sell to players.
+'''

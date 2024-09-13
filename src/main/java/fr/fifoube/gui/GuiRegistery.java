@@ -2,19 +2,20 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import fr.fifoube.gui.container.type.ContainerTypeRegistery;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.inventory.container.ContainerType;
+import fr.fifoube.gui.container.type.MenuTypeRegistery;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 public class GuiRegistery {
 
 	public static void register() {
 
-		ScreenManager.registerFactory(ContainerTypeRegistery.SELLER_TYPE, GuiSeller::new);
-		ScreenManager.registerFactory(ContainerTypeRegistery.VAULT_TYPE, GuiVault::new);
-		ScreenManager.registerFactory(ContainerTypeRegistery.VAULT2BY2_TYPE, GuiVault2by2::new);
-		ScreenManager.registerFactory(ContainerTypeRegistery.CHANGER_TYPE, GuiChanger::new);
-		ScreenManager.registerFactory(ContainerTypeRegistery.BUYER_CREATION_TYPE, GuiBuyerCreation::new);
-		ScreenManager.registerFactory(ContainerTypeRegistery.BUYER_TYPE, GuiBuyerContainer::new);
+		MenuScreens.register(MenuTypeRegistery.SELLER_TYPE.get(), GuiSeller::new);
+		MenuScreens.register(MenuTypeRegistery.SELLERBUY_TYPE.get(), GuiSellerBuy::new);
+		MenuScreens.register(MenuTypeRegistery.VAULT_TYPE.get(), GuiVault::new);
+		MenuScreens.register(MenuTypeRegistery.VAULT2BY2_TYPE.get(), GuiVault2by2::new);
+		MenuScreens.register(MenuTypeRegistery.CHANGER_TYPE.get(), GuiChanger::new);
+		MenuScreens.register(MenuTypeRegistery.BUYER_TYPE.get(), GuiBuyerContainer::new);
+		MenuScreens.register(MenuTypeRegistery.BUYER_CREA_TYPE.get(), GuiBuyerCreation::new);
+
 	}
 }

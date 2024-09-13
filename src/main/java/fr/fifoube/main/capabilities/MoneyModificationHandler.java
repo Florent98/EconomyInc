@@ -14,7 +14,6 @@
 package fr.fifoube.main.capabilities;
 
 import fr.fifoube.main.ModEconomyInc;
-
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +24,7 @@ public class MoneyModificationHandler {
 	@SubscribeEvent
 	public static void onDimensionTravel(PlayerChangedDimensionEvent event)
 	{
-		if(!event.getPlayer().world.isRemote)
+		if(!event.getPlayer().level.isClientSide)
 			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
 			});

@@ -2,20 +2,20 @@
  *******************************************************************************/
 package fr.fifoube.items;
 
-import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import fr.fifoube.main.capabilities.CapabilityMoney;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import java.util.List;
 
 public class ItemWireless extends Item {
 
@@ -24,37 +24,58 @@ public class ItemWireless extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		
-		ItemStack stackInHand = playerIn.getHeldItem(handIn);
-		ItemStack stackCard = ItemStack.EMPTY;
-		boolean keepSearching = true;
-		for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
-			
-			if(keepSearching)
-			{
-				if(playerIn.inventory.getStackInSlot(i).getItem().equals(ItemsRegistery.ITEM_CREDITCARD))
+		ItemStack stack = player.getItemInHand(hand);
+		ItemStack stackFound = ItemStack.EMPTY;
+		
+		if(!level.isClientSide)
+		{
+			boolean found = false;
+			for (int i = 0; i < player.getInventory().getContainerSize(); i++) {		
+			if(!found)
+				if(player.getInventory().getItem(i).getItem().equals(ItemsRegistery.CREDITCARD.get()))
 				{
-					if(playerIn.inventory.getStackInSlot(i).hasTag() && playerIn.inventory.getStackInSlot(i).getTag().getString("OwnerUUID").equals(playerIn.getUniqueID().toString()) && !playerIn.inventory.getStackInSlot(i).getTag().getBoolean("Linked"))
+					if(player.getInventory().getItem(i).hasTag())
 					{
-						keepSearching = false;
-						stackCard = playerIn.inventory.getStackInSlot(i);
+							stackFound = player.getInventory().getItem(i);
+							found = true;
 					}
 				}
 			}
+			if(found && stackFound != ItemStack.EMPTY)
+			{
+				if(!stackFound.getTag().getBoolean("Linked"))
+				{
+					stackFound.getTag().putBoolean("Linked", true);
+					player.getInventory().removeItem(stack);
+					player.sendMessage(new TranslatableComponent("title.cardUpdated"), player.getUUID());
+					InteractionResultHolder.success(stackFound);
+	
+				}
+				else
+				{
+					player.sendMessage(new TranslatableComponent("title.cardAlreadyLinked"), player.getUUID());
+					InteractionResultHolder.fail(stackFound);
+				}
+			}
+			else
+			{
+				player.sendMessage(new TranslatableComponent("title.cardTooMuch"), player.getUUID());
+				InteractionResultHolder.fail(stackFound);
+			}
 		}
-		if(stackCard != ItemStack.EMPTY) {
-			
-			playerIn.inventory.deleteStack(stackInHand);
-			stackCard.getTag().putBoolean("Linked", true);
-			return new ActionResult<ItemStack>(ActionResultType.SUCCESS, stackInHand);
-
-		}
-		return new ActionResult<ItemStack>(ActionResultType.FAIL, stackInHand);
+		return InteractionResultHolder.fail(stack);
+		
 	}
 	
+	
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent(I18n.format("title.wireless")));
+	@OnlyIn(Dist.CLIENT)
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		
+		tooltip.add(new TranslatableComponent("title.wireless").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC));
+
 	}
+
 }

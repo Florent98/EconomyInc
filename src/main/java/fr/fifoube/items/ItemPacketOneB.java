@@ -2,9 +2,19 @@
  *******************************************************************************/
 package fr.fifoube.items;
 
-import net.minecraft.item.Item;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemPacketOneB extends Item implements IValue{
+import java.util.List;
+
+public class ItemPacketOneB extends Item implements IValue {
 
 	public ItemPacketOneB(Properties properties) {
 		super(properties);
@@ -13,5 +23,14 @@ public class ItemPacketOneB extends Item implements IValue{
 	@Override
 	public int getValue() {
 		return 9;
+	}
+
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn) {
+
+		tooltip.add(new TranslatableComponent("money.value", getValue()).withStyle(ChatFormatting.ITALIC, ChatFormatting.GREEN));
+
 	}
 }

@@ -2,256 +2,214 @@
  *******************************************************************************/
 package fr.fifoube.blocks;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockBills;
+import fr.fifoube.blocks.blockentity.BlockEntityBills;
+import fr.fifoube.blocks.blockentity.BlockEntityTypeRegistery;
+import fr.fifoube.items.IValue;
 import fr.fifoube.items.ItemsRegistery;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockBills extends ContainerBlock {
+
+public class BlockBills extends Block implements EntityBlock {
 
 	public ItemEntity item;
-	public static VoxelShape shapeMain;
-	
-	public static final AxisAlignedBB platform = new AxisAlignedBB(0, 0, 0, 1D, 1/16D, 1D);
-	
+	private static VoxelShape BOUDING_BOX = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+
+
 	public BlockBills(Properties properties) {
 		super(properties);
-		VoxelShape shape = VoxelShapes.create(platform);
-		shapeMain = shape;
 	}
-	
+
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityBlockBills();
+	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return BlockEntityTypeRegistery.TILE_BILLS.get().create(pos, state);
 	}
-	
+
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity living, ItemStack stack) {
 		
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof TileEntityBlockBills)
+		BlockEntity tileentity = level.getBlockEntity(pos);
+		if(tileentity instanceof BlockEntityBills)
 		{
-			TileEntityBlockBills te = (TileEntityBlockBills)tileentity;
-	        if(!worldIn.isRemote)
+			BlockEntityBills te = (BlockEntityBills)tileentity;
+	        if(!level.isClientSide)
 	        {
-	        	int direction = MathHelper.floor((double) (placer.rotationYaw * 4.0F / 360.0F) + 2.5D) & 3;
+	        	int direction = Mth.floor((double) (living.getYRot() * 4.0F / 360.0F) + 2.5D) & 3;
 	        	te.setDirection((byte) direction);
-	        	te.markDirty();
+	        	te.setChanged();
 	        }
 		}
 	}
+
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		if(!worldIn.isRemote)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+		
+		if(!level.isClientSide)
 		{
-	    	TileEntity tileentity = worldIn.getTileEntity(pos);
-	    	if(tileentity instanceof TileEntityBlockBills)
+	    	BlockEntity tileentity = level.getBlockEntity(pos);
+	    	if(tileentity instanceof BlockEntityBills)
 	    	{
-	    		TileEntityBlockBills te = (TileEntityBlockBills)tileentity;
-		    	if(te.getNumbBills() != 64)
+	    		BlockEntityBills te = (BlockEntityBills)tileentity;
+				if(te.getNumbBills() != 64)
 		    	{
-	    			String unNa = player.getHeldItem(hand).getTranslationKey();
+	    			Item item = player.getItemInHand(hand).getItem();
 		    		if(te.getNumbBills() == 0)
 		    		{
-			    		if(unNa.equals("item.economyinc.item_oneb") || unNa.equals("item.economyinc.item_fiveb") || unNa.equals("item.economyinc.item_tenb") || unNa.equals("item.economyinc.item_twentyb") || unNa.equals("item.economyinc.item_fiftybe") || unNa.equals("item.economyinc.item_hundreedb") || unNa.equals("item.economyinc.item_twohundreedb") || unNa.equals("item.economyinc.item_fivehundreedb"))
+						if(ItemsRegistery.availableBills().contains(item))
 			    		{
-			    			checkBillRef(te, worldIn, player, hand);
+							checkBillRef(te, level, player, hand);
 					    	te.addBill();
-					    	player.getHeldItem(hand).setCount(player.getHeldItemMainhand().getCount() - 1);
-					    	te.markDirty();
-					    	return ActionResultType.SUCCESS;
+					    	player.getItemInHand(hand).setCount(player.getItemInHand(hand).getCount() - 1);
+					    	te.setChanged();
+					    	return InteractionResult.SUCCESS;
 			    		}
 		    		}
 		    		else
 		    		{
-		    			if(te.getBillRef().equals(unNa))
-		    			{
-		    				te.addBill();
-		    				player.getHeldItem(hand).setCount(player.getHeldItemMainhand().getCount() - 1);
-					    	te.markDirty();
-					    	return ActionResultType.SUCCESS;
-		    			}
+						if(item instanceof IValue value)
+			    			if(te.getBillValue() == value.getValue())
+			    			{
+			    				te.addBill();
+			    				player.getItemInHand(hand).setCount(player.getItemInHand(hand).getCount() - 1);
+						    	te.setChanged();
+						    	return InteractionResult.SUCCESS;
+			    			}
 		    		}
 	
 		    	}
 	    	}
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.CONSUME;
 		
 	}
-	
+
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		super.onBlockHarvested(worldIn, pos, state, player);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		dropBlocks(tileentity, worldIn, pos);
-	}
-	
-	public void dropBlocks(TileEntity tileentity, World world, BlockPos pos) {
-				
-		if(tileentity instanceof TileEntityBlockBills)
-		{
-			TileEntityBlockBills te = (TileEntityBlockBills)tileentity;
-			ItemEntity itemBase = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_BILLS));
-			world.addEntity(itemBase);
-				for(int i=0; i < te.getNumbBills(); i++)
-				{
-					Item bill = te.getItemBill();
-					if(bill != null)
-					{
-						ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(bill));
-						
-						float multiplier = 0.1f;
-						float motionX = world.rand.nextFloat() - 0.5F;
-						float motionY = world.rand.nextFloat() - 0.5F;
-						float motionZ = world.rand.nextFloat() - 0.5F;
-						
-						item.lastTickPosX = motionX * multiplier;
-						item.lastTickPosY = motionY * multiplier;
-						item.lastTickPosZ = motionZ * multiplier;
-						
-						world.addEntity(item);
-					}
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockentity, ItemStack stack) {
+
+		if (!level.isClientSide) {
+			if (blockentity instanceof BlockEntityBills te) {
+				ItemEntity itemBase = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(BlocksRegistry.BLOCK_BILLS.get()));
+				level.addFreshEntity(itemBase);
+				ItemStack bill = te.getItemBill(te.getBillValue());
+				bill.setCount(te.getNumbBills());
+				if (bill != null) {
+					ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, bill);
+					level.addFreshEntity(item);
 				}
 			}
+			super.playerDestroy(level, player, pos, state, blockentity, stack);
+		}
 	}
 
-	public void checkBillRef(TileEntityBlockBills te, IWorld worldIn, PlayerEntity playerIn, Hand hand)
+	public void checkBillRef(BlockEntityBills te, Level level, Player playerIn, InteractionHand hand)
 	{
-		if(!worldIn.isRemote())
+		if(!level.isClientSide)
 		{
-			switch (playerIn.getHeldItem(hand).getTranslationKey()) {
-				case "item.economyinc.item_oneb":
-					te.setBillRef("item.economyinc.item_oneb");
-					te.markDirty();
+			int value = 0;
+			if(playerIn.getItemInHand(hand).getItem() instanceof IValue givenValue)
+			{			
+				value = givenValue.getValue();
+			}
+			
+			switch (value) {
+				case 1:
+					te.setBillValue(1);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_fiveb":
-					te.setBillRef("item.economyinc.item_fiveb");
-					te.markDirty();
+				case 5:
+					te.setBillValue(5);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_tenb":
-					te.setBillRef("item.economyinc.item_tenb");
-					te.markDirty();
+				case 10:
+					te.setBillValue(10);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_twentyb":
-					te.setBillRef("item.economyinc.item_twentyb");
-					te.markDirty();
+				case 20:
+					te.setBillValue(20);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_fiftybe":
-					te.setBillRef("item.economyinc.item_fiftybe");
-					te.markDirty();
+				case 50:
+					te.setBillValue(50);
 					break;
-				case "item.economyinc.item_hundreedb":
-					te.setBillRef("item.economyinc.item_hundreedb");
-					te.markDirty();
+				case 100:
+					te.setBillValue(100);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_twohundreedb":
-					te.setBillRef("item.economyinc.item_twohundreedb");
-					te.markDirty();
+				case 200:
+					te.setBillValue(200);
+					te.setChanged();
 					break;
-				case "item.economyinc.item_fivehundreedb":
-					te.setBillRef("item.economyinc.item_fivehundreedb");
-					te.markDirty();
+				case 500:
+					te.setBillValue(500);
+					te.setChanged();
 					break;
 				default:
-					te.setBillRef("item.economyinc.item_zerob");
-					te.markDirty();
+					te.setBillValue(0);
+					te.setChanged();
 					break;
 			}
 		}
 	}
-	
-	public void checkBillRefForDrop(TileEntityBlockBills te, World worldIn, BlockPos pos)
-	{
-		if(!worldIn.isRemote())
-		{
-			switch (te.getBillRef()) {
-				case "item.economyinc.item_oneb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_ONEB));
-					break;
-				case "item.economyinc.item_fiveb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEB));
-					break;
-				case "item.economyinc.item_tenb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TENB));
-					break;
-				case "item.economyinc.item_twentyb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWENTYB));
-					break;
-				case "item.economyinc.item_fiftybe":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIFTYB));
-					break;
-				case "item.economyinc.item_hundreedb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_HUNDREEDB));
-					break;
-				case "item.economyinc.item_twohundreedb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_TWOHUNDREEDB));
-					break;
-				case "item.economyinc.item_fivehundreedb":
-					item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(ItemsRegistery.ITEM_FIVEHUNDREEDB));
-					break;
-				default:
-					break;
-			}
-		}
-	}
+
 	//TILE ENTITY
 	
 	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-	     return tileentity == null ? false : tileentity.receiveClientEvent(id, param);	     
+	public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+		
+		 BlockEntity tileentity = level.getBlockEntity(pos);
+	     return tileentity == null ? false : tileentity.triggerEvent(id, param);    
 	}
 
-	
 	//RENDER
 	
-    
 	@Override
-	public BlockRenderType getRenderType(BlockState state)
+	public RenderShape getRenderShape(BlockState state) {
+		
+		return RenderShape.MODEL;
+	}
+
+	public VoxelShape getShapeFromCount(BlockEntityBills be)
 	{
-		return BlockRenderType.MODEL;
+		if(be != null)
+		{
+			int number = be.getNumbBills() / 8;
+			BOUDING_BOX = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D + number, 16.0D);
+		}
+		return BOUDING_BOX;
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return shapeMain;
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext ctx) {
+
+		if(getter.getBlockEntity(pos) instanceof BlockEntityBills be)
+			return getShapeFromCount(be);
+		return BOUDING_BOX;
 	}
-	
+
 	@Override
-	public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return shapeMain;
-	}
-	
-	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos,
-			ISelectionContext context) {
-		return shapeMain;
+	public VoxelShape getInteractionShape(BlockState state, BlockGetter getter, BlockPos pos) {
+		if(getter.getBlockEntity(pos) instanceof BlockEntityBills be)
+			return getShapeFromCount(be);
+		return BOUDING_BOX;
 	}
 }
 

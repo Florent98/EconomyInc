@@ -2,59 +2,52 @@
  *******************************************************************************/
 package fr.fifoube.main.commands;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
 import fr.fifoube.world.saveddata.ChunksWorldSavedData;
 import fr.fifoube.world.saveddata.PlotsChunkData;
 import fr.fifoube.world.saveddata.PlotsData;
 import fr.fifoube.world.saveddata.PlotsWorldSavedData;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.BlockPosArgument;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class CommandsPlots {
 
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 			
 			dispatcher.register(
-					LiteralArgumentBuilder.<CommandSource>literal("plot")
-					.requires(src -> src.hasPermissionLevel(3))
+					LiteralArgumentBuilder.<CommandSourceStack>literal("plot")
+					.requires(src -> src.hasPermission(3))
 					.then(
 							Commands.literal("create")
 							.then(
@@ -100,27 +93,27 @@ public class CommandsPlots {
 								.executes(ctx -> teleportToPlot(ctx.getSource(), null, StringArgumentType.getString(ctx, "name"), false))
 								.then(
 										Commands.argument("players", EntityArgument.players())
-										.executes(ctx -> teleportToPlot(ctx.getSource(), EntityArgument.getEntitiesAllowingNone(ctx, "players"), StringArgumentType.getString(ctx, "name"), true))
+										.executes(ctx -> teleportToPlot(ctx.getSource(), EntityArgument.getEntities(ctx, "players"), StringArgumentType.getString(ctx, "name"), true))
 								)
 							)
 					)
 			);
 	}
 	
-	private static int teleportToPlot(CommandSource src, Collection<? extends Entity> targets, String plotsName, boolean tpOther)
+	private static int teleportToPlot(CommandSourceStack src, Collection<? extends Entity> targets, String plotsName, boolean tpOther)
 	{
     	int indexToProceedBuy = -1;
-		ServerPlayerEntity player = null;
+		ServerPlayer player = null;
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 		} catch (CommandSyntaxException e) {e.printStackTrace();}
 		
 		if(player != null)
 		{
-			ServerPlayerEntity playerTarget = player;
-			ServerWorld worldIn = player.getServerWorld();
-			DimensionSavedDataManager storage = worldIn.getSavedData();
-			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+			ServerPlayer playerTarget = player;
+			ServerLevel worldIn = player.getLevel();
+			DimensionDataStorage storage = worldIn.getDataStorage();
+			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 			if(dataWorld != null)
 			{
 				for (int i = 0; i < dataWorld.getListContainer().size(); i++) 
@@ -135,48 +128,48 @@ public class CommandsPlots {
 				if(indexToProceedBuy != -1)
 				{
 					PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
-					Vector3d center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
+					Vec3 center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
 					if(!tpOther)
 					{
-						player.teleport(player.getServerWorld(), center.x, center.y, center.z, player.rotationYaw, player.rotationPitch);
-						src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
+						player.teleportTo(player.getLevel(), center.x, center.y, center.z, player.getYRot(), player.getXRot());
+						src.sendSuccess(new TranslatableComponent("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
 					}
 					else
 					{
 						targets.forEach(e -> {
-							if(e instanceof ServerPlayerEntity)
+							if(e instanceof ServerPlayer)
 							{
-								ServerPlayerEntity playerMP = (ServerPlayerEntity)e;
-								playerMP.teleport(playerTarget.getServerWorld(), center.x, center.y, center.z, playerMP.rotationYaw, playerMP.rotationPitch);
-								src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
+								ServerPlayer playerMP = (ServerPlayer)e;
+								playerMP.teleportTo(playerTarget.getLevel(), center.x, center.y, center.z, playerMP.getYRot(), playerMP.getXRot());
+								src.sendSuccess(new TranslatableComponent("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
 							}	
 						});
 					}
 				}
 				else
 				{
-					src.sendFeedback(new TranslationTextComponent("commands.plot.teleport.fail"), false);
+					src.sendFailure(new TranslatableComponent("commands.plot.teleport.fail"));
 				}
 			}
 		}
 		return 0;
 	}
 	
-	private static int assignPlotTo(CommandSource src, ServerPlayerEntity assignedPlayer, String plotsName) {
+	private static int assignPlotTo(CommandSourceStack src, ServerPlayer assignedPlayer, String plotsName) {
 		
     	boolean canProceedBuy = false;
     	int indexToProceedBuy = -1;
-		ServerPlayerEntity player = null;
+		ServerPlayer player = null;
 
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 		} catch (CommandSyntaxException e) {e.printStackTrace();}
 		
 		if(player != null)
 		{
-				ServerWorld worldIn = player.getServerWorld();
-				DimensionSavedDataManager storage = worldIn.getSavedData();
-				PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+				ServerLevel worldIn = player.getLevel();
+				DimensionDataStorage storage = worldIn.getDataStorage();
+				PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 				if(dataWorld != null)
 				{
 					for (int i = 0; i < dataWorld.getListContainer().size(); i++) 
@@ -193,7 +186,7 @@ public class CommandsPlots {
 							}
 							else
 							{
-								src.sendFeedback(new TranslationTextComponent("commands.plotbuy.alreadybought"), false);
+								src.sendFailure(new TranslatableComponent("commands.plotbuy.alreadybought"));
 							}
 						}
 					}
@@ -202,28 +195,28 @@ public class CommandsPlots {
 				{
 					PlotsData plotsData = dataWorld.getListContainer().get(indexToProceedBuy);
 					plotsData.bought = true;
-					plotsData.owner = assignedPlayer.getUniqueID().toString();		
-					dataWorld.markDirty();
+					plotsData.owner = assignedPlayer.getStringUUID();
+					dataWorld.setDirty();
 					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
 					saveAll(src, false);
-					src.sendFeedback(new TranslationTextComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
+					src.sendSuccess(new TranslatableComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
 				}
 		}
 		return 0;
 	}
 
-	public static int listPlot(CommandSource src)
+	public static int listPlot(CommandSourceStack src)
 	{
-    	ServerPlayerEntity player = null;
+    	ServerPlayer player = null;
     	
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 		} catch (CommandSyntaxException e) {e.printStackTrace();}
 		
 		if(player != null)
 		{
-			DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
-			PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+			DimensionDataStorage storage = player.getLevel().getDataStorage();
+			PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 			List<String> namePlot = new ArrayList<String>();
 			if(data != null)
 			{
@@ -246,7 +239,7 @@ public class CommandsPlots {
 					}
 					name += namePlot.get(i) + seperator; 
 				}
-				src.sendFeedback(new TranslationTextComponent(name), false);
+				src.sendSuccess(new TextComponent(name), false);
 			}
 		}
 		
@@ -254,13 +247,13 @@ public class CommandsPlots {
 	}
 
 	
-	public static int createPlot(CommandSource src, BlockPos from, BlockPos to, String name,double price)
+	public static int createPlot(CommandSourceStack src, BlockPos from, BlockPos to, String name, double price)
     {
     	boolean canProceed = true;
-    	ServerPlayerEntity player = null;
+    	ServerPlayer player = null;
     	
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 			} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 			}
@@ -270,9 +263,9 @@ public class CommandsPlots {
 		{
 					if(Math.abs(to.getX() - from.getX()) < 26 && Math.abs(to.getZ() - from.getZ()) < 26)
 					{
-						DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
-						ServerWorld worldIn = player.getServerWorld();
-						PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+						DimensionDataStorage storage = player.getLevel().getDataStorage();
+						ServerLevel worldIn = player.getLevel();
+						PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 						if(data != null)
 						{
 							for (int i = 0; i < data.getListContainer().size(); i++) 
@@ -282,44 +275,44 @@ public class CommandsPlots {
 								if(plotsData.getList().get(0).equals(name))
 								{
 									canProceed = false;
-									src.sendFeedback(new TranslationTextComponent("commands.plot.samename"), false);
+									src.sendFailure(new TranslatableComponent("commands.plot.samename"));
 								}
 							}
 						}
 						if(canProceed)
 						{
 							createData(src, worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
-							src.sendFeedback(new TranslationTextComponent("commands.plot.success"), false);
+							src.sendSuccess(new TranslatableComponent("commands.plot.success"), false);
 							saveAll(src, false);
 						}
 
 					}
 					else
 					{
-						src.sendFeedback(new TranslationTextComponent("commands.plot.sizeexceed"), false);
+						src.sendFailure(new TranslatableComponent("commands.plot.sizeexceed"));
 					}
 		}
 		else
 		{
-			src.sendFeedback(new TranslationTextComponent("commands.plot.noplayer"), false);
+			src.sendFailure(new TranslatableComponent("commands.plot.noplayer"));
 		}
 		return 0;
     }
 	
-	public static int removePlot(CommandSource src, String namePlot)
+	public static int removePlot(CommandSourceStack src, String namePlot)
     {
     	boolean canProceedRemove = false;
     	int indexToProceed = -1;
-    	ServerPlayerEntity player = null;
+    	ServerPlayer player = null;
     	
 		try {
-			player = src.asPlayer();
+			player = src.getPlayerOrException();
 			} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 			}
 		
-		DimensionSavedDataManager storage = player.getServerWorld().getSavedData();
-		PlotsWorldSavedData data = (PlotsWorldSavedData)storage.getOrCreate(PlotsWorldSavedData::new, ModEconomyInc.MOD_ID + "_PlotsData");
+		DimensionDataStorage storage = player.getLevel().getDataStorage();
+		PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
     	if(player != null)
 		if(data != null)
 		{
@@ -332,40 +325,40 @@ public class CommandsPlots {
 				{
 					indexToProceed = i;
 					canProceedRemove = true;
-					src.sendFeedback(new TranslationTextComponent("commands.plot.removed"), false);
+					src.sendSuccess(new TranslatableComponent("commands.plot.removed"), false);
 					saveAll(src, false);
 				}
 				else
 				{
-					src.sendFeedback(new TranslationTextComponent("commands.plot.nomatch"), false);
+					src.sendFailure(new TranslatableComponent("commands.plot.nomatch"));
 				}
 			}
 		}
 		if(canProceedRemove && indexToProceed != -1)
 		{
 			data.getListContainer().remove(indexToProceed);
-			data.markDirty();
+			data.setDirty();
 		}
 		return 0;
     }
 	
 	
-	private static void createData(CommandSource src, ServerWorld worldIn, String name, ServerPlayerEntity playerIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn) throws CommandException 
+	private static void createData(CommandSourceStack src, ServerLevel worldIn, String name, ServerPlayer playerIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn) 
 	{
 		/** WORLD/DIMENSION DATA SAVING **/
 		List<ChunkPos> listChunk = calculatingChunks(worldIn, xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos);
-		PlotsData plotsData = new PlotsData(name, playerIn.getUniqueID().toString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn, false);
+		PlotsData plotsData = new PlotsData(name, playerIn.getStringUUID(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn, false);
 		PlotsChunkData chunkData = new PlotsChunkData(listChunk);
-		PlotsWorldSavedData storagePlots = worldIn.getSavedData().getOrCreate(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
+		PlotsWorldSavedData storagePlots = worldIn.getDataStorage().computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 		storagePlots.getListContainer().add(plotsData);
-		storagePlots.markDirty();
-		ChunksWorldSavedData storageChunk = worldIn.getSavedData().getOrCreate(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
+		storagePlots.setDirty();
+		ChunksWorldSavedData storageChunk = worldIn.getDataStorage().computeIfAbsent(ChunksWorldSavedData::new, ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
 		storageChunk.getListContainer().add(chunkData);
-		storageChunk.markDirty();
+		storageChunk.setDirty();
 		createBorders(src, worldIn, name, playerIn.getDisplayName().getString(), xPosFirst, zPosFirst, xPosSecond, zPosSecond, yPos, priceIn);
 	}
 	
-	private static List<ChunkPos> calculatingChunks(World worldIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos) 
+	private static List<ChunkPos> calculatingChunks(Level worldIn, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos) 
 	{
 		List<ChunkPos> listChunk = new ArrayList<ChunkPos>();
 		int minusXToTake;
@@ -397,19 +390,19 @@ public class CommandsPlots {
 		{
 			for(int z = minusZToTake; z <= maxZToTake; z++)
 			{
-				Chunk chunkIn = worldIn.getChunk(x, z);
+				LevelChunk chunkIn = worldIn.getChunk(x, z);
 				listChunk.add(chunkIn.getPos());
 			}
 		}
 		return listChunk;
 	}
 	
-	private static void createBorders(CommandSource src, ServerWorld worldIn, String name, String senderName, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn)
+	private static void createBorders(CommandSourceStack src, ServerLevel worldIn, String name, String senderName, int xPosFirst, int zPosFirst, int xPosSecond, int zPosSecond, int yPos, double priceIn)
 	{
-		AxisAlignedBB area = new AxisAlignedBB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
-		AxisAlignedBB areaGrown = area.grow(1.0D, 0.0D, 1.0D);
-		Vector3d vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
-		BlockPos posSign = new BlockPos(vec.x, vec.y, vec.z);
+		AABB area = new AABB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
+		AABB areaGrown = area.inflate(1.0D, 0.0D, 1.0D);
+		Vec3 vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
+		BlockPos posSign = new BlockPos(vec);
 		
 		Block block = Blocks.SMOOTH_STONE_SLAB;
 		String rl = ConfigFile.plotBorderBlock; 
@@ -421,59 +414,63 @@ public class CommandsPlots {
 		else
 		{
 			block = Blocks.SMOOTH_STONE_SLAB;
-			src.sendFeedback(new TranslationTextComponent("commands.plot.wrongPlotBorder"), false);
+			src.sendFailure(new TranslatableComponent("commands.plot.wrongPlotBorder"));
 		}
 		
-		worldIn.setBlockState(posSign, Blocks.AIR.getDefaultState());
+		worldIn.setBlockAndUpdate(posSign, Blocks.AIR.defaultBlockState());
 		
-		Iterable<BlockPos> posToPlace = BlockPos.getAllInBoxMutable(new BlockPos(areaGrown.minX, yPos, areaGrown.minZ), new BlockPos(areaGrown.maxX, yPos, areaGrown.maxZ));
-		Iterable<BlockPos> posToRemove = BlockPos.getAllInBoxMutable(new BlockPos(area.minX, yPos, area.minZ), new BlockPos(area.maxX, yPos, area.maxZ));
+		Vec3 minGrow = new Vec3(areaGrown.minX, yPos, areaGrown.minZ);
+		Vec3 maxGrow = new Vec3(areaGrown.maxX, yPos, areaGrown.maxZ);
+		
+		Vec3 min = new Vec3(area.minX, yPos, area.minZ);
+		Vec3 max = new Vec3(area.maxX, yPos, area.maxZ);
+		
+		Iterable<BlockPos> posToPlace = BlockPos.betweenClosed(new BlockPos(minGrow), new BlockPos(maxGrow));
+		Iterable<BlockPos> posToRemove = BlockPos.betweenClosed(new BlockPos(min), new BlockPos(max));
 		for(BlockPos posNew : posToPlace)
 		{
-			worldIn.setBlockState(posNew, block.getDefaultState());
+			worldIn.setBlockAndUpdate(posNew, block.defaultBlockState());
 		}
 		for(BlockPos posNew : posToRemove)
 		{
-			worldIn.setBlockState(posNew, Blocks.AIR.getDefaultState());
+			worldIn.setBlockAndUpdate(posNew, Blocks.AIR.defaultBlockState());
 		}
+				
+		SignBlockEntity tileEntityIn = new SignBlockEntity(posSign, Blocks.OAK_SIGN.defaultBlockState());
+		tileEntityIn.clearRemoved();
 		
-		worldIn.setBlockState(posSign, Blocks.OAK_SIGN.getDefaultState(), 2);
 		
-		TileEntity tileEntityIn = new SignTileEntity();
-		tileEntityIn.validate();
-		
-		worldIn.setTileEntity(posSign, tileEntityIn);
-		
-		SignTileEntity signTe = (SignTileEntity)worldIn.getTileEntity(posSign);
-		
-		if(signTe != null)
+		worldIn.setBlock(posSign, Blocks.OAK_SIGN.defaultBlockState(), 3);
+		worldIn.setBlockEntity(tileEntityIn);
+				
+		if(tileEntityIn != null)
 		{
-			signTe.setText(0 , new StringTextComponent("[" + name + "]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLUE));
-			signTe.setText(1 , new StringTextComponent(senderName).mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
-			signTe.setText(2 , new StringTextComponent(String.valueOf(priceIn) + "$").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.BLACK));
-			signTe.setText(3 , new StringTextComponent("[BUY]").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.GREEN));
-			signTe.markDirty();
+			tileEntityIn.setMessage(0 , new TextComponent("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE));
+			tileEntityIn.setMessage(1 , new TextComponent(senderName).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+			tileEntityIn.setMessage(2 , new TextComponent(String.valueOf(priceIn) + "$").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+			tileEntityIn.setMessage(3 , new TextComponent("[BUY]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GREEN));
+			tileEntityIn.setChanged();
 		}
 		
 	}
 	
-	public static Vector3d getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
+	public static Vec3 getCenter(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
 	{
-		return new Vector3d(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
+		return new Vec3(minX + (maxX - minX) * 0.5D, minY + (maxY - minY) * 0.5D, minZ + (maxZ - minZ) * 0.5D);
 	}
 	
-	 private static int saveAll(CommandSource source, boolean flush) {
+	 private static int saveAll(CommandSourceStack source, boolean flush) {
 	      MinecraftServer minecraftserver = source.getServer();
-	      minecraftserver.getPlayerList().saveAllPlayerData();
-	      boolean flag = minecraftserver.save(true, flush, true);
+	      minecraftserver.getPlayerList().saveAll();
+	      boolean flag = minecraftserver.saveAllChunks(true, flush, true);
 	      if(flag)
 	      {
-	    	  source.sendFeedback(new TranslationTextComponent("commands.plot.saved"), false);
+	    	  source.sendSuccess(new TranslatableComponent("commands.plot.saved"), false);
 	    	  return 1;
 	      }
 	      else
 	      {
-	    	  source.sendFeedback(new TranslationTextComponent("commands.plot.errorsaved"), false);
+	    	  source.sendFailure(new TranslatableComponent("commands.plot.errorsaved"));
 	    	  return 0;
 	      }
 	   }

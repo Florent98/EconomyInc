@@ -4,111 +4,108 @@ package fr.fifoube.blocks;
 
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemCreditCard;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
-public class BlockATM extends Block implements INamedContainerProvider {
 
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
-	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.atm");
+public class BlockATM extends Block {
+
+	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	private static final TranslatableComponent NAME = new TranslatableComponent("container.atm");
 
 	public BlockATM(Properties properties) {
 		super(properties);
-	    this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
+	      this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 
 	}
 	
+	
 	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 5;
+	public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+		
+		return 10;
 	}
 	
-	
-	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
-		if(worldIn.isRemote)
-		{
-			for(int i = 0; i <= player.inventory.getSizeInventory(); i++)
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result)
+    {
+			for(int i = 0; i <= player.getInventory().getContainerSize(); i++)
 			{
-				if(player.inventory.getStackInSlot(i) != null)
+				if(player.getInventory().getItem(i) != null)
 				{
-					if(player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard)		
+					if(player.getInventory().getItem(i).getItem() instanceof ItemCreditCard)		
 					{
-						ItemStack stackIn = player.inventory.getStackInSlot(i);
+						ItemStack stackIn = player.getInventory().getItem(i);
 						if(stackIn.hasTag() && stackIn.getTag().getBoolean("Owned"))
 						{
-							ClientGuiScreen.openGui(0, null);											
-							return ActionResultType.SUCCESS;
+					    	if(level.isClientSide)
+							{
+					    		ClientGuiScreen.openGui(0, null);		
+							}
+							return InteractionResult.SUCCESS;
 						}
 					}
 				}
 			}
-		}
-		return ActionResultType.FAIL;
-	}
+        return InteractionResult.CONSUME;
+    }
+    
+    
+    
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext placeContext) {
+    	
+    	return this.defaultBlockState().setValue(FACING,placeContext.getHorizontalDirection().getOpposite());
+    }
+    
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState state2, boolean isMoving) {
+	   	 this.setDefaultFacing(level, pos, state);	 
+    }
 	
-	
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-	}
-	
-	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-	   	 this.setDefaultFacing(worldIn, pos, state);	 
-	}
-	
-	
-	 private void setDefaultFacing(World worldIn, BlockPos pos, BlockState state)
+	 private void setDefaultFacing(Level level, BlockPos pos, BlockState state)
 	    {
-	        if (!worldIn.isRemote)
+	        if (!level.isClientSide)
 	        {
-	            BlockState blockstate = worldIn.getBlockState(pos.north());
-	            BlockState blockstate1 = worldIn.getBlockState(pos.south());
-	            BlockState blockstate2 = worldIn.getBlockState(pos.west());
-	            BlockState blockstate3 = worldIn.getBlockState(pos.east());
-	            Direction dir = (Direction)state.get(FACING);
+	            BlockState blockstate = level.getBlockState(pos.north());
+	            BlockState blockstate1 = level.getBlockState(pos.south());
+	            BlockState blockstate2 = level.getBlockState(pos.west());
+	            BlockState blockstate3 = level.getBlockState(pos.east());
+	            Direction dir = (Direction)state.getValue(FACING);
 
-	            if (dir == Direction.NORTH && blockstate.isCollisionShapeLargerThanFullBlock() && !blockstate1.isCollisionShapeLargerThanFullBlock())
+	            if (dir == Direction.NORTH && blockstate.hasLargeCollisionShape() && !blockstate1.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.SOUTH;
 	            }
-	            else if (dir == Direction.SOUTH && blockstate1.isCollisionShapeLargerThanFullBlock() && !blockstate.isCollisionShapeLargerThanFullBlock())
+	            else if (dir == Direction.SOUTH && blockstate1.hasLargeCollisionShape() && !blockstate.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.NORTH;
 	            }
-	            else if (dir == Direction.WEST && blockstate2.isCollisionShapeLargerThanFullBlock() && !blockstate3.isCollisionShapeLargerThanFullBlock())
+	            else if (dir == Direction.WEST && blockstate2.hasLargeCollisionShape() && !blockstate3.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.EAST;
 	            }
-	            else if (dir == Direction.EAST && blockstate3.isCollisionShapeLargerThanFullBlock() && !blockstate2.isCollisionShapeLargerThanFullBlock())
+	            else if (dir == Direction.EAST && blockstate3.hasLargeCollisionShape() && !blockstate2.hasLargeCollisionShape())
 	            {
 	            	dir = Direction.WEST;
 	            }
 
-	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
+	            level.setBlock(pos, state.setValue(FACING, dir), 2);
 	        }
 	    }
 	
@@ -117,14 +114,14 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	*/
 	public BlockState getStateFromMeta(int meta)
 	{
-	    Direction dir = Direction.byIndex(meta);
+	    Direction dir = Direction.from2DDataValue(meta);
 	 
 	    if (dir.getAxis() == Direction.Axis.Y)
 	    {
 	    	dir = Direction.NORTH;
 	    }
 	 
-	    return this.getDefaultState().with(FACING, dir);
+	    return this.defaultBlockState().setValue(FACING, dir);
 	}
 	 
 	/**
@@ -132,31 +129,19 @@ public class BlockATM extends Block implements INamedContainerProvider {
 	*/
 	public int getMetaFromState(BlockState state)
 	{
-	    return ((Direction)state.get(FACING)).getIndex();
+	    return ((Direction)state.getValue(FACING)).get3DDataValue();
 	}
 	
+
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+
 		builder.add(FACING);
 	}
-	
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return this.NAME;
+	public MutableComponent getName() {
+		return NAME;
 	}
-
-	@Override
-	public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
-		return new Container(ContainerType.FURNACE /** TO CHANGE **/, id) {
-			
-			@Override
-			public boolean canInteractWith(PlayerEntity playerIn) {
-				return true;
-			}
-			
-		};
-	}
-
 
 }

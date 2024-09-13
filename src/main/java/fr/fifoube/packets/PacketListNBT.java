@@ -2,15 +2,15 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
+import fr.fifoube.blocks.blockentity.BlockEntityVault;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault;
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 public class PacketListNBT {
 
@@ -39,27 +39,27 @@ public class PacketListNBT {
 		this.index = index;
 	}
 	
-	public static PacketListNBT decode(PacketBuffer buf) 
+	public static PacketListNBT decode(FriendlyByteBuf buf) 
 	{
-		String names = buf.readString(32767);
+		String names = buf.readUtf(32767);
 		int x = buf.readInt();
 		int y = buf.readInt();
 		int z = buf.readInt();
 		boolean isBlock2x2 = buf.readBoolean();
-		String addrem = buf.readString(32767);
+		String addrem = buf.readUtf(32767);
 		int index = buf.readInt();
 		return new PacketListNBT(names, x, y, z, isBlock2x2, addrem, index);
 	}
 
 
-	public static void encode(PacketListNBT packet, PacketBuffer buf) 
+	public static void encode(PacketListNBT packet, FriendlyByteBuf buf) 
 	{
-		buf.writeString(packet.names);
+		buf.writeUtf(packet.names);
 		buf.writeInt(packet.x);
 		buf.writeInt(packet.y);
 		buf.writeInt(packet.z);
 		buf.writeBoolean(packet.isBlock2x2);
-		buf.writeString(packet.addrem);
+		buf.writeUtf(packet.addrem);
 		buf.writeInt(packet.index);
 	}
 	
@@ -69,27 +69,27 @@ public class PacketListNBT {
 
 		ctx.get().enqueueWork(() -> {
 			
-			PlayerEntity player = ctx.get().getSender(); // GET PLAYER
-			World worldIn = player.world; // GET WORLD
+			Player player = ctx.get().getSender(); // GET PLAYER
+			Level worldIn = player.level; // GET WORLD
 				if(packet.addrem.equals("add"))
 				{
 					if(packet.isBlock2x2)
 					{
-						TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
+						BlockEntityVault2by2 te = (BlockEntityVault2by2)worldIn.getBlockEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
 							te.addAllowedPlayers(packet.names);
 							te.addToMax();
-							te.markDirty();
+							te.setChanged();
 							
 						}
 					}
 					else
 					{
-						TileEntityBlockVault te = (TileEntityBlockVault)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
+						BlockEntityVault te = (BlockEntityVault)worldIn.getBlockEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
-							te.markDirty();
+							te.setChanged();
 						}
 					}
 				}
@@ -97,20 +97,20 @@ public class PacketListNBT {
 				{
 					if(packet.isBlock2x2)
 					{
-						TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
+						BlockEntityVault2by2 te = (BlockEntityVault2by2)worldIn.getBlockEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
 							te.getAllowedPlayers().remove(packet.index);
 							te.removeToMax();
-							te.markDirty();
+							te.setChanged();
 						}
 					}
 					else
 					{
-						TileEntityBlockVault te = (TileEntityBlockVault)worldIn.getTileEntity(new BlockPos(packet.x, packet.y, packet.z));
+						BlockEntityVault te = (BlockEntityVault)worldIn.getBlockEntity(new BlockPos(packet.x, packet.y, packet.z));
 						if(te != null)
 						{
-							te.markDirty();
+							te.setChanged();
 						}
 					}	
 				}		

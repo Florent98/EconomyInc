@@ -3,31 +3,26 @@
 package fr.fifoube.gui;
 
 
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import fr.fifoube.gui.container.ContainerVault2by2;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import fr.fifoube.gui.container.MenuVault2by2;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
-public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
+public class GuiVault2by2 extends AbstractContainerScreen<MenuVault2by2>
 {
-
-	protected TileEntityBlockVault2by2 tile_getter;
-	protected PlayerInventory player_inventory;
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/container/gui_vault2by2.png");
+	protected BlockEntityVault2by2 tile_getter;
+	protected Inventory player_inventory;
 	protected int xSize = 176;
 	protected int ySize = 222;
 	protected int guiLeft;
@@ -35,22 +30,26 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 	private Button settings;
 
 	
-	public GuiVault2by2(ContainerVault2by2 container, PlayerInventory playerInventory, ITextComponent name) 
+	public GuiVault2by2(MenuVault2by2 container, Inventory playerInventory, Component name) 
 	{
 		super(container, playerInventory, name);
-		this.tile_getter = getContainer().getTile();
+		this.tile_getter = container.getTile();
 		this.player_inventory = playerInventory;	
+	    this.inventoryLabelX = 8;
+	    this.inventoryLabelY = this.ySize - 122;
+	    this.titleLabelX = 8;
+	    this.titleLabelY = -22;
 	}
 	
 	@Override
 	protected void init() {
 		super.init();
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 			int i = (this.width - this.xSize) / 2;
 			int j = (this.height - this.ySize) / 2;
-			if(tile_getter.getOwner().equals(this.minecraft.player.getUniqueID()) && !Minecraft.getInstance().isSingleplayer())
+			if(tile_getter.getOwner().equals(this.minecraft.player.getUUID()) && !Minecraft.getInstance().hasSingleplayerServer())
 	        {
-	        	this.settings = this.addButton(new Button(i + 161, j, 15, 15, new StringTextComponent("⚙").mergeStyle(TextFormatting.BOLD).mergeStyle(TextFormatting.WHITE),(press) -> actionPerformed(0)));
+	        	this.settings = this.addRenderableWidget(new Button(i + 175, j + 5, 20, 20, new TextComponent("⚙").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE),(press) -> actionPerformed(0)));
 	        }
 	}
 	
@@ -64,31 +63,26 @@ public class GuiVault2by2 extends ContainerScreen<ContainerVault2by2>
 			break;
 		}
 	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) 
-	{
-		this.font.drawString(matrixStack, I18n.format("block.economyinc.block_vault"), 8.0F, -22, 4210752);
-	    this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 122), 4210752);		
-	}
-				
-	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) 
-	{
-		this.renderBackground(matrixStack);
-	    super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
-	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) 
-	{
-	       GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); 
-	       this.minecraft.getTextureManager().bindTexture(background); 
-	       int k = (this.width - this.xSize) / 2; 
-	       int l = (this.height - this.ySize) / 2;
-	       this.blit(matrixStack, k, l, 0, 0, this.xSize, this.ySize); 
+	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+		
+		this.renderBackground(stack);
+	    super.render(stack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(stack, mouseX, mouseY);
+    }
+
+	@Override
+	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+		 
+	    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+	    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+	    RenderSystem.setShaderTexture(0, background);
+	    int k = (this.width - this.xSize) / 2; 
+	    int l = (this.height - this.ySize) / 2;
+	    this.blit(stack, k, l, 0, 0, this.xSize, this.ySize); 		
 	}
+
 	
 	
 }

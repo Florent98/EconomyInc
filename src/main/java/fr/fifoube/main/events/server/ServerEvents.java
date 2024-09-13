@@ -2,45 +2,51 @@
  *******************************************************************************/
 package fr.fifoube.main.events.server;
 
+import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.main.capabilities.CapabilityMoney;
+import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.world.saveddata.ChunksWorldSavedData;
+import fr.fifoube.world.saveddata.PlotsChunkData;
+import fr.fifoube.world.saveddata.PlotsData;
+import fr.fifoube.world.saveddata.PlotsWorldSavedData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.world.saveddata.ChunksWorldSavedData;
-import fr.fifoube.world.saveddata.PlotsChunkData;
-import fr.fifoube.world.saveddata.PlotsData;
-import fr.fifoube.world.saveddata.PlotsWorldSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-
-@Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(value = Dist.DEDICATED_SERVER, modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ServerEvents {
+
+
 	
 	@SubscribeEvent
-    public void onPlacedBlock(EntityPlaceEvent event)
+    public void onPlacedBlock(BlockEvent.EntityPlaceEvent event)
     {
-		ServerPlayerEntity player = null;
-		if(event.getEntity() instanceof ServerPlayerEntity)
+		ServerPlayer player = null;
+		if(event.getEntity() instanceof ServerPlayer)
 		{
-			player = (ServerPlayerEntity) event.getEntity();
+			player = (ServerPlayer) event.getEntity();
 		}
 		if(player != null)
 		{
-	    	ServerWorld worldIn = player.getServerWorld();
+	    	ServerLevel worldIn = player.getLevel();
 	    	List<ChunkPos> listPos = new ArrayList<ChunkPos>();
-	    	DimensionSavedDataManager storage = worldIn.getSavedData();
+	    	DimensionDataStorage storage = worldIn.getDataStorage();
 	    	ChunksWorldSavedData data = (ChunksWorldSavedData)storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
 	    	if(data != null)
 	    	{
@@ -61,8 +67,8 @@ public class ServerEvents {
 	    	{
 	    		if(new ChunkPos(event.getPos()).equals(pos))
 	    		{
-	    			Vector3d vec = new Vector3d(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
-	    	    	List<AxisAlignedBB> listAABB = new ArrayList<AxisAlignedBB>();
+	    			Vec3 vec = new Vec3(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
+	    	    	List<AABB> listAABB = new ArrayList<AABB>();
 	    	    	PlotsWorldSavedData plotsDataWSD = (PlotsWorldSavedData)storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 	    	    	UUID uuidOwner = null;
 	    	    	if(plotsDataWSD != null)
@@ -78,18 +84,18 @@ public class ServerEvents {
 								int zPosFirst = Integer.valueOf(plotsData.getList().get(3));
 								int xPosSecond = Integer.valueOf(plotsData.getList().get(4));
 								int zPosSecond = Integer.valueOf(plotsData.getList().get(5));
-								listAABB.add(new AxisAlignedBB(xPosFirst, 0, zPosFirst, xPosSecond, 255, zPosSecond).grow(2, 1, 2));
+								listAABB.add(new AABB(xPosFirst, 0, zPosFirst, xPosSecond, 255, zPosSecond).expandTowards(2, 1, 2));
 							}
 						}
 	    	    	}
-	    	    	for(AxisAlignedBB checker : listAABB)
+	    	    	for(AABB checker : listAABB)
 	    	    	{
 	    	    		if(checker.contains(vec))
 	    	    		{
 	    	    			if(uuidOwner != null)
-	    	    			if(!player.getUniqueID().equals(uuidOwner))
+	    	    			if(!player.getUUID().equals(uuidOwner))
 	    	    			{
-	    	    				if(player.hasPermissionLevel(4))
+	    	    				if(player.hasPermissions(4))
 	    	    				{
 	    	    					event.setCanceled(false);
 	    	    				}
@@ -106,18 +112,18 @@ public class ServerEvents {
     }
     
     @SubscribeEvent
-    public void onBreakBlock(BreakEvent event)
+    public void onBreakBlock(BlockEvent.BreakEvent event)
     { 	
-    	ServerPlayerEntity player = null;
-		if(event.getPlayer() instanceof ServerPlayerEntity)
+    	ServerPlayer player = null;
+		if(event.getPlayer() instanceof ServerPlayer)
 		{
-			player = (ServerPlayerEntity) event.getPlayer();
+			player = (ServerPlayer) event.getPlayer();
 		}
 		if(player != null)
 		{
-	    	ServerWorld worldIn = player.getServerWorld();
+	    	ServerLevel worldIn = player.getLevel();
 	    	List<ChunkPos> listPos = new ArrayList<ChunkPos>();
-	    	DimensionSavedDataManager storage = worldIn.getSavedData();
+	    	DimensionDataStorage storage = worldIn.getDataStorage();
 	    	ChunksWorldSavedData data = (ChunksWorldSavedData)storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
 	    	if(data != null)
 	    	{
@@ -138,8 +144,8 @@ public class ServerEvents {
 	    	{
 	    		if(new ChunkPos(event.getPos()).equals(pos))
 	    		{
-	    			Vector3d vec = new Vector3d(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
-	    	    	List<AxisAlignedBB> listAABB = new ArrayList<AxisAlignedBB>();
+	    			Vec3 vec = new Vec3(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
+	    	    	List<AABB> listAABB = new ArrayList<AABB>();
 	    	    	PlotsWorldSavedData plotsDataWSD = (PlotsWorldSavedData)storage.get(PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 	    	    	UUID uuidOwner = null;
 	    	    	if(plotsDataWSD != null)
@@ -155,18 +161,18 @@ public class ServerEvents {
 								int zPosFirst = Integer.valueOf(plotsData.getList().get(3));
 								int xPosSecond = Integer.valueOf(plotsData.getList().get(4));
 								int zPosSecond = Integer.valueOf(plotsData.getList().get(5));
-								listAABB.add(new AxisAlignedBB(xPosFirst, 0, zPosFirst, xPosSecond, 255, zPosSecond).grow(2, 1, 2));
+								listAABB.add(new AABB(xPosFirst, 0, zPosFirst, xPosSecond, 255, zPosSecond).expandTowards(2, 1, 2));
 							}
 						}
 	    	    	}
-	    	    	for(AxisAlignedBB checker : listAABB)
+	    	    	for(AABB checker : listAABB)
 	    	    	{
 	    	    		if(checker.contains(vec))
 	    	    		{
 	    	    			if(uuidOwner != null)
-	    	    			if(!event.getPlayer().getUniqueID().equals(uuidOwner))
+	    	    			if(!event.getPlayer().getUUID().equals(uuidOwner))
 	    	    			{
-	    	    				if(player.hasPermissionLevel(4))
+	    	    				if(player.hasPermissions(4))
 	    	    				{
 	    	    					event.setCanceled(false);
 	    	    				}
@@ -182,6 +188,40 @@ public class ServerEvents {
 	    	}
 	    }
     }
-    
 
+	@SubscribeEvent
+	public void onLivingDeath(LivingDeathEvent event) {
+
+		if(ConfigFile.doSpecificMobsGiveMoney) {
+			LivingEntity entity = event.getEntityLiving();
+			if (event.getSource().getEntity() instanceof Player player) {
+
+				double money;
+				if (entity instanceof Zombie) {
+					money = ConfigFile.zombieMoney;
+				} else if (entity instanceof Skeleton) {
+					money = ConfigFile.skeletonMoney;
+				} else if (entity instanceof Creeper) {
+					money = ConfigFile.creeperMoney;
+				} else if (entity instanceof Spider) {
+					money = ConfigFile.spiderMoney;
+				} else if (entity instanceof Witch) {
+					money = ConfigFile.witchMoney;
+				} else { money = 0; }
+				player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
+					data.addMoney(money);
+				});
+			}
+		}
+		else if(ConfigFile.doMobsGiveMoney)
+		{
+			LivingEntity entity = event.getEntityLiving();
+			if (event.getSource().getEntity() instanceof Player player) {
+				if (entity instanceof Monster)
+					player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
+						data.addMoney(ConfigFile.mobsMoney);
+					});
+			}
+		}
+	}
 }

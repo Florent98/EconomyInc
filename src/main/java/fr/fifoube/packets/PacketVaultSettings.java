@@ -2,14 +2,14 @@
 
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
+import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockVault2by2;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 public class PacketVaultSettings {
 
@@ -31,20 +31,20 @@ public class PacketVaultSettings {
 		this.id = id;
 	}	
 	
-	public static PacketVaultSettings decode(PacketBuffer buf) 
+	public static PacketVaultSettings decode(FriendlyByteBuf buf) 
 	{
 		BlockPos pos = buf.readBlockPos();
-		String playerToAdd = buf.readString(32767);
+		String playerToAdd = buf.readUtf(32767);
 		boolean remove = buf.readBoolean();
 		int id = buf.readInt();
 		return new PacketVaultSettings(pos, playerToAdd, remove, id);
 	}
 
 
-	public static void encode(PacketVaultSettings packet, PacketBuffer buf) 
+	public static void encode(PacketVaultSettings packet, FriendlyByteBuf buf) 
 	{
 		buf.writeBlockPos(packet.pos);
-		buf.writeString(packet.playerToAdd);
+		buf.writeUtf(packet.playerToAdd);
 		buf.writeBoolean(packet.remove);
 		buf.writeInt(packet.id);
 	}
@@ -52,22 +52,22 @@ public class PacketVaultSettings {
 	public static void handle(PacketVaultSettings packet, Supplier<NetworkEvent.Context> ctx)
 	{
 		ctx.get().enqueueWork(() -> {
-			PlayerEntity player = ctx.get().getSender(); // GET PLAYER
-			TileEntity tile = player.world.getTileEntity(packet.pos);
-			if(tile instanceof TileEntityBlockVault2by2)
+			Player player = ctx.get().getSender(); // GET PLAYER
+			BlockEntity tile = player.level.getBlockEntity(packet.pos);
+			if(tile instanceof BlockEntityVault2by2)
 			{
-				TileEntityBlockVault2by2 te = (TileEntityBlockVault2by2)tile;
+				BlockEntityVault2by2 te = (BlockEntityVault2by2)tile;
 				if(!packet.remove)
 				{
 					te.addAllowedPlayers(packet.playerToAdd);
 					te.addToMax();
-					te.markDirty();			
+					te.setChanged();			
 				}
 				else
 				{
 					te.getAllowedPlayers().remove(packet.id);
 					te.removeToMax();
-					te.markDirty();
+					te.setChanged();
 				}
 			}
 		});

@@ -2,17 +2,16 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
-
-import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.capabilities.IMoney;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 public class PacketMoneyData {
 
@@ -28,12 +27,12 @@ public class PacketMoneyData {
 		this.money = money;
 	}
     
-    public static void encode(PacketMoneyData pck, PacketBuffer buf)
+    public static void encode(PacketMoneyData pck, FriendlyByteBuf buf)
     {
         buf.writeDouble(pck.money);
     }
  
-    public static PacketMoneyData decode(PacketBuffer buf)
+    public static PacketMoneyData decode(FriendlyByteBuf buf)
     {
         return new PacketMoneyData(buf.readDouble());
     }
@@ -52,6 +51,6 @@ public class PacketMoneyData {
                 .ifPresent(capa -> {
                 	capa.setMoney(pck.money);
                 }
-                );
+        );
     }
 }

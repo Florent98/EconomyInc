@@ -2,149 +2,152 @@
  *******************************************************************************/
 package fr.fifoube.blocks;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockChanger;
+
+import fr.fifoube.blocks.blockentity.BlockEntityChanger;
+import fr.fifoube.blocks.blockentity.BlockEntityTypeRegistery;
 import fr.fifoube.items.ItemsRegistery;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
-public class BlockChanger extends ContainerBlock {
+public class BlockChanger extends Block implements EntityBlock {
 
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
-	private static final TranslationTextComponent NAME = new TranslationTextComponent("container.changer");
+	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public BlockChanger(Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
 	}
-	
+
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityBlockChanger();
-	}
-	
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-	
-	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand handIn, BlockRayTraceResult hit) {
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		
-		boolean canOpen = true;
-		if(!worldIn.isRemote)
+		return BlockEntityTypeRegistery.TILE_CHANGER.get().create(pos, state);
+	}
+			
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		
+		boolean canOpen = false;
+		if(!level.isClientSide)
 		{
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if(tileentity instanceof TileEntityBlockChanger)
+			BlockEntity tileentity = level.getBlockEntity(pos);
+			if(tileentity instanceof BlockEntityChanger)
 			{
-				TileEntityBlockChanger te = (TileEntityBlockChanger)tileentity;
+				BlockEntityChanger te = (BlockEntityChanger)tileentity;
 				if(te != null)
 				{
-					if(te.getNumbUse() >= 1)
+					if(te.getNumbUse() < 1)
 					{
-						canOpen = false;
-				
-					}
-					if(canOpen)
-					{
-						NetworkHooks.openGui((ServerPlayerEntity)playerIn, (INamedContainerProvider)te, buf -> buf.writeBlockPos(pos));
-						te.setNumbUse(1);
-						te.setEntityPlayer(playerIn);
-						te.markDirty();
-						return ActionResultType.SUCCESS;	
-
-					}
-					else
-					{
-						playerIn.sendStatusMessage(new TranslationTextComponent("title.alreadyUsed"), true);
-						return ActionResultType.FAIL;
+						canOpen = true;
 					}
 				}
+				openMenuOrThrowError((ServerPlayer)player, te, pos, canOpen, state, level);
 			}
+			
 		}
-         return ActionResultType.FAIL;
+        return InteractionResult.CONSUME;
+	}
+	
+	public InteractionResult openMenuOrThrowError(ServerPlayer player, BlockEntityChanger te, BlockPos pos, boolean canOpen, BlockState state, Level level)
+	{
+		if(canOpen)
+		{
+            NetworkHooks.openGui(player, te, pos);
+			te.setNumbUse(1);
+			te.setEntityPlayer(player);
+			te.setChanged();
+			return InteractionResult.SUCCESS;
+		}
+		else
+		{
+			player.sendMessage(new TranslatableComponent("title.alreadyUsed"), player.getUUID());
+		}
+		return InteractionResult.CONSUME;
 	}
 	
 	@Override
-	public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+	public void attack(BlockState state, Level level, BlockPos pos, Player player) {
 		
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if(tileentity instanceof TileEntityBlockChanger)
+		BlockEntity tileentity = level.getBlockEntity(pos);
+		if(tileentity instanceof BlockEntityChanger)
 		{
-			TileEntityBlockChanger te = (TileEntityBlockChanger)tileentity;
-			ItemStack stack = player.getHeldItemMainhand();
-				
+			BlockEntityChanger te = (BlockEntityChanger)tileentity;				
 				if(te != null)
 				{
-					if(stack.isItemEqual(new ItemStack(ItemsRegistery.ITEM_REMOVER)))
+					if(player.getMainHandItem().is(ItemsRegistery.WRENCH.get()))
 					{
 						if(te.getNumbUse() < 1)
 						{
-							worldIn.destroyBlock(pos, true);
-							worldIn.removeTileEntity(pos);
+							level.destroyBlock(pos, true);
+							level.removeBlockEntity(pos);
 							
 							//DROPPING ITEMS
-							ItemEntity itemBase = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_CHANGER));
-							worldIn.addEntity(itemBase);
-							for(int i=0; i < te.getHandler().getSlots(); i++)
+							ItemEntity itemBase = new ItemEntity(level, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(BlocksRegistry.BLOCK_CHANGER.get()));
+							level.addFreshEntity(itemBase);
+							for(int i=0; i < te.getInventory().getSlots(); i++)
 							{
-								Item toDrop = te.getStackInSlot(i).getItem();
-								if(toDrop != null && toDrop != Items.AIR)
+								ItemStack toDrop = te.getInventory().getStackInSlot(i);
+								if(toDrop != null && toDrop != ItemStack.EMPTY)
 								{
-									ItemEntity item = new ItemEntity(worldIn, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, new ItemStack(toDrop));
+									ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY()+0.5, pos.getZ() +0.5, toDrop);
 									
 									float multiplier = 0.1f;
-									float motionX = worldIn.rand.nextFloat() - 0.5F;
-									float motionY = worldIn.rand.nextFloat() - 0.5F;
-									float motionZ = worldIn.rand.nextFloat() - 0.5F;
+									float motionX = level.random.nextFloat() - 0.5F;
+									float motionY = level.random.nextFloat() - 0.5F;
+									float motionZ = level.random.nextFloat() - 0.5F;
 									
-									item.lastTickPosX = motionX * multiplier;
-									item.lastTickPosY = motionY * multiplier;
-									item.lastTickPosZ = motionZ * multiplier;
+									item.xOld = motionX * multiplier;
+									item.yOld = motionY * multiplier;
+									item.zOld = motionZ * multiplier;
 									
-									worldIn.addEntity(item);
+									level.addFreshEntity(item);
 								}
 							}
 						}
 					}
 				}
 		}
+		
 	}
-
-	
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    	worldIn.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		
+		return level.isClientSide() ? null : create(type, BlockEntityTypeRegistery.TILE_CHANGER.get(), BlockEntityChanger::serverTicker);
 	}
+	
+    @SuppressWarnings("unchecked")
+	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> create(BlockEntityType<A> type, BlockEntityType<E> typeExpec, BlockEntityTicker<? super E> ticker)
+    {
+        return typeExpec == type ? (BlockEntityTicker<A>) ticker : null;
+    }
 
 	@Override
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		super.setPlacedBy(level, pos, state, placer, stack);
+    	level.setBlock(pos, state.setValue(FACING, placer.getDirection().getOpposite()), 2);
+	}
+	
+
+	/*@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
 	   	 this.setDefaultFacing(worldIn, pos, state);	 
 	}
@@ -177,32 +180,36 @@ public class BlockChanger extends ContainerBlock {
 	            }
 	            worldIn.setBlockState(pos, state.with(FACING, dir), 2);
 	        }
-	    }
+	    }*/
 	
-	 	@Override
-		public BlockState getStateForPlacement(BlockItemUseContext context) {
-			return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		@Override
+		public BlockState getStateForPlacement(BlockPlaceContext context) {
+
+			return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 		}
 		
 		@Override
 		public BlockState rotate(BlockState state, Rotation rot) {
-			return state.with(FACING, rot.rotate((Direction)state.get(FACING)));
-		}
-		@Override
-		public BlockState mirror(BlockState state, Mirror mirrorIn) {
-			return state.rotate(mirrorIn.toRotation((Direction)state.get(FACING)));
+			
+			return state.setValue(FACING, rot.rotate((Direction)state.getValue(FACING)));
 		}
 		
+		@SuppressWarnings("deprecation")
 		@Override
-		protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		public BlockState mirror(BlockState state, Mirror mirror) {
+			return state.rotate(mirror.getRotation((Direction)state.getValue(FACING)));
+		}
+			
+		@Override
+		protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 			builder.add(FACING);
 		}
 	 
+
 		@Override
-		public BlockRenderType getRenderType(BlockState state)
-		{
-			return BlockRenderType.MODEL;
+		public RenderShape getRenderShape(BlockState state) {
+			
+			return RenderShape.MODEL;
 		}
-	
-		
+
 }

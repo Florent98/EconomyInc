@@ -1,10 +1,11 @@
 package fr.fifoube.stats;
 
 import fr.fifoube.main.ModEconomyInc;
-import net.minecraft.stats.IStatFormatter;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ResourceLocation;import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,14 +17,14 @@ public class StatsRegistry {
 	 public static ResourceLocation CHANGED_GOLD_TO_MONEY;
 	
 	 @SubscribeEvent
-	 public static void registerAll(RegistryEvent.Register<StatType<?>> event) 
+	 public static void registerAll(RegistryEvent.Register<StatType<?>> event)
 	 { 
 	    if (event.getName().equals(ForgeRegistries.STAT_TYPES.getRegistryName())) {
-	       CHANGED_GOLD_TO_MONEY = register("changed_gold_money", IStatFormatter.DEFAULT);
+	       CHANGED_GOLD_TO_MONEY = register("changed_gold_money", StatFormatter.DEFAULT);
 	    }
 	 }
 
-	    private static ResourceLocation register(String name, IStatFormatter formatter) {
+	    private static ResourceLocation register(String name, StatFormatter formatter) {
 	        ResourceLocation id = new ResourceLocation(ModEconomyInc.MOD_ID, name);
 	        Registry.register(Registry.CUSTOM_STAT, name, id);
 	        Stats.CUSTOM.get(id, formatter);

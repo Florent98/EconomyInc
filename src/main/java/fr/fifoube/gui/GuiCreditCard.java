@@ -2,30 +2,28 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.packets.PacketCardChange;
 import fr.fifoube.packets.PacketsRegistery;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.awt.*;
+
+@OnlyIn(Dist.CLIENT)
 public class GuiCreditCard extends Screen {
-
-	public GuiCreditCard() {
-		super(new TranslationTextComponent("gui.creditcard"));
-	}
 
 	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
 	private Button oneB;
@@ -53,31 +51,35 @@ public class GuiCreditCard extends Screen {
 	protected int ySize = 124;
 	protected int guiLeft;
 	protected int guiTop;
-	
+
+	public GuiCreditCard() {
+		super(new TranslatableComponent("gui.creditcard"));
+	}
+
 	@Override
 	public void init() {
 		
+		super.init();
 		this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
-        
-        this.oneB = this.addButton(new Button(width / 2 + 90, height / 2 - 55, 30, 20, new StringTextComponent("+1").mergeStyle(TextFormatting.GREEN), (press) -> actionPerformed(0))); 
-        this.fiveB = this.addButton(new Button(width / 2 - 120, height / 2 , 30, 20, new StringTextComponent("+5").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(1)));
-        this.tenB = this.addButton(new Button(width / 2 - 85, height / 2 , 30, 20, new StringTextComponent("+10").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(2)));
-        this.twentyB = this.addButton(new Button(width /2 - 50, height / 2 , 30, 20, new StringTextComponent("+20").mergeStyle(TextFormatting.GREEN),(press) -> actionPerformed(3)));
-        this.fiftyB = this.addButton(new Button(width / 2 - 15, height / 2 , 30, 20, new StringTextComponent("+50").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(4)));
-        this.hundreedB = this.addButton(new Button(width / 2 + 20, height / 2 , 30, 20, new StringTextComponent("+100").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(5)));
-        this.twoHundreedB = this.addButton(new Button(width / 2 + 55, height / 2 , 30, 20, new StringTextComponent("+200").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(6)));
-        this.fiveHundreedB = this.addButton(new Button(width / 2 + 90, height / 2 , 30, 20, new StringTextComponent("+500").mergeStyle(TextFormatting.GREEN), (press) ->actionPerformed(7)));
-		
-        this.oneBMinus = this.addButton(new Button(width / 2 + 90, height / 2 - 25, 30, 20, new StringTextComponent("-1").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(8)));
-        this.fiveBMinus = this.addButton(new Button(width / 2 - 120, height / 2 + 30, 30, 20,new StringTextComponent("-5").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(9)));
-        this.tenBMinus = this.addButton(new Button(width / 2 - 85, height / 2 + 30, 30, 20, new StringTextComponent("-10").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(10)));
-        this.twentyBMinus = this.addButton(new Button(width /2 - 50, height / 2 + 30, 30, 20, new StringTextComponent("-20").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(11)));
-        this.fiftyBMinus = this.addButton(new Button(width / 2 - 15, height / 2 + 30, 30, 20, new StringTextComponent("-50").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(12)));
-        this.hundreedBMinus = this.addButton(new Button(width / 2 + 20, height / 2 + 30, 30, 20, new StringTextComponent("-100").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(13)));
-        this.twoHundreedBMinus = this.addButton(new Button(width / 2 + 55, height / 2 + 30, 30, 20, new StringTextComponent("-200").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(14)));
-        this.fiveHundreedBMinus = this.addButton(new Button(width / 2 + 90, height / 2 + 30, 30, 20, new StringTextComponent("-500").mergeStyle(TextFormatting.RED), (press) ->actionPerformed(15)));
-        super.init();
+
+        this.oneB = this.addRenderableWidget(new Button(width / 2 + 90, height / 2 - 55, 30, 20, new TextComponent("+1").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(0);}));
+		this.fiveB = this.addRenderableWidget(new Button(width / 2 - 120, height / 2 + 5, 30, 20, new TextComponent("+5").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(1);}));
+		this.tenB = this.addRenderableWidget(new Button(width / 2 - 85, height / 2 + 5, 30, 20, new TextComponent("+10").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(2);}));
+		this.twentyB = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 5, 30, 20, new TextComponent("+20").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(3);}));
+		this.fiftyB = this.addRenderableWidget(new Button(width / 2 - 15, height / 2 + 5, 30, 20, new TextComponent("+50").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(4);}));
+		this.hundreedB = this.addRenderableWidget(new Button(width / 2 + 20, height / 2 + 5, 30, 20, new TextComponent("+100").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(5);}));
+		this.twoHundreedB = this.addRenderableWidget(new Button(width / 2 + 55 , height / 2 + 5, 30, 20, new TextComponent("+200").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(6);}));
+		this.fiveHundreedB = this.addRenderableWidget(new Button(width / 2 + 90, height / 2 + 5, 30, 20, new TextComponent("+500").withStyle(ChatFormatting.GREEN), button -> { actionPerformed(7);}));
+
+		this.oneBMinus = this.addRenderableWidget(new Button(width / 2 + 90, height / 2 - 25, 30, 20, new TextComponent("-1").withStyle(ChatFormatting.RED), button -> { actionPerformed(8);}));
+		this.fiveBMinus = this.addRenderableWidget(new Button(width / 2 - 120, height / 2 + 30, 30, 20, new TextComponent("-5").withStyle(ChatFormatting.RED), button -> { actionPerformed(9);}));
+		this.tenBMinus = this.addRenderableWidget(new Button(width / 2 - 85, height / 2 + 30, 30, 20, new TextComponent("-10").withStyle(ChatFormatting.RED), button -> { actionPerformed(10);}));
+		this.twentyBMinus = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 30, 30, 20, new TextComponent("-20").withStyle(ChatFormatting.RED), button -> { actionPerformed(11);}));
+		this.fiftyBMinus = this.addRenderableWidget(new Button(width / 2 - 15, height / 2 + 30, 30, 20, new TextComponent("-50").withStyle(ChatFormatting.RED), button -> { actionPerformed(12);}));
+		this.hundreedBMinus = this.addRenderableWidget(new Button(width / 2 + 20, height / 2 + 30, 30, 20, new TextComponent("-100").withStyle(ChatFormatting.RED), button -> { actionPerformed(13);}));
+		this.twoHundreedBMinus = this.addRenderableWidget(new Button(width / 2 + 55, height / 2 + 30, 30, 20, new TextComponent("-200").withStyle(ChatFormatting.RED), button -> { actionPerformed(14);}));
+		this.fiveHundreedBMinus = this.addRenderableWidget(new Button(width / 2 + 90, height / 2 + 30, 30, 20, new TextComponent("-500").withStyle(ChatFormatting.RED), button -> { actionPerformed(15);}));
 	}
 	
 	
@@ -94,7 +96,7 @@ public class GuiCreditCard extends Screen {
 	@Override
 	public void tick() {
 		super.tick();
-		PlayerEntity playerIn = getMinecraft().player;
+		Player playerIn = Minecraft.getInstance().player;
 		playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 			this.funds_s = data.getMoney();
 		});
@@ -106,18 +108,21 @@ public class GuiCreditCard extends Screen {
 		PacketsRegistery.CHANNEL.sendToServer(new PacketCardChange(listNumber[buttonId]));
 	}	
 	
+	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		// TODO Auto-generated method stub
-		this.renderBackground(matrixStack);
-		this.minecraft.getTextureManager().bindTexture(background);
-		this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
-        InventoryScreen.drawEntityOnScreen(this.guiLeft + 25, this.guiTop + 58, 25, (float)(this.guiLeft + 51) - mouseX, (float)(this.guiTop + 75 - 50) - mouseY, this.getMinecraft().player);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.font.drawString(matrixStack, I18n.format("title.ownerCard")+ ": " + name, (this.width / 2) - 75, (this.height / 2)- 55, Color.DARK_GRAY.getRGB());
-		this.font.drawString(matrixStack, I18n.format("title.fundsCard")+ ": " + String.valueOf(funds_s), (this.width / 2) - 75, (this.height / 2)- 45, Color.DARK_GRAY.getRGB());
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		
+		this.renderBackground(poseStack);
+		int i = this.guiLeft;
+		int j = this.guiTop;
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, background);		
+        this.blit(poseStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+        InventoryScreen.renderEntityInInventory(i + 28, j + 58, 25, (float)(i + 51) - mouseX, (float)(j + 75 - 50) - mouseY, this.minecraft.player);
 
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.font.draw(poseStack, new TranslatableComponent("title.ownerCard", name), (this.width / 2) - 75, (this.height / 2)- 55, Color.DARK_GRAY.getRGB());
+		this.font.draw(poseStack, new TranslatableComponent("title.fundsCard", funds_s), (this.width / 2) - 75, (this.height / 2)- 45, Color.DARK_GRAY.getRGB());
+		 
 	}
-	
-	
 }

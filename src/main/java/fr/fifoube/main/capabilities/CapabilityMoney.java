@@ -1,56 +1,53 @@
-/*******************************************************************************
- *******************************************************************************/
-package fr.fifoube.main.capabilities;
+/** 
+ *  Copyright 2020, Turrioni Florent, All rights reserved.
+ *  
+ * 	This program is copyrighted for all the files and code 
+ * 	included in this program. No reuse, modification or 
+ * 	reselling is authorized without any legal document 
+ *  approved by the owner*.
+ * 
+ * 	*Owner : Turrioni Florent resident in Belgium and 
+ *  contactable at florent_turrioni@hotmail.com
+ *  
+ * */
 
-import java.util.Map;
-import java.util.WeakHashMap;
+package fr.fifoube.main.capabilities;
 
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketMoneyData;
 import fr.fifoube.packets.PacketsRegistery;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.INBT;
-import net.minecraft.profiler.Profiler;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = ModEconomyInc.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CapabilityMoney {
 
 	public static final ResourceLocation CAP_KEY = new ResourceLocation(ModEconomyInc.MOD_ID, "money");
-	
-	@CapabilityInject(IMoney.class)
 	public static final Capability<IMoney> MONEY_CAPABILITY = null;
-	
-	public static void register()
-	{
-	    CapabilityManager.INSTANCE.register(IMoney.class, new DefaultMoneyStorage(), MoneyHolder::new);
-	}
-	
+
 	@SubscribeEvent
 	public static void attachToPlayer(AttachCapabilitiesEvent<Entity> event)
 	{
-		if(event.getObject() instanceof PlayerEntity)
+		if(event.getObject() instanceof Player)
 		{
-				IMoney holder;
-		        if(event.getObject() instanceof ServerPlayerEntity)
+				MoneyHolder holder;
+		        if(event.getObject() instanceof ServerPlayer)
 		        {
-		            holder = new PlayerMoneyHolder((ServerPlayerEntity)event.getObject());
+		            holder = new PlayerMoneyHolder((ServerPlayer)event.getObject());
 		        }
 		        else
 		        {
-		            holder = CapabilityMoney.MONEY_CAPABILITY.getDefaultInstance();
+		            holder = new MoneyHolder();
 		        }
 				PlayerMoneyWrapper wrapper = new PlayerMoneyWrapper(holder);
 				event.addCapability(CAP_KEY, wrapper);
@@ -59,11 +56,11 @@ public class CapabilityMoney {
 	}
 	
     @SubscribeEvent
-	public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+	public static void onPlayerClone(PlayerEvent.Clone event) {
     	
-    	PlayerEntity oldPlayer = event.getOriginal();
+    	Player oldPlayer = event.getOriginal();
         oldPlayer.revive();
-        PlayerEntity newPlayer = event.getPlayer();
+        Player newPlayer = event.getPlayer();
         oldPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(oldData -> { 	
         	newPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> data.setMoney(oldData.getMoney()));
         });
@@ -72,8 +69,8 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 	{
-		if(!event.getPlayer().world.isRemote)
-			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
+		if(!event.getEntity().level.isClientSide)
+			event.getEntity().getCapability(MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
 			});
 	}
@@ -81,10 +78,10 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		if(!event.getPlayer().world.isRemote && event.getPlayer() instanceof ServerPlayerEntity)
+		if(!event.getEntity().level.isClientSide && event.getEntity() instanceof ServerPlayer)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity)event.getPlayer();
-			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
+			ServerPlayer player = (ServerPlayer)event.getEntity();
+			event.getEntity().getCapability(MONEY_CAPABILITY, null).ifPresent(data -> {
 				
 				PacketsRegistery.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new PacketMoneyData(data.getMoney()));
 			});	
@@ -92,6 +89,14 @@ public class CapabilityMoney {
 
 	}
 	
-
-		
+	@SubscribeEvent
+	public static void onDimensionTravel(PlayerChangedDimensionEvent event)
+	{
+		if(!event.getEntity().level.isClientSide)
+			event.getEntity().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
+				data.setMoney(data.getMoney());
+			});
+	}
+	
+	
 }

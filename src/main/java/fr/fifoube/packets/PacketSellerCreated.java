@@ -2,68 +2,51 @@
  *******************************************************************************/
 package fr.fifoube.packets;
 
-import java.util.function.Supplier;
+import fr.fifoube.blocks.blockentity.BlockEntitySeller;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import java.util.function.Supplier;
 
 public class PacketSellerCreated {
 
 	private boolean created; 
 	private double cost;
-	private int x;
-	private int y;
-	private int z;
-	private String name = "";
-	private int amount = 0;
 	private boolean admin;
 	private boolean autorefill;
-	
+	private BlockPos pos;
+
 	public PacketSellerCreated() {}
-	
-	public PacketSellerCreated(boolean createdS, double costS, String nameS, int amountS, int xS, int yS, int zS, boolean adminS, boolean refill)
+
+	public PacketSellerCreated(double costS, BlockPos pos, boolean adminS, boolean refill)
 	{
-		this.created = createdS;
 		this.cost = costS;
-		this.name = nameS;
-		this.amount = amountS;
-		this.x = xS;
-		this.y = yS;
-		this.z = zS;
 		this.admin = adminS;
 		this.autorefill = refill;
+		this.pos = pos;
 	}
 	
-	public static PacketSellerCreated decode(PacketBuffer buf) 
+	public static PacketSellerCreated decode(FriendlyByteBuf buf) 
 	{
-		boolean created = buf.readBoolean();
 		double cost = buf.readDouble();
-		String name = buf.readString(32767);
-		int amount = buf.readInt();
-		int x = buf.readInt();
-		int y = buf.readInt();
-		int z = buf.readInt();
 		boolean admin = buf.readBoolean();
 		boolean refill = buf.readBoolean();
-		return new PacketSellerCreated(created, cost, name, amount, x, y, z, admin, refill);
+		BlockPos pos = buf.readBlockPos();
+		return new PacketSellerCreated(cost, pos, admin, refill);
 	}
 
 
-	public static void encode(PacketSellerCreated packet, PacketBuffer buf) 
+	public static void encode(PacketSellerCreated packet, FriendlyByteBuf buf) 
 	{
-		buf.writeBoolean(packet.created);
 		buf.writeDouble(packet.cost);
-		buf.writeString(packet.name);
-		buf.writeInt(packet.amount);
-		buf.writeInt(packet.x);
-		buf.writeInt(packet.y);
-		buf.writeInt(packet.z);
 		buf.writeBoolean(packet.admin);
 		buf.writeBoolean(packet.autorefill);
+		buf.writeBlockPos(packet.pos);
 	}
 	
     
@@ -71,20 +54,33 @@ public class PacketSellerCreated {
 	{
 
 		ctx.get().enqueueWork(() -> {
-			
-				PlayerEntity player = ctx.get().getSender(); // GET PLAYER
-	  			World world = player.world;  
-				BlockPos pos = new BlockPos(packet.x, packet.y, packet.z);
-				TileEntityBlockSeller te = (TileEntityBlockSeller)world.getTileEntity(pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
-				if(packet.cost > 0 && packet.cost != 0)
+
+				Player player = ctx.get().getSender(); // GET PLAYER
+	  			Level world = player.level;
+				BlockPos pos = packet.pos;
+				BlockEntitySeller te = (BlockEntitySeller)world.getBlockEntity(pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
 				if(te != null) // CHECK IF PLAYER HAS NOT DESTROYED TILE ENTITY IN THE SHORT TIME OF SENDING PACKET
 				{
-					te.setCreated(packet.created); // SERVER ADD CREATED TO TILE ENTITY
-					te.setCost(packet.cost); // SERVER ADD COST TO TILE ENTITY
-					te.setItem(packet.name); // SERVER ADD NAME TO TILE ENTITY
-					te.setAdmin(packet.admin); // SERVER ADD ADMIN TO TILE ENTITY
-					te.setAutoRefill(packet.autorefill);
-					te.markDirty(); //UPDATE THE TILE ENTITY
+					if(packet.cost > 0 ) {
+						if (te.getStackInSlot(0).getItem() != Items.AIR) // IF SLOT 0 IS NOT BLOCKS.AIR, WE PASS
+						{
+							String name = te.getStackInSlot(0).getDisplayName().getString(); // GET ITEM NAME IN TILE THANKS TO STACK IN SLOT
+							te.setItem(name); //  SET ITEM NAME
+							te.setCreated(true);
+							te.setCost(packet.cost);
+							te.setAdmin(packet.admin);
+							te.setAutoRefill(packet.autorefill);
+							te.setAdmin(packet.admin);
+							te.setChanged();
+
+						} else // PROVIDE PLAYER TO SELL AIR
+						{
+							player.sendMessage(new TranslatableComponent("title.sellAir"), player.getUUID());
+						}
+					}
+					else {
+						player.sendMessage(new TranslatableComponent("title.noValidCost"), player.getUUID());
+					}
 				}
 		});
 		ctx.get().setPacketHandled(true);

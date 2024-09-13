@@ -2,72 +2,75 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import java.awt.Color;
-import java.util.UUID;
-
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import fr.fifoube.blocks.tileentity.TileEntityBlockSeller;
-import fr.fifoube.items.ItemCreditCard;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.fifoube.blocks.blockentity.BlockEntitySeller;
+import fr.fifoube.gui.container.MenuSellerBuy;
+import fr.fifoube.gui.utilities.GuiUtilities;
 import fr.fifoube.main.ModEconomyInc;
-import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.packets.PacketSellerFundsTotal;
 import fr.fifoube.packets.PacketsRegistery;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class GuiSellerBuy extends Screen
+import java.awt.*;
+import java.util.UUID;
+
+@OnlyIn(Dist.CLIENT)
+public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
 {
-	private TileEntityBlockSeller tile;
-	
-	private static final ResourceLocation background = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
+	private static final ResourceLocation BACKGROUND = new ResourceLocation(ModEconomyInc.MOD_ID ,"textures/gui/screen/gui_item.png");
+	private BlockEntitySeller tile;
+	private MenuSellerBuy menu;
 	protected int xSize = 256;
 	protected int ySize = 124;
 	protected int guiLeft;
 	protected int guiTop;
 	
-	private Button slot1;
+	private Button buy;
 	private Button takeFunds;
 	private String owner = "";
 	private String itemName = "";
 	private double cost;
 	private int amount;
 	private double fundsTotalRecovery;
-	private UUID sellerOwnerUUID;
-	private UUID worldPlayerUUID;
+	private UUID sellerOwner;
+	private UUID worldPlayer;
+	private ItemRenderer renderer = null;
 	
-	public GuiSellerBuy(TileEntityBlockSeller te) {
-		super(new TranslationTextComponent("gui.sellerbuy"));
-		this.tile = te;
+	
+	public GuiSellerBuy(MenuSellerBuy menu, Inventory inv, Component comp) {
+		super(menu, inv, comp);
+		this.menu = menu;
+		this.tile = menu.getTile();
 	}
 	
-	
 	@Override
-	public void tick() 
-	{
-		super.tick();
-		amount = tile.getAmount();
-		fundsTotalRecovery = tile.getFundsTotal();	
-		tile.setFundsTotal(fundsTotalRecovery);
-		tile.markDirty();
-		if(tile.getTime() != 0)
+	protected void containerTick() {
+		
+		super.containerTick();
+		this.amount = tile.getAmount();
+		this.fundsTotalRecovery = tile.getFundsTotal();
+		if(menu.getCooldown() != 0)
 		{
-			slot1.active = false;
+			buy.active = false;
 		}
 		else
 		{
-			slot1.active = true;
+			buy.active = true;
 		}
 	}
 	
@@ -76,24 +79,84 @@ public class GuiSellerBuy extends Screen
 		
 		this.guiLeft = (this.width - this.xSize) / 2;
 	    this.guiTop = (this.height - this.ySize) / 2;
+	    this.renderer = Minecraft.getInstance().getItemRenderer();
 		if(tile != null)
 		{
 			this.owner = tile.getOwnerName();
 			this.itemName = tile.getItem();
 			this.cost = tile.getCost();
-			this.slot1 = this.addButton(new Button(width / 2 - 50, height / 2 + 27, 100, 20, new TranslationTextComponent("title.buy"),(press) -> actionPerformed(0))); 
+			this.buy = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 27, 100, 20, new TranslatableComponent("title.buy"),(press) -> actionPerformed(0))); 
              
-			sellerOwnerUUID = tile.getOwner();
-			worldPlayerUUID = minecraft.player.getUniqueID();
-			if(sellerOwnerUUID.equals(worldPlayerUUID))
+			sellerOwner = tile.getOwner();
+			worldPlayer = minecraft.player.getUUID();
+			if(sellerOwner.equals(worldPlayer))
 			{
-				this.takeFunds = this.addButton(new Button(width / 2 + 20, height / 2 - 75, 100, 13, new TranslationTextComponent("title.recover"),(press) -> actionPerformed(1))); 
+				this.takeFunds = this.addRenderableWidget(new Button(width / 2 + 20, height / 2 - 75, 100, 13, new TranslatableComponent("title.recover"),(press) -> actionPerformed(1))); 
 			}
 			
 		}
 		super.init();
 	}
 	
+	
+	
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+	
+	protected void actionPerformed(int buttonId)
+	{		
+		switch (buttonId) {
+		case 0:
+			PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+			break;
+		case 1:
+			PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+			break;
+		}
+	}
+	
+	@Override
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+		
+		this.renderBackground(poseStack);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, BACKGROUND);		
+        this.blit(poseStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+		this.drawImageInGui((this.width / 2) + 85, (this.height / 2) - 40);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.font.draw(poseStack, new TranslatableComponent("title.seller",  owner).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+		this.font.draw(poseStack, new TranslatableComponent("title.item", itemName).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+		this.font.draw(poseStack, new TranslatableComponent("title.cost", cost).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+		this.font.draw(poseStack, new TranslatableComponent("title.amount", amount).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
+		if(sellerOwner.equals(worldPlayer))
+		{
+			this.font.draw(poseStack, new TranslatableComponent("title.fundsToRecover", fundsTotalRecovery).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+		}
+
+	}
+	
+	@Override
+	protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
+		
+	}
+	 
+
+	@Override
+	protected void renderLabels(PoseStack p_97808_, int p_97809_, int p_97810_) {
+	}
+
+	public void drawImageInGui(int posX, int posY) 
+	{
+		ItemStack stack = new ItemStack(Blocks.BARRIER,1);
+		if(!(tile.getAmount() == 0))
+		{
+			stack = new ItemStack(tile.getInventory().getStackInSlot(0).getItem(), 1);
+		}
+		GuiUtilities.renderGuiItem(renderer, this.getBlitOffset(), stack, posX, posY, renderer.getModel(stack, (Level)null, (LivingEntity)null, 0));
+	}
+
 	@Override
 	public void onClose() {
 
@@ -103,124 +166,4 @@ public class GuiSellerBuy extends Screen
 		}
 		super.onClose();
 	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-	
-	protected void actionPerformed(int buttonId)
-	{		
-		final int x = tile.getPos().getX(); // GET X COORDINATES
-		final int y = tile.getPos().getY(); // GET Y COORDINATES
-		final int z = tile.getPos().getZ(); // GET Z COORDINATES
-		minecraft.player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
-			if(tile != null) // WE CHECK IF TILE IS NOT NULL TO AVOID CRASH
-			{	
-				if(buttonId == 0) //IF PLAYER BUY
-				{
-						for(int i = 0; i < minecraft.player.inventory.getSizeInventory(); i++) //CHECKING INVENTORY TO SEE IF CREDIT CARD IS THERE
-						{
-							if(minecraft.player.inventory.getStackInSlot(i).getItem() instanceof ItemCreditCard) //IF AN ITEM CREDIT CARD IS FOUND WE ACCEPT THE ACTION PERFORMED
-							{
-									ItemStack creditCard = minecraft.player.inventory.getStackInSlot(i); //SET THE SLOT FOUND TO BE THE CREDIT CARD
-									if(creditCard.hasTag()) //IF IT HAS TAG 
-									if(minecraft.player.getUniqueID().toString().equals(creditCard.getTag().getString("OwnerUUID"))) //AND IT'S THE SAME OWNER 
-									{
-										if(creditCard.getTag().getBoolean("Linked")) //IF IT'S A LINKED CREDIT CARD THEN WE ACCEPT 
-										{
-											if(data.getMoney() >= tile.getCost()) //IF THE PLAYER HAS ENOUGH MONEY
-											{
-												if(tile.getAmount() >= 1)
-												{
-													boolean admin = tile.getAdmin();
-													if(!admin)
-													{
-														double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
-														int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
-														PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundTotal, tile.getCost(), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-														tile.markDirty();
-													}
-													else if(admin)
-													{
-														double fundTotal = tile.getFundsTotal(); // WE GET THE TOTAL FUNDS
-														int amount = tile.getAmount(); // GET AMOUNT OF THE TILE ENTITY
-														PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundTotal, tile.getCost(), x,y,z, amount, false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-														tile.markDirty();
-													}
-												}
-											}
-											else
-											{
-												minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noEnoughFunds")), minecraft.player.getUniqueID());
-											}
-										}
-										else
-										{
-											minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.notLinked")), minecraft.player.getUniqueID());
-	
-										}
-								}
-								else
-								{
-									minecraft.player.sendMessage(new StringTextComponent(I18n.format("title.noSameOwner")), minecraft.player.getUniqueID());
-								}
-							}
-						}
-				}
-				else if(buttonId == 1)
-				{
-					tile.setFundsTotal(0);
-					tile.markDirty();
-					PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(fundsTotalRecovery, 0, x,y,z, amount, true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-				}			
-			}
-			
-		});
-		
-	}
-	 
-		@Override
-		public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
-		{
-			this.renderBackground(matrixStack);
-			// added
-	        this.getMinecraft().getTextureManager().bindTexture(background);
-	        int i = this.guiLeft;
-	        int j = this.guiTop;
-	        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
-			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.seller") + owner, (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.item") + itemName, (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.cost") + cost, (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
-			this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.amount") + amount, (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
-			if(sellerOwnerUUID.equals(worldPlayerUUID))
-			{
-				this.font.drawString(matrixStack, TextFormatting.BOLD + I18n.format("title.fundsToRecover") + fundsTotalRecovery, (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
-			}
-
-			
-			super.render(matrixStack, mouseX, mouseY, partialTicks);
-	        drawImageInGui();
-
-	    }
-
-		public void drawImageInGui() 
-		{
-	        int i = this.guiLeft;
-	        int j = this.guiTop;
-	        GL11.glPushMatrix();
-			GlStateManager.enableRescaleNormal();
-		    RenderHelper.enableStandardItemLighting();
-		    GL11.glScaled(2, 2, 2);
-		    ItemStack stack = new ItemStack(Blocks.BARRIER,1);
-		    if(!(tile.getAmount() == 0))
-		    {
-			    stack = new ItemStack(tile.getStackInSlot(0).getItem(), 1);
-		    }
-		    this.itemRenderer.renderItemIntoGUI(stack, (i / 2) + 105 , (j /2) + 5);
-		    RenderHelper.disableStandardItemLighting();
-		    GlStateManager.disableRescaleNormal();
-		    GL11.glPopMatrix();   
-		}
-
 }
