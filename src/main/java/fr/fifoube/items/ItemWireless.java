@@ -4,7 +4,6 @@ package fr.fifoube.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -49,19 +48,19 @@ public class ItemWireless extends Item {
 				{
 					stackFound.getTag().putBoolean("Linked", true);
 					player.getInventory().removeItem(stack);
-					player.sendMessage(new TranslatableComponent("title.cardUpdated"), player.getUUID());
+					player.sendSystemMessage(Component.translatable("title.cardUpdated"));
 					InteractionResultHolder.success(stackFound);
 	
 				}
 				else
 				{
-					player.sendMessage(new TranslatableComponent("title.cardAlreadyLinked"), player.getUUID());
+					player.sendSystemMessage(Component.translatable("title.cardAlreadyLinked"));
 					InteractionResultHolder.fail(stackFound);
 				}
 			}
 			else
 			{
-				player.sendMessage(new TranslatableComponent("title.cardTooMuch"), player.getUUID());
+				player.sendSystemMessage(Component.translatable("title.cardTooMuch"));
 				InteractionResultHolder.fail(stackFound);
 			}
 		}
@@ -74,7 +73,7 @@ public class ItemWireless extends Item {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn) {
 		
-		tooltip.add(new TranslatableComponent("title.wireless").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC));
+		tooltip.add(Component.translatable("title.wireless").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD, ChatFormatting.ITALIC));
 
 	}
 

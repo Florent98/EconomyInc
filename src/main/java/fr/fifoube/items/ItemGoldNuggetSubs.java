@@ -3,7 +3,6 @@
 package fr.fifoube.items;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -26,7 +25,7 @@ public class ItemGoldNuggetSubs extends Item {
 			if(stack.getTag().contains("weight"))
 			{
 				String weight = stack.getTag().getString("weight");
-				tooltip.add(new TranslatableComponent("title.weight", weight));	
+				tooltip.add(Component.translatable("title.weight", weight));
 			}
 		}
 	}

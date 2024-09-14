@@ -18,7 +18,7 @@ import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -96,8 +96,11 @@ public class PacketBuyerChange {
 											ItemHandlerHelper.insertItem(te.getInventoryHandler(), stackToInsert.split(1), false);
 										}
 										else {
-											System.out.println("c'est plein");
+											player.sendSystemMessage(Component.translatable("title.buyerNoSpaceLeft"));
 										}
+									}
+									else {
+										player.sendSystemMessage(Component.translatable("title.buyerNoMoney"));
 									}
 
 								} else {
@@ -129,11 +132,11 @@ public class PacketBuyerChange {
 									}
 									if(!wasAbleToInsertAny)
 									{
-										player.sendMessage(new TranslatableComponent("titile.buyerNoSpaceLeft"), player.getUUID());
+										player.sendSystemMessage(Component.translatable("title.buyerNoSpaceLeft"));
 									}
 									if(costTooHigh)
 									{
-										player.sendMessage(new TranslatableComponent("titile.buyerNoMoney"), player.getUUID());
+										player.sendSystemMessage(Component.translatable("title.buyerNoMoney"));
 									}
 
 								}
@@ -142,12 +145,12 @@ public class PacketBuyerChange {
 						}
 						else
 						{
-							player.sendMessage(new TranslatableComponent("titile.buyerNothingSell"), player.getUUID());
+							player.sendSystemMessage(Component.translatable("title.buyerNothingSell"));
 						}
 					}
 					else
 					{
-						player.sendMessage(new TranslatableComponent("titile.generalErrorBE"), player.getUUID());
+						player.sendSystemMessage(Component.translatable("title.generalErrorBE"));
 					}
 		});
 		ctx.get().setPacketHandled(true);

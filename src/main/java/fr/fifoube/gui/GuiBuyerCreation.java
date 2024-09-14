@@ -26,7 +26,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -68,7 +67,8 @@ public class GuiBuyerCreation extends AbstractContainerScreen<MenuBuyerCreation>
 		
 	    super.init();
 		this.fieldInit();
-		this.validate = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 83, 100, 20, new TranslatableComponent("title.validate"),(press) -> actionPerformed(0))); 
+
+		this.validate = this.addRenderableWidget(Button.builder(Component.translatable("title.validate"), button -> { actionPerformed(0);}).pos(width / 2 - 50, height / 2 + 83).size(100, 20).build());
 
 
 	}
@@ -95,10 +95,10 @@ public class GuiBuyerCreation extends AbstractContainerScreen<MenuBuyerCreation>
 	}
 	
 	protected void fieldInit() {
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+
 		int i = (this.width - this.xSize) / 2;
 		int j = (this.height - this.ySize) / 2;
-		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, new TranslatableComponent("title.cost"));
+		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, Component.translatable("title.cost"));
 		this.costField.setMaxLength(35);
 		this.costField.setBordered(false);
 		this.costField.setVisible(true);
@@ -128,7 +128,7 @@ public class GuiBuyerCreation extends AbstractContainerScreen<MenuBuyerCreation>
 		{
 			this.font.draw(matrixStack, stackInSlot.getDisplayName().getString(), 30.0f, 29.0f, Color.DARK_GRAY.getRGB());
 		}
-		this.font.draw(matrixStack, new TranslatableComponent("title.fundsCard").getString() + moneyInTile, 30.0f, 44.0f, Color.DARK_GRAY.getRGB());
+		this.font.draw(matrixStack, Component.translatable("title.fundsCard", moneyInTile), 30.0f, 44.0f, Color.DARK_GRAY.getRGB());
 		super.renderLabels(matrixStack, mouseX, mouseY);
 	}
 

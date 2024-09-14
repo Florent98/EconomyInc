@@ -15,9 +15,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +55,7 @@ public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
 
 	}
 
+
 	@Override
 	protected void init() {
 		super.init();
@@ -63,10 +65,11 @@ public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
 		if(!tile.getCreated())
 		{
 			this.autoRefill = this.addRenderableWidget(new RefillIconButton(width / 2 + 87, height / 2 - 75, (onPress) -> { actionPerformed(this.autoRefill); }, background));
-			this.validate = this.addRenderableWidget(new Button(width / 2 + 26, height / 2 + 83, 55, 20, new TranslatableComponent("title.validate"), (onPress) -> { actionPerformed(this.validate); }));
+			this.validate = this.addRenderableWidget(Button.builder(Component.translatable("title.validate"), button -> { actionPerformed(this.validate);}).pos(width / 2 + 26, height / 2 + 83).size(55, 20).build());
+
 			if(player.isCreative())
 			{
-				this.unlimitedStack = this.addRenderableWidget(new Button(width /2 + 2, height / 2 - 96, 80, 13, new TranslatableComponent("title.unlimited"), (onPress) -> { actionPerformed(this.unlimitedStack); }));
+				this.unlimitedStack = this.addRenderableWidget(Button.builder(Component.translatable("title.unlimited"), button -> { actionPerformed(this.unlimitedStack);}).pos(width / 2 + 2, height / 2 - 96).size(80, 13).build());
 			}
 		}
 		this.fieldInit();
@@ -74,10 +77,9 @@ public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
 
 	protected void fieldInit() {
 
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		int i = (this.width - this.xSize) / 2;
 		int j = (this.height - this.ySize) / 2;
-		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, new TranslatableComponent("title.cost"));
+		this.costField = new EditBox(this.font, i + 121, j + 15, 38, 12, Component.translatable("title.cost"));
 		this.costField.setMaxLength(35);
 		this.costField.setBordered(false);
 		this.costField.setVisible(true);
@@ -140,7 +142,7 @@ public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
 				}
 				else
 				{
-					playerIn.sendMessage(new TranslatableComponent("title.noValidCost"), playerIn.getUUID());
+					playerIn.sendSystemMessage(Component.translatable("title.noValidCost"));
 				}
 			}
 		}
@@ -162,9 +164,9 @@ public class GuiSeller extends AbstractContainerScreen<MenuSeller> {
 			this.costField.render(stack, mouseX, mouseY, partialTicks);
 		}
 		super.render(stack, mouseX, mouseY, partialTicks);
-		TranslatableComponent s = this.admin ? new TranslatableComponent("title.unlimitedStack") : new TranslatableComponent("title.limitedStack");
-		this.font.draw(stack, new TranslatableComponent("title.cost",  tile.getCost()), this.getGuiLeft() + 100, this.getGuiTop() + 33, Color.DARK_GRAY.getRGB());
-		this.font.draw(stack, new TranslatableComponent("title.mode", s), this.getGuiLeft() + 100, this.getGuiTop() + 44, Color.DARK_GRAY.getRGB());
+		MutableComponent s = this.admin ? Component.translatable("title.unlimitedStack") : Component.translatable("title.limitedStack");
+		this.font.draw(stack, Component.translatable("title.cost",  tile.getCost()), this.getGuiLeft() + 100, this.getGuiTop() + 33, Color.DARK_GRAY.getRGB());
+		this.font.draw(stack, Component.translatable("title.mode", s), this.getGuiLeft() + 100, this.getGuiTop() + 44, Color.DARK_GRAY.getRGB());
 		RenderSystem.disableBlend();
 		this.renderTooltip(stack, mouseX, mouseY);
 	}

@@ -1,6 +1,6 @@
 {
     "textures": {
-        "4": "economyinc:items/item_twentyb",
+        "4": "economyinc:item/item_twentyb",
         "8": "block/acacia_planks"
     },
     "elements": [

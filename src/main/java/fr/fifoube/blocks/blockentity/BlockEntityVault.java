@@ -18,7 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,7 +34,7 @@ import java.util.UUID;
 
 public class BlockEntityVault extends BlockEntity implements MenuProvider {
 
-	public static final TranslatableComponent NAME = new TranslatableComponent("block.economyinc.block_vault");
+	public static final MutableComponent NAME = Component.translatable("block.economyinc.block_vault");
 	ItemStackHandler inventory;
 	private UUID owner;
 	private byte direction;

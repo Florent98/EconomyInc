@@ -22,7 +22,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,7 +48,7 @@ public class BlockEntityVault2by2 extends BlockEntity implements MenuProvider {
 	private List<String> allowedPlayers = new ArrayList<String>();
 	private int maxAllowedPlayers = 0;
     protected final ItemStackHandler inventory;
-    public static final TranslatableComponent NAME = new TranslatableComponent("block.economyinc.block_vault");
+    public static final MutableComponent NAME = Component.translatable("block.economyinc.block_vault");
 
     public BlockEntityVault2by2(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
     	

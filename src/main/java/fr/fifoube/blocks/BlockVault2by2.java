@@ -80,7 +80,7 @@ public class BlockVault2by2 extends Block implements EntityBlock {
 					UUID checkOBA = player.getUUID();
 					if(checkONBT.equals(checkOBA) || player.hasPermissions(4))
 					{
-						NetworkHooks.openGui((ServerPlayer)player, te, pos);
+						NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 						te.setChanged();
 						return InteractionResult.SUCCESS;
 					}
@@ -92,7 +92,7 @@ public class BlockVault2by2 extends Block implements EntityBlock {
 							String listToCheck = fullString.substring(fullString.indexOf(",") + 1);
 							if(player.getUUID().equals(UUID.fromString(listToCheck)))
 							{
-								NetworkHooks.openGui((ServerPlayer)player, te, pos);
+								NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 								te.setChanged();
 								return InteractionResult.SUCCESS;
 							}

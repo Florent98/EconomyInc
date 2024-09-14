@@ -392,12 +392,12 @@ public class BlockVault extends Block implements EntityBlock {
 					UUID checkOBA = player.getUUID();
 					if(checkONBT.equals(checkOBA))
 					{
-						NetworkHooks.openGui((ServerPlayer)player, te, pos);
+						NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 						return InteractionResult.SUCCESS;
 					}
 					else if(player.hasPermissions(4))
 					{
-						NetworkHooks.openGui((ServerPlayer)player, te, pos);
+						NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 						return InteractionResult.SUCCESS;
 					}
 				}

@@ -19,9 +19,11 @@ import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,7 +52,7 @@ public class BlockBuyer extends Block implements EntityBlock {
 
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
  	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-	private static final TranslatableComponent NAME = new TranslatableComponent("container.buyer");
+	private static final MutableComponent NAME = Component.translatable("container.buyer");
 
 	public BlockBuyer(Properties properties) {
 		super(properties);
@@ -71,12 +73,11 @@ public class BlockBuyer extends Block implements EntityBlock {
 			if (!level.isClientSide) {
 				if (!te.isCreated()) {
 					if (te.getOwner().equals(player.getUUID())) {
-						NetworkHooks.openGui((ServerPlayer) player, te, pos);
+						NetworkHooks.openScreen((ServerPlayer) player, te, pos);
 					}
 				} else {
 					if (player.getMainHandItem().getItem().equals(ItemsRegistery.WRENCH.get()) && te.getOwner().equals(player.getUUID())) {
-						System.out.println(te.getAccountMoney());
-						NetworkHooks.openGui((ServerPlayer) player, te, pos);
+						NetworkHooks.openScreen((ServerPlayer) player, te, pos);
 					}
 				}
 			} else if (level.isClientSide) {
@@ -254,18 +255,18 @@ public class BlockBuyer extends Block implements EntityBlock {
 	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
 		return state.getValue(POWERED) ? 15 : 0;
 	}
-    
-    @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
-        if (state.getValue(POWERED)) {
-           level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(false)), 2);
-        } else {
-           level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(true)), 2);
-           level.scheduleTick(pos, this, 20);
-        }
-        this.updateNeighborsInFront(level, pos, state);
-     }
-    
+
+	@Override
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+		if (state.getValue(POWERED)) {
+			level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(false)), 2);
+		} else {
+			level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(true)), 2);
+			level.scheduleTick(pos, this, 20);
+		}
+		this.updateNeighborsInFront(level, pos, state);
+	}
+
     protected void updateNeighborsInFront(Level level, BlockPos pos, BlockState state) {
         Direction direction = state.getValue(FACING);
         BlockPos blockpos = pos.relative(direction);

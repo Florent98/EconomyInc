@@ -8,7 +8,7 @@ import fr.fifoube.main.config.ConfigFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -53,7 +53,7 @@ public class ItemCreditCard extends Item {
 										}
 										else
 										{
-											playerIn.sendMessage(new TranslatableComponent("title.notLinked"), playerIn.getUUID());
+											playerIn.sendSystemMessage(Component.translatable("title.notLinked"));
 										}
 								}
 							}
@@ -101,20 +101,20 @@ public class ItemCreditCard extends Item {
 
 	 		 double funds = data.getMoney();
 	 		 boolean linked = stack.getTag().getBoolean("Linked");
-		     String linkedValue = "";
+		     MutableComponent linkedValue = null;
 			 if(linked == true)
 			 {
-				 linkedValue = new TranslatableComponent("title.yes").getString();
+				 linkedValue = Component.translatable("title.yes");
 			 }
 			 else
 			 {
-				linkedValue = new TranslatableComponent("title.no").getString();
+				linkedValue = Component.translatable("title.no");
 			 }
 			 
 		        String ownerName = stack.getTag().getString("Owner");	
-		        tooltip.add(new TranslatableComponent("title.ownerCard", ownerName));
-		        tooltip.add(new TranslatableComponent("title.fundsCard", funds));
-		        tooltip.add(new TranslatableComponent("title.linkedCard", linkedValue));
+		        tooltip.add(Component.translatable("title.ownerCard", ownerName));
+		        tooltip.add(Component.translatable("title.fundsCard", funds));
+		        tooltip.add(Component.translatable("title.linkedCard", linkedValue));
 	 		 
 	 	 });
 

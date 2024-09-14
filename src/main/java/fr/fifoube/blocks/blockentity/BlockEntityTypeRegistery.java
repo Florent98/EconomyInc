@@ -27,7 +27,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class BlockEntityTypeRegistery {
 	
 	
-    public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ModEconomyInc.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModEconomyInc.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<BlockEntityVault>> TILE_VAULT = REGISTER
     		.register("block_vault_te", () -> BlockEntityType.Builder.of(BlockEntityVault::new, BlocksRegistry.BLOCK_VAULT.get()).build(null));

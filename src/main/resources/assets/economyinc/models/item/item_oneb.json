@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "economyinc:items/item_oneb"
+        "layer0": "economyinc:item/item_oneb"
     }
 }

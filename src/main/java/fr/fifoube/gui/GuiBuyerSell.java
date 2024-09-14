@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -58,8 +58,9 @@ public class GuiBuyerSell extends Screen
 		
 		this.guiLeft = (this.width - this.xSize) / 2;
 	    this.guiTop = (this.height - this.ySize) / 2;
-		this.sellOne = this.addRenderableWidget(new Button(width / 2 - 110, height / 2 + 27, 100, 20, new TranslatableComponent("title.sellOne"),(press) -> actionPerformed(0)));
-		this.sellAll = this.addRenderableWidget(new Button(width / 2 + 10, height / 2 + 27, 100, 20, new TranslatableComponent("title.sellAll"),(press) -> actionPerformed(1)));
+		this.sellOne = this.addRenderableWidget(Button.builder(Component.translatable("title.sellOne"), button -> { actionPerformed(0);}).pos(width / 2 - 110, height / 2 + 27).size(100, 20).build());
+		this.sellAll = this.addRenderableWidget(Button.builder(Component.translatable("title.sellAll"), button -> { actionPerformed(1);}).pos(width / 2 + 10, height / 2 + 27).size(100, 20).build());
+
 		this.renderer = Minecraft.getInstance().getItemRenderer();
 
 	}
@@ -83,7 +84,7 @@ public class GuiBuyerSell extends Screen
 		if (!tile.getItemStackToBuy().isEmpty()) {
 			stack = new ItemStack(tile.getItemStackToBuy().getItem(), 1);
 		}
-		GuiUtilities.renderGuiItem(renderer, this.getBlitOffset(), stack, posX, posY, renderer.getModel(stack, (Level)null, (LivingEntity)null, 0));
+		GuiUtilities.renderGuiItem(renderer, stack, posX, posY, renderer.getModel(stack, (Level)null, (LivingEntity)null, 0));
 	}
 
 	@Override
@@ -115,9 +116,9 @@ public class GuiBuyerSell extends Screen
 		RenderSystem.setShaderTexture(0, background);
 		this.blit(stack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
 		this.drawImageInGui((this.width / 2) + 85, (this.height / 2) - 40);
-		this.font.draw(stack, new TranslatableComponent("title.seller",  tile.getOwnerName()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-		this.font.draw(stack, new TranslatableComponent("title.item", tile.getItemStackToBuy().getDisplayName().getString()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-		this.font.draw(stack, new TranslatableComponent("title.cost", tile.getCost()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+		this.font.draw(stack, Component.translatable("title.seller",  tile.getOwnerName()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+		this.font.draw(stack, Component.translatable("title.item", tile.getItemStackToBuy().getDisplayName().getString()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+		this.font.draw(stack, Component.translatable("title.cost", tile.getCost()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
 		super.render(stack, mouseX, mouseY, partialTicks);
 	}
 

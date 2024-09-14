@@ -5,7 +5,7 @@ package fr.fifoube.packets;
 import fr.fifoube.blocks.blockentity.BlockEntitySeller;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -75,11 +75,11 @@ public class PacketSellerCreated {
 
 						} else // PROVIDE PLAYER TO SELL AIR
 						{
-							player.sendMessage(new TranslatableComponent("title.sellAir"), player.getUUID());
+							player.sendSystemMessage(Component.translatable("title.sellAir"));
 						}
 					}
 					else {
-						player.sendMessage(new TranslatableComponent("title.noValidCost"), player.getUUID());
+						player.sendSystemMessage(Component.translatable("title.noValidCost"));
 					}
 				}
 		});

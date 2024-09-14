@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,14 +70,14 @@ public class BlockSeller extends Block implements EntityBlock {
 					{
 						if(!te.getCreated())
 						{
-							NetworkHooks.openGui((ServerPlayer)player, te, pos);				
+							NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 							return InteractionResult.SUCCESS;
 						}
 						else if (te.getCreated())
 						{
 							if(player.getItemInHand(InteractionHand.MAIN_HAND).equals(new ItemStack(ItemsRegistery.WRENCH.get()), false));
 							{
-								NetworkHooks.openGui((ServerPlayer)player, te, pos);				
+								NetworkHooks.openScreen((ServerPlayer)player, te, pos);
 							}
 						}
 					}
@@ -292,7 +293,7 @@ public class BlockSeller extends Block implements EntityBlock {
 	}
     
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
         if (state.getValue(POWERED)) {
            level.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(false)), 2);
         } else {

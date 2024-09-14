@@ -24,8 +24,8 @@ public class MoneyModificationHandler {
 	@SubscribeEvent
 	public static void onDimensionTravel(PlayerChangedDimensionEvent event)
 	{
-		if(!event.getPlayer().level.isClientSide)
-			event.getPlayer().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
+		if(!event.getEntity().level.isClientSide)
+			event.getEntity().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {
 				data.setMoney(data.getMoney());
 			});
 	}

@@ -2,7 +2,6 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
@@ -14,7 +13,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -44,13 +42,12 @@ public class GuiVault2by2 extends AbstractContainerScreen<MenuVault2by2>
 	@Override
 	protected void init() {
 		super.init();
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-			int i = (this.width - this.xSize) / 2;
-			int j = (this.height - this.ySize) / 2;
-			if(tile_getter.getOwner().equals(this.minecraft.player.getUUID()) && !Minecraft.getInstance().hasSingleplayerServer())
-	        {
-	        	this.settings = this.addRenderableWidget(new Button(i + 175, j + 5, 20, 20, new TextComponent("⚙").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE),(press) -> actionPerformed(0)));
-	        }
+		int i = (this.width - this.xSize) / 2;
+		int j = (this.height - this.ySize) / 2;
+		if(tile_getter.getOwner().equals(this.minecraft.player.getUUID()) && !Minecraft.getInstance().hasSingleplayerServer())
+		{
+			this.settings = this.addRenderableWidget(Button.builder(Component.literal("⚙").withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE), button -> { actionPerformed(0);}).pos(i + 175, j + 5).size(20, 20).build());
+		}
 	}
 	
 	protected void actionPerformed(int buttonId)

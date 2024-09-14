@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -58,7 +57,7 @@ public class GuiVault extends AbstractContainerScreen<MenuVault>
 	{		
 		switch (buttonId) {
 		case 0:
-			Minecraft.getInstance().player.sendMessage(new TextComponent("Not available right now."), Minecraft.getInstance().player.getUUID());
+			Minecraft.getInstance().player.sendSystemMessage(Component.literal("Not available right now."));
 			break;
 
 		default:

@@ -6,7 +6,7 @@ import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
@@ -60,7 +60,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 							
 						}
@@ -79,7 +79,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 						}
 						
@@ -97,7 +97,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 
 						}
@@ -115,7 +115,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 
 						}
@@ -133,7 +133,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 						}
 					}
@@ -150,7 +150,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 
 						}
@@ -168,7 +168,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 
 						}
@@ -186,7 +186,7 @@ public class PacketCardChange {
 							}
 							else
 							{
-								player.sendMessage(new TranslatableComponent("title.noInventoryPlace"), player.getUUID());
+								player.sendSystemMessage(Component.translatable("title.noInventoryPlace"));
 							}
 						}
 					}

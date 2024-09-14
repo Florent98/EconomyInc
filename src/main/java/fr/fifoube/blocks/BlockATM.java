@@ -6,8 +6,8 @@ import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.items.ItemCreditCard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class BlockATM extends Block {
 
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-	private static final TranslatableComponent NAME = new TranslatableComponent("container.atm");
+	private static final MutableComponent NAME = Component.translatable("container.atm");
 
 	public BlockATM(Properties properties) {
 		super(properties);

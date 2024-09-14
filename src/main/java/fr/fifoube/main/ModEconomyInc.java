@@ -51,16 +51,19 @@ public class ModEconomyInc {
 		public ModEconomyInc() {
 
 			IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+			//StatsRegistry.registerStats();
 			BlocksRegistry.REGISTER.register(bus);
 			ItemsRegistery.REGISTER.register(bus);
 			BlockEntityTypeRegistery.REGISTER.register(bus);
 			MenuTypeRegistery.REGISTER.register(bus);
 
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigHolder.CLIENT_SPEC);
-			ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);	
-			
-			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-			FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+			ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigHolder.SERVER_SPEC);
+
+			bus.addListener(this::setup);
+			bus.addListener(this::clientSetup);
+			bus.addListener(EconomyIncModTab::addCreativeModTab);
+			bus.addListener(EconomyIncModTab::addToTab);
 			MinecraftForge.EVENT_BUS.addListener(this::serverStartingEvent);
 	        MinecraftForge.EVENT_BUS.addListener(this::onCommandRegister);
 	        

@@ -1,11 +1,11 @@
 {
 	"textures": {
 		"0": "minecraft:block/smooth_stone",
-		"1": "economyinc:blocks/insertcardscreen",
+		"1": "economyinc:block/insertcardscreen",
 		"3": "minecraft:block/anvil",
-		"6": "economyinc:blocks/caclac_button",
-		"11": "economyinc:blocks/buttons",
-		"19": "economyinc:blocks/cash_output",
+		"6": "economyinc:block/caclac_button",
+		"11": "economyinc:block/buttons",
+		"19": "economyinc:block/cash_output",
 		"20": "minecraft:block/daylight_detector_top",
 		"particle": "minecraft:block/smooth_stone"
 	},

@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Consumer;
 
@@ -17,17 +17,17 @@ public class ItemBlockBills extends BlockItem {
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         super.initializeClient(consumer);
-        consumer.accept(RenderItemBlockBills.INSTANCE);
-    }
+        consumer.accept(RenderItemBlockBills.INSTANCE);    }
 
-    static class RenderItemBlockBills implements IItemRenderProperties {
+
+    static class RenderItemBlockBills implements IClientItemExtensions {
 
         public static RenderItemBlockBills INSTANCE = new RenderItemBlockBills();
 
         @Override
-        public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
             return new ItemBillsSpecialRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
         }
 

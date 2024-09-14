@@ -20,7 +20,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -193,7 +193,7 @@ public class ServerEvents {
 	public void onLivingDeath(LivingDeathEvent event) {
 
 		if(ConfigFile.doSpecificMobsGiveMoney) {
-			LivingEntity entity = event.getEntityLiving();
+			LivingEntity entity = event.getEntity();
 			if (event.getSource().getEntity() instanceof Player player) {
 
 				double money;
@@ -215,7 +215,7 @@ public class ServerEvents {
 		}
 		else if(ConfigFile.doMobsGiveMoney)
 		{
-			LivingEntity entity = event.getEntityLiving();
+			LivingEntity entity = event.getEntity();
 			if (event.getSource().getEntity() instanceof Player player) {
 				if (entity instanceof Monster)
 					player.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> {

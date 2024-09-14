@@ -60,7 +60,7 @@ public class CapabilityMoney {
     	
     	Player oldPlayer = event.getOriginal();
         oldPlayer.revive();
-        Player newPlayer = event.getPlayer();
+        Player newPlayer = event.getEntity();
         oldPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(oldData -> { 	
         	newPlayer.getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> data.setMoney(oldData.getMoney()));
         });

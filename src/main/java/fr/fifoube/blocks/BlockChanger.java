@@ -8,7 +8,7 @@ import fr.fifoube.blocks.blockentity.BlockEntityTypeRegistery;
 import fr.fifoube.items.ItemsRegistery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -70,7 +70,7 @@ public class BlockChanger extends Block implements EntityBlock {
 	{
 		if(canOpen)
 		{
-            NetworkHooks.openGui(player, te, pos);
+            NetworkHooks.openScreen(player, te, pos);
 			te.setNumbUse(1);
 			te.setEntityPlayer(player);
 			te.setChanged();
@@ -78,7 +78,7 @@ public class BlockChanger extends Block implements EntityBlock {
 		}
 		else
 		{
-			player.sendMessage(new TranslatableComponent("title.alreadyUsed"), player.getUUID());
+			player.displayClientMessage(Component.translatable("title.alreadyUsed"), true);
 		}
 		return InteractionResult.CONSUME;
 	}

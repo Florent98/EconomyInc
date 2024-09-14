@@ -18,8 +18,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -132,7 +132,7 @@ public class CommandsPlots {
 					if(!tpOther)
 					{
 						player.teleportTo(player.getLevel(), center.x, center.y, center.z, player.getYRot(), player.getXRot());
-						src.sendSuccess(new TranslatableComponent("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
+						src.sendSuccess(Component.translatable("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
 					}
 					else
 					{
@@ -141,14 +141,14 @@ public class CommandsPlots {
 							{
 								ServerPlayer playerMP = (ServerPlayer)e;
 								playerMP.teleportTo(playerTarget.getLevel(), center.x, center.y, center.z, playerMP.getYRot(), playerMP.getXRot());
-								src.sendSuccess(new TranslatableComponent("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
+								src.sendSuccess(Component.translatable("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
 							}	
 						});
 					}
 				}
 				else
 				{
-					src.sendFailure(new TranslatableComponent("commands.plot.teleport.fail"));
+					src.sendFailure(Component.translatable("commands.plot.teleport.fail"));
 				}
 			}
 		}
@@ -186,7 +186,7 @@ public class CommandsPlots {
 							}
 							else
 							{
-								src.sendFailure(new TranslatableComponent("commands.plotbuy.alreadybought"));
+								src.sendFailure(Component.translatable("commands.plotbuy.alreadybought"));
 							}
 						}
 					}
@@ -199,7 +199,7 @@ public class CommandsPlots {
 					dataWorld.setDirty();
 					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
 					saveAll(src, false);
-					src.sendSuccess(new TranslatableComponent("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
+					src.sendSuccess(Component.translatable("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
 				}
 		}
 		return 0;
@@ -239,7 +239,7 @@ public class CommandsPlots {
 					}
 					name += namePlot.get(i) + seperator; 
 				}
-				src.sendSuccess(new TextComponent(name), false);
+				src.sendSuccess(Component.literal(name), false);
 			}
 		}
 		
@@ -275,26 +275,26 @@ public class CommandsPlots {
 								if(plotsData.getList().get(0).equals(name))
 								{
 									canProceed = false;
-									src.sendFailure(new TranslatableComponent("commands.plot.samename"));
+									src.sendFailure(Component.translatable("commands.plot.samename"));
 								}
 							}
 						}
 						if(canProceed)
 						{
 							createData(src, worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
-							src.sendSuccess(new TranslatableComponent("commands.plot.success"), false);
+							src.sendSuccess(Component.translatable("commands.plot.success"), false);
 							saveAll(src, false);
 						}
 
 					}
 					else
 					{
-						src.sendFailure(new TranslatableComponent("commands.plot.sizeexceed"));
+						src.sendFailure(Component.translatable("commands.plot.sizeexceed"));
 					}
 		}
 		else
 		{
-			src.sendFailure(new TranslatableComponent("commands.plot.noplayer"));
+			src.sendFailure(Component.translatable("commands.plot.noplayer"));
 		}
 		return 0;
     }
@@ -325,12 +325,12 @@ public class CommandsPlots {
 				{
 					indexToProceed = i;
 					canProceedRemove = true;
-					src.sendSuccess(new TranslatableComponent("commands.plot.removed"), false);
+					src.sendSuccess(Component.translatable("commands.plot.removed"), false);
 					saveAll(src, false);
 				}
 				else
 				{
-					src.sendFailure(new TranslatableComponent("commands.plot.nomatch"));
+					src.sendFailure(Component.translatable("commands.plot.nomatch"));
 				}
 			}
 		}
@@ -402,7 +402,7 @@ public class CommandsPlots {
 		AABB area = new AABB(new BlockPos(xPosFirst, yPos, zPosFirst), new BlockPos(xPosSecond, yPos, zPosSecond));
 		AABB areaGrown = area.inflate(1.0D, 0.0D, 1.0D);
 		Vec3 vec = getCenter(xPosFirst, yPos, zPosFirst, xPosSecond, yPos, zPosSecond);
-		BlockPos posSign = new BlockPos(vec);
+		BlockPos posSign = new BlockPos((int)vec.x(), (int)vec.y(), (int)vec.z());
 		
 		Block block = Blocks.SMOOTH_STONE_SLAB;
 		String rl = ConfigFile.plotBorderBlock; 
@@ -414,16 +414,16 @@ public class CommandsPlots {
 		else
 		{
 			block = Blocks.SMOOTH_STONE_SLAB;
-			src.sendFailure(new TranslatableComponent("commands.plot.wrongPlotBorder"));
+			src.sendFailure(Component.translatable("commands.plot.wrongPlotBorder"));
 		}
 		
 		worldIn.setBlockAndUpdate(posSign, Blocks.AIR.defaultBlockState());
 		
-		Vec3 minGrow = new Vec3(areaGrown.minX, yPos, areaGrown.minZ);
-		Vec3 maxGrow = new Vec3(areaGrown.maxX, yPos, areaGrown.maxZ);
+		Vec3i minGrow = new Vec3i((int) areaGrown.minX, yPos, (int) areaGrown.minZ);
+		Vec3i maxGrow = new Vec3i((int) areaGrown.maxX, yPos, (int) areaGrown.maxZ);
 		
-		Vec3 min = new Vec3(area.minX, yPos, area.minZ);
-		Vec3 max = new Vec3(area.maxX, yPos, area.maxZ);
+		Vec3i min = new Vec3i((int) area.minX, yPos, (int) area.minZ);
+		Vec3i max = new Vec3i((int) area.maxX, yPos, (int) area.maxZ);
 		
 		Iterable<BlockPos> posToPlace = BlockPos.betweenClosed(new BlockPos(minGrow), new BlockPos(maxGrow));
 		Iterable<BlockPos> posToRemove = BlockPos.betweenClosed(new BlockPos(min), new BlockPos(max));
@@ -445,10 +445,10 @@ public class CommandsPlots {
 				
 		if(tileEntityIn != null)
 		{
-			tileEntityIn.setMessage(0 , new TextComponent("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE));
-			tileEntityIn.setMessage(1 , new TextComponent(senderName).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
-			tileEntityIn.setMessage(2 , new TextComponent(String.valueOf(priceIn) + "$").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
-			tileEntityIn.setMessage(3 , new TextComponent("[BUY]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GREEN));
+			tileEntityIn.setMessage(0 , Component.literal("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE));
+			tileEntityIn.setMessage(1 , Component.literal(senderName).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+			tileEntityIn.setMessage(2 , Component.literal(String.valueOf(priceIn) + "$").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
+			tileEntityIn.setMessage(3 , Component.literal("[BUY]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GREEN));
 			tileEntityIn.setChanged();
 		}
 		
@@ -465,12 +465,12 @@ public class CommandsPlots {
 	      boolean flag = minecraftserver.saveAllChunks(true, flush, true);
 	      if(flag)
 	      {
-	    	  source.sendSuccess(new TranslatableComponent("commands.plot.saved"), false);
+	    	  source.sendSuccess(Component.translatable("commands.plot.saved"), false);
 	    	  return 1;
 	      }
 	      else
 	      {
-	    	  source.sendFailure(new TranslatableComponent("commands.plot.errorsaved"));
+	    	  source.sendFailure(Component.translatable("commands.plot.errorsaved"));
 	    	  return 0;
 	      }
 	   }

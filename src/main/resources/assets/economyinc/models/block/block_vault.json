@@ -1,8 +1,8 @@
 {
     "textures": {
-        "pad": "economyinc:blocks/pad",
-        "anvil": "economyinc:blocks/anvil",
-	"particle": "economyinc:blocks/anvil"
+        "pad": "economyinc:block/pad",
+        "anvil": "economyinc:block/anvil",
+	"particle": "economyinc:block/anvil"
     },
     "display": {
         "gui": {

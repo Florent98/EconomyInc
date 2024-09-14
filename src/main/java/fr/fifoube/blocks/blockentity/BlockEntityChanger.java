@@ -18,12 +18,11 @@ import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
-import fr.fifoube.stats.StatsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -38,7 +37,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class BlockEntityChanger extends BlockEntity implements MenuProvider{
 
-	public static TranslatableComponent NAME = new TranslatableComponent("block.economyinc.block_changer");
+	public static MutableComponent NAME = Component.translatable("block.economyinc.block_changer");
 	private byte direction;
 	public int numbUse;
 	public Player user;
@@ -206,7 +205,6 @@ public class BlockEntityChanger extends BlockEntity implements MenuProvider{
 												changer.timePassed = 0;
 												changer.isProcessing = false;
 												changer.setChanged();
-												playerIn.awardStat(StatsRegistry.CHANGED_GOLD_TO_MONEY);
 												ModEconomyInc.LOGGER_MONEY.info(playerIn.getDisplayName().getString() + " has changed gold with the weight ("+ weight +"), the change was at " + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight) + ". Balance was at " + fundsPrev + ", balance is now " + data.getMoney() + "." + "[UUID: " + playerIn.getStringUUID() + "," + changer.getBlockPos() + "]");
 											});
 

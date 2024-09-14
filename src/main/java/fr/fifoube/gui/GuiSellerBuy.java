@@ -16,7 +16,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -85,13 +84,13 @@ public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
 			this.owner = tile.getOwnerName();
 			this.itemName = tile.getItem();
 			this.cost = tile.getCost();
-			this.buy = this.addRenderableWidget(new Button(width / 2 - 50, height / 2 + 27, 100, 20, new TranslatableComponent("title.buy"),(press) -> actionPerformed(0))); 
-             
+			this.buy = this.addRenderableWidget(Button.builder(Component.translatable("title.buy"), button -> { actionPerformed(this.buy);}).pos(width / 2 - 50, height / 2 + 27).size(100, 20).build());
+
 			sellerOwner = tile.getOwner();
 			worldPlayer = minecraft.player.getUUID();
 			if(sellerOwner.equals(worldPlayer))
 			{
-				this.takeFunds = this.addRenderableWidget(new Button(width / 2 + 20, height / 2 - 75, 100, 13, new TranslatableComponent("title.recover"),(press) -> actionPerformed(1))); 
+				this.takeFunds = this.addRenderableWidget(Button.builder(Component.translatable("title.recover"), button -> { actionPerformed(this.takeFunds);}).pos(width / 2 + 20, height / 2 - 74).size(100, 13).build());
 			}
 			
 		}
@@ -105,16 +104,13 @@ public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
 		return false;
 	}
 	
-	protected void actionPerformed(int buttonId)
-	{		
-		switch (buttonId) {
-		case 0:
-			PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-			break;
-		case 1:
-			PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
-			break;
-		}
+	protected void actionPerformed(Button button)
+	{
+        if (button.equals(this.buy)) {
+            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+        } else if (button == this.takeFunds) {
+            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+        }
 	}
 	
 	@Override
@@ -126,13 +122,13 @@ public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
         this.blit(poseStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
 		this.drawImageInGui((this.width / 2) + 85, (this.height / 2) - 40);
         super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.font.draw(poseStack, new TranslatableComponent("title.seller",  owner).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-		this.font.draw(poseStack, new TranslatableComponent("title.item", itemName).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-		this.font.draw(poseStack, new TranslatableComponent("title.cost", cost).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
-		this.font.draw(poseStack, new TranslatableComponent("title.amount", amount).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
+        this.font.draw(poseStack, Component.translatable("title.seller",  owner).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+		this.font.draw(poseStack, Component.translatable("title.item", itemName).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+		this.font.draw(poseStack, Component.translatable("title.cost", cost).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+		this.font.draw(poseStack, Component.translatable("title.amount", amount).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
 		if(sellerOwner.equals(worldPlayer))
 		{
-			this.font.draw(poseStack, new TranslatableComponent("title.fundsToRecover", fundsTotalRecovery).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+			this.font.draw(poseStack, Component.translatable("title.fundsToRecover", fundsTotalRecovery).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
 		}
 
 	}
@@ -154,7 +150,7 @@ public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
 		{
 			stack = new ItemStack(tile.getInventory().getStackInSlot(0).getItem(), 1);
 		}
-		GuiUtilities.renderGuiItem(renderer, this.getBlitOffset(), stack, posX, posY, renderer.getModel(stack, (Level)null, (LivingEntity)null, 0));
+		GuiUtilities.renderGuiItem(renderer, stack, posX, posY, renderer.getModel(stack, (Level)null, (LivingEntity)null, 0));
 	}
 
 	@Override

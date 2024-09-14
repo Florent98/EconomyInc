@@ -4,8 +4,7 @@ package fr.fifoube.blocks.blockentity.specialrenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import fr.fifoube.blocks.blockentity.BlockEntityBills;
 import fr.fifoube.blocks.models.ModelBills;
 import fr.fifoube.main.ModEconomyInc;
@@ -14,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Quaternionf;
 
 public class BlockEntityBillsSpecialRenderer implements BlockEntityRenderer<BlockEntityBills> {
 
@@ -32,24 +32,24 @@ public class BlockEntityBillsSpecialRenderer implements BlockEntityRenderer<Bloc
         switch (te.getDirection()) {
             case 0:
                 matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-                matrixStackIn.mulPose(new Quaternion(new Vector3f(0, 1.0f, 0), 180f, true));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(180f));
                 break;
             case 1:
                 matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-                matrixStackIn.mulPose(new Quaternion(new Vector3f(0, 1.0f, 0), 90f, true));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(90f));
                 break;
             case 2:
                 matrixStackIn.translate(0.5F, 1.5F, 0.50F);
-                matrixStackIn.mulPose(new Quaternion(new Vector3f(0, 1.0f, 0), 360f, true));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(360f));
                 break;
             case 3:
                 matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-                matrixStackIn.mulPose(new Quaternion(new Vector3f(0, 1.0f, 0), 270f, true));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(270f));
                 break;
             default:
                 break;
         }
-        matrixStackIn.mulPose(new Quaternion(new Vector3f(0, 0, 1.0f), 180f, true));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180f));
         VertexConsumer renderBuffer = buffer.getBuffer(RenderType.entitySolid(texture));
         modelBlock.renderAll(te,matrixStackIn, renderBuffer, light, overlay, 1.0f, 1.0f, 1.0f, 1.0f);
         matrixStackIn.popPose();

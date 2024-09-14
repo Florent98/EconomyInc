@@ -14,8 +14,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +37,7 @@ public class GuiVaultSettings2by2  extends Screen
 	List<Button> buttonList = new ArrayList<Button>();
 		
 	public GuiVaultSettings2by2(BlockEntityVault2by2 te) {
-		super(new TranslatableComponent("gui.vaultsettings"));
+		super(Component.translatable("gui.vaultsettings"));
 		this.tile = te;
 	}
 	
@@ -58,8 +57,7 @@ public class GuiVaultSettings2by2  extends Screen
 		
 		this.guiLeft = (this.width - this.xSize) / 2;
 	    this.guiTop = (this.height - this.ySize) / 2;
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		this.commandTextField = new EditBox(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, new TranslatableComponent("gui.vaultsettings"));
+		this.commandTextField = new EditBox(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, Component.translatable("gui.vaultsettings"));
 	    this.commandTextField.setMaxLength(35);
 	    this.commandTextField.insertText("Add other players.");
 	    this.addWidget(this.commandTextField);
@@ -67,7 +65,7 @@ public class GuiVaultSettings2by2  extends Screen
 	    for(int i = 0; i < 5; i++)
 	    {
 	    	int id = i;
-	    	Button button = new Button(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1)), 40, 13, new TextComponent("✖").withStyle(ChatFormatting.DARK_RED), (press) -> this.actionPerformed(id));
+			Button button = Button.builder(Component.literal("✖").withStyle(ChatFormatting.DARK_RED), (press) -> { this.actionPerformed(id);}).pos(((this.width - this.xSize) / 2) + 164, ((this.height - this.ySize) / 2) + (18 * (i + 1))).size(40, 13).build();
 	    	buttonList.add(id, button);
 	    	button.active = false;
 	    	this.addRenderableWidget(button);
@@ -190,7 +188,6 @@ public class GuiVaultSettings2by2  extends Screen
 	@Override
 	public void onClose() {
 		super.onClose();
-		this.getMinecraft().keyboardHandler.setSendRepeatsToGui(false);
 	}
 
 	

@@ -4,7 +4,6 @@ package fr.fifoube.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,7 +28,7 @@ public class ItemPacketFiveB extends Item implements IValue {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn) {
 
-		tooltip.add(new TranslatableComponent("money.value", getValue()).withStyle(ChatFormatting.ITALIC, ChatFormatting.GREEN));
+		tooltip.add(Component.translatable("money.value", getValue()).withStyle(ChatFormatting.ITALIC, ChatFormatting.GREEN));
 
 	}
 }

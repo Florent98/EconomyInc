@@ -5,6 +5,7 @@ package fr.fifoube.gui.container.type;
 import fr.fifoube.blocks.blockentity.*;
 import fr.fifoube.gui.container.*;
 import fr.fifoube.main.ModEconomyInc;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.IContainerFactory;
@@ -15,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class MenuTypeRegistery {
 	
 
-    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, ModEconomyInc.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModEconomyInc.MOD_ID);
     
     
     public static final RegistryObject<MenuType<MenuSeller>> SELLER_TYPE = register("containerseller", (IContainerFactory<MenuSeller>) (windowId, playerInventory, data) -> {
@@ -56,7 +57,7 @@ public class MenuTypeRegistery {
     
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String key, MenuType.MenuSupplier<T> supplier)
     {
-        MenuType<T> type = new MenuType<>(supplier);
+        MenuType<T> type = new MenuType<>(supplier, FeatureFlags.DEFAULT_FLAGS);
         return REGISTER.register(key, () -> type);
     }
 }
