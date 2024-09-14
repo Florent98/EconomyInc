@@ -75,7 +75,6 @@ public class BlockBuyer extends Block implements EntityBlock {
 					}
 				} else {
 					if (player.getMainHandItem().getItem().equals(ItemsRegistery.WRENCH.get()) && te.getOwner().equals(player.getUUID())) {
-						System.out.println(te.getAccountMoney());
 						NetworkHooks.openGui((ServerPlayer) player, te, pos);
 					}
 				}

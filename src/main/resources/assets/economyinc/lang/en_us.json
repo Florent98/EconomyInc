@@ -53,6 +53,10 @@
 
 "title.sellOne": "Sell one item",
 "title.sellAll": "Sell max items",
+"title.buyerNothingSell": "Nothing to sell in your inventory.",
+"title.generalErrorBE": "There was an error with the block.",
+"title.buyerNoMoney": "There is not enough money to buy your item(s).",
+"title.buyerNoSpaceLeft": "The block inventory is full.",
 
 "_comment" : "SELLER RELATED",
 
@@ -114,6 +118,10 @@
 "_comment" : "STATS RELATED",
 
 "stat.economyinc.changed_gold_money": "Gold changed",
+
+"_comment" : "NARRATOR RELATED",
+
+"narrator.button.restock" : "Auto-Refill button",
 
 "_comment" : "MISC",
 
