@@ -66,7 +66,7 @@ public class PacketRefillSeller {
 		ctx.get().enqueueWork(() -> {
 			
 			Player player = ctx.get().getSender();
-			Level world = player.level;
+			Level world = player.level();
 			BlockEntity tileS = world.getBlockEntity(packet.posSeller);
 			BlockEntity tileV = world.getBlockEntity(packet.posVault);
 			

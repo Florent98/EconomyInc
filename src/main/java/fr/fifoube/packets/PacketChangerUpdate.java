@@ -43,7 +43,7 @@ public class PacketChangerUpdate {
 	{
 		ctx.get().enqueueWork(() -> {
 			Player player = ctx.get().getSender();
-			Level world = player.level;
+			Level world = player.level();
 			BlockEntity tile = world.getBlockEntity(packet.pos);
 			if(tile instanceof BlockEntityChanger)
 			{

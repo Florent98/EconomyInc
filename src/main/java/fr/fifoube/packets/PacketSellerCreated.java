@@ -56,7 +56,7 @@ public class PacketSellerCreated {
 		ctx.get().enqueueWork(() -> {
 
 				Player player = ctx.get().getSender(); // GET PLAYER
-	  			Level world = player.level;
+	  			Level world = player.level();
 				BlockPos pos = packet.pos;
 				BlockEntitySeller te = (BlockEntitySeller)world.getBlockEntity(pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
 				if(te != null) // CHECK IF PLAYER HAS NOT DESTROYED TILE ENTITY IN THE SHORT TIME OF SENDING PACKET

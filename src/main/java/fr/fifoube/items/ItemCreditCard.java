@@ -5,6 +5,8 @@ package fr.fifoube.items;
 import fr.fifoube.gui.ClientGuiScreen;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.main.economy.MoneyFormat;
+import fr.fifoube.main.economy.PinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -113,8 +115,11 @@ public class ItemCreditCard extends Item {
 			 
 		        String ownerName = stack.getTag().getString("Owner");	
 		        tooltip.add(Component.translatable("title.ownerCard", ownerName));
-		        tooltip.add(Component.translatable("title.fundsCard", funds));
+		        tooltip.add(Component.translatable("title.fundsCard", MoneyFormat.display(funds)));
 		        tooltip.add(Component.translatable("title.linkedCard", linkedValue));
+		        if (PinUtil.isPinEnabled(stack)) {
+		        	tooltip.add(Component.translatable("title.pinEnabled"));
+		        }
 	 		 
 	 	 });
 

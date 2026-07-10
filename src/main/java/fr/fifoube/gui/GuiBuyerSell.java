@@ -13,15 +13,16 @@
 
 package fr.fifoube.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
 import fr.fifoube.gui.utilities.GuiUtilities;
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.gui.utilities.GuiText;
+import fr.fifoube.main.economy.MoneyFormat;
 import fr.fifoube.packets.PacketBuyerChange;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -97,32 +98,24 @@ public class GuiBuyerSell extends Screen
 	{		
 		if(buttonId == 0)
 		{
-			PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerChange(tile.getBlockPos(), true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+			PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerChange(tile.getBlockPos(), true));
 
 		}
 		else if(buttonId == 1)
 		{
-			PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerChange(tile.getBlockPos(), false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+			PacketsRegistery.CHANNEL.sendToServer(new PacketBuyerChange(tile.getBlockPos(), false));
 		}
 	}
 
 	@Override
-	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 
-		this.renderBackground(stack);
-		int i = this.guiLeft;
-		int j = this.guiTop;
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, background);
-		this.blit(stack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+		this.renderBackground(guiGraphics);
+		guiGraphics.blit(background, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
 		this.drawImageInGui((this.width / 2) + 85, (this.height / 2) - 40);
-		this.font.draw(stack, Component.translatable("title.seller",  tile.getOwnerName()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-		this.font.draw(stack, Component.translatable("title.item", tile.getItemStackToBuy().getDisplayName().getString()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-		this.font.draw(stack, Component.translatable("title.cost", tile.getCost()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
-		super.render(stack, mouseX, mouseY, partialTicks);
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.seller",  tile.getOwnerName()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.item", tile.getItemStackToBuy().getDisplayName().getString()).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.cost", MoneyFormat.display(tile.getCost())).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
-
-
-
-
 }

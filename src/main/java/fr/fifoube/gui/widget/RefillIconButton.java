@@ -13,11 +13,8 @@
 
 package fr.fifoube.gui.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -42,12 +39,9 @@ public class RefillIconButton extends Button {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-
-		Minecraft.getInstance().getTextureManager().getTexture(resources);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 		RefillIconButton.Icon refillIcon;
-		if(this.isMouseOver(mouseX, mouseY) || this.isHovered)
+		if(this.isMouseOver(mouseX, mouseY))
 		{
 			refillIcon = this.refill ? RefillIconButton.Icon.REFILL_HOVER : RefillIconButton.Icon.REFILL_HOVER_DISABLED;
 		}
@@ -55,7 +49,7 @@ public class RefillIconButton extends Button {
 		{
 			refillIcon = this.refill ? RefillIconButton.Icon.REFILL : RefillIconButton.Icon.REFILL_DISABLED;
 		}
-		this.blit(poseStack, this.getX(), this.getY(), refillIcon.getX(), refillIcon.getY(), this.width, this.height);
+		guiGraphics.blit(resources, this.getX(), this.getY(), refillIcon.getX(), refillIcon.getY(), this.width, this.height);
 	}
 
 	public boolean isRefillEnabled() {

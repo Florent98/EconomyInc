@@ -53,7 +53,7 @@ public class PacketVaultSettings {
 	{
 		ctx.get().enqueueWork(() -> {
 			Player player = ctx.get().getSender(); // GET PLAYER
-			BlockEntity tile = player.level.getBlockEntity(packet.pos);
+			BlockEntity tile = player.level().getBlockEntity(packet.pos);
 			if(tile instanceof BlockEntityVault2by2)
 			{
 				BlockEntityVault2by2 te = (BlockEntityVault2by2)tile;

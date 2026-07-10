@@ -8,6 +8,9 @@ import fr.fifoube.items.ItemCreditCard;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.main.economy.TransactionHistoryService;
+import fr.fifoube.main.economy.TransactionType;
+import fr.fifoube.packets.PacketSellerFundsTotal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,7 +57,7 @@ public class PacketSellerFundsTotal {
 			ctx.get().enqueueWork(() -> {
 				
 				ServerPlayer player = ctx.get().getSender(); // GET PLAYER
-				Level worldIn = player.level; // GET WORLD
+				Level worldIn = player.level(); // GET WORLD
 				BlockPos pos = packet.pos;
 				BlockEntity tileentity = worldIn.getBlockEntity(pos); // GET THE TILE ENTITY IN WORLD THANKS TO COORDINATES
 				BlockSeller seller = (BlockSeller) worldIn.getBlockState(pos).getBlock();
@@ -86,8 +89,9 @@ public class PacketSellerFundsTotal {
 													boolean flag = player.getInventory().add(stackInSlot);
 													if(flag)
 													{
-														ModEconomyInc.LOGGER_MONEY.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " from : " + te.getOwnerName() + "[UUID : " + te.getOwner() + "]. Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + te.getCost()) + "." + "[UUID: " + player.getUUID() + "]");
+														ModEconomyInc.LOGGER_MONEY.info(player.getDisplayName().getString() + " has bought " + te.getItem() + " from : " + te.getOwnerName() + "[UUID : " + te.getOwner() + "]. Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - te.getCost()) + "." + "[UUID: " + player.getUUID() + "]");
 														data.setMoney(data.getMoney() - te.getCost());
+														TransactionHistoryService.record(player, data, TransactionType.SELLER_BUY, te.getCost(), te.getItem());
 														te.increaseFundsTotal();
 														if(!admin)
 														{
@@ -110,7 +114,9 @@ public class PacketSellerFundsTotal {
 							{
 								if(te.getOwner().equals(player.getUUID()))
 								{
-									data.addMoney(te.getFundsTotal());
+									double recovered = te.getFundsTotal();
+									data.addMoney(recovered);
+									TransactionHistoryService.record(player, data, TransactionType.SELLER_RECOVERY, recovered, te.getOwnerName());
 									te.setFundsTotal(0);
 									te.setChanged();
 								}

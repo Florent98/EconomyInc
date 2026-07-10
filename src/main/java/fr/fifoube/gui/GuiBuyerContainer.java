@@ -13,13 +13,12 @@
 
 package fr.fifoube.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.blocks.blockentity.BlockEntityBuyer;
 import fr.fifoube.gui.container.MenuBuyer;
+import fr.fifoube.gui.utilities.GuiText;
 import fr.fifoube.main.ModEconomyInc;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -64,29 +63,23 @@ public class GuiBuyerContainer extends AbstractContainerScreen<MenuBuyer>
 	}
 
 	@Override
-	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(stack);
-		super.render(stack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(stack, mouseX, mouseY);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-
-		this.font.draw(matrixStack, this.tile.getDisplayName(), 8.0F, 5, 4210752);
-		this.font.draw(matrixStack, this.inv.getDisplayName().getString(), 8.0F, (float)(this.ySize - 94), 4210752);
-
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+		GuiText.draw(this.font, guiGraphics, this.tile.getDisplayName(), 8, 5, 4210752);
+		GuiText.draw(this.font, guiGraphics, this.inv.getDisplayName().getString(), 8, this.ySize - 94, 4210752);
 	}
 
 	@Override
-	protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, background);
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
-		this.blit(stack, k, l, 0, 0, this.xSize, this.ySize);
+		guiGraphics.blit(background, k, l, 0, 0, this.xSize, this.ySize);
 	}
 
 

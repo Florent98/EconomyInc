@@ -2,16 +2,17 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.blocks.blockentity.BlockEntitySeller;
 import fr.fifoube.gui.container.MenuSellerBuy;
 import fr.fifoube.gui.utilities.GuiUtilities;
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.gui.utilities.GuiText;
+import fr.fifoube.main.economy.MoneyFormat;
 import fr.fifoube.packets.PacketSellerFundsTotal;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -107,40 +108,37 @@ public class GuiSellerBuy extends AbstractContainerScreen<MenuSellerBuy>
 	protected void actionPerformed(Button button)
 	{
         if (button.equals(this.buy)) {
-            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), false)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), false));
         } else if (button == this.takeFunds) {
-            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), true)); //SENDING PACKET TO LET SERVER KNOW CHANGES WITH TOTAL FUNDS, COORDINATES AND AMOUNT
+            PacketsRegistery.CHANNEL.sendToServer(new PacketSellerFundsTotal(tile.getBlockPos(), true));
         }
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		
-		this.renderBackground(poseStack);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BACKGROUND);		
-        this.blit(poseStack, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+		this.renderBackground(guiGraphics);
+        guiGraphics.blit(BACKGROUND, this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
 		this.drawImageInGui((this.width / 2) + 85, (this.height / 2) - 40);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.font.draw(poseStack, Component.translatable("title.seller",  owner).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
-		this.font.draw(poseStack, Component.translatable("title.item", itemName).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
-		this.font.draw(poseStack, Component.translatable("title.cost", cost).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
-		this.font.draw(poseStack, Component.translatable("title.amount", amount).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        GuiText.draw(this.font, guiGraphics, Component.translatable("title.seller",  owner).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 55, Color.BLACK.getRGB());
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.item", itemName).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 45, Color.BLACK.getRGB());
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.cost", MoneyFormat.display(cost)).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 35, Color.BLACK.getRGB());
+		GuiText.draw(this.font, guiGraphics, Component.translatable("title.amount", amount).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 25, Color.BLACK.getRGB());
 		if(sellerOwner.equals(worldPlayer))
 		{
-			this.font.draw(poseStack, Component.translatable("title.fundsToRecover", fundsTotalRecovery).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
+			GuiText.draw(this.font, guiGraphics, Component.translatable("title.fundsToRecover", MoneyFormat.display(fundsTotalRecovery)).withStyle(ChatFormatting.BOLD), (this.width / 2) - 120, (this.height / 2)- 15, Color.BLACK.getRGB());
 		}
 
 	}
 	
 	@Override
-	protected void renderBg(PoseStack p_97787_, float p_97788_, int p_97789_, int p_97790_) {
-		
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
 	}
 	 
 
 	@Override
-	protected void renderLabels(PoseStack p_97808_, int p_97809_, int p_97810_) {
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 	}
 
 	public void drawImageInGui(int posX, int posY) 

@@ -70,7 +70,7 @@ public class PacketListNBT {
 		ctx.get().enqueueWork(() -> {
 			
 			Player player = ctx.get().getSender(); // GET PLAYER
-			Level worldIn = player.level; // GET WORLD
+			Level worldIn = player.level(); // GET WORLD
 				if(packet.addrem.equals("add"))
 				{
 					if(packet.isBlock2x2)

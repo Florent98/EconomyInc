@@ -81,7 +81,7 @@ public class MenuChanger extends AbstractContainerMenu {
 	@Override
 	public void removed(Player playerIn) {
 
-		Level level = playerIn.level;
+		Level level = playerIn.level();
 		if(!level.isClientSide)
 		{
 			BlockEntityChanger te = this.te;

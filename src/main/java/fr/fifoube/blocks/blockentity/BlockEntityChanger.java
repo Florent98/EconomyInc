@@ -18,6 +18,10 @@ import fr.fifoube.items.ItemsRegistery;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.main.capabilities.CapabilityMoney;
 import fr.fifoube.main.config.ConfigFile;
+import fr.fifoube.main.atm.AtmService;
+import fr.fifoube.main.economy.MoneyFormat;
+import fr.fifoube.main.economy.TransactionHistoryService;
+import fr.fifoube.main.economy.TransactionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -192,12 +196,19 @@ public class BlockEntityChanger extends BlockEntity implements MenuProvider{
 										if(changer.timePassed == changer.timeProcess)
 										{
 											Player playerIn = changer.user;
-											if(playerIn != null)
+											if(playerIn != null && playerIn instanceof net.minecraft.server.level.ServerPlayer serverPlayer)
 											playerIn.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
 												double fundsPrev = data.getMoney();
 												String weight = slot0.getTag().getString("weight");
-												double fundsNow = (fundsPrev + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight));
+												double gross = MoneyFormat.toWhole(Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight);
+												long fee = AtmService.calculateFee((long) gross, AtmService.effectiveGoldConvertFeePercent());
+												double credit = gross - fee;
+												double fundsNow = fundsPrev + credit;
 												data.setMoney(fundsNow);
+												TransactionHistoryService.record(serverPlayer, data, TransactionType.GOLD_CONVERT, credit, "weight:" + weight);
+												if (fee > 0) {
+													TransactionHistoryService.record(serverPlayer, data, TransactionType.FEE, fee, "gold");
+												}
 												slot0.split(1);
 												ItemStack copyOfCard = slot1.copy();
 												slot1.split(1);
@@ -205,7 +216,7 @@ public class BlockEntityChanger extends BlockEntity implements MenuProvider{
 												changer.timePassed = 0;
 												changer.isProcessing = false;
 												changer.setChanged();
-												ModEconomyInc.LOGGER_MONEY.info(playerIn.getDisplayName().getString() + " has changed gold with the weight ("+ weight +"), the change was at " + (Double.parseDouble(weight) * ConfigFile.multiplierGoldNuggetWeight) + ". Balance was at " + fundsPrev + ", balance is now " + data.getMoney() + "." + "[UUID: " + playerIn.getStringUUID() + "," + changer.getBlockPos() + "]");
+												ModEconomyInc.LOGGER_MONEY.info(playerIn.getDisplayName().getString() + " has changed gold with the weight ("+ weight +"), credit " + credit + (fee > 0 ? " (fee " + fee + ")" : "") + ". Balance was at " + fundsPrev + ", balance is now " + data.getMoney() + "." + "[UUID: " + playerIn.getStringUUID() + "," + changer.getBlockPos() + "]");
 											});
 
 										}

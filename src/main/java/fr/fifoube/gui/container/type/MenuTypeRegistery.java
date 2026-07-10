@@ -20,37 +20,37 @@ public class MenuTypeRegistery {
     
     
     public static final RegistryObject<MenuType<MenuSeller>> SELLER_TYPE = register("containerseller", (IContainerFactory<MenuSeller>) (windowId, playerInventory, data) -> {
-        BlockEntitySeller sellerTE = (BlockEntitySeller) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntitySeller sellerTE = (BlockEntitySeller) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuSeller(windowId, playerInventory, sellerTE);
     });
 
     public static final RegistryObject<MenuType<MenuSellerBuy>> SELLERBUY_TYPE = register("containersellerbuy", (IContainerFactory<MenuSellerBuy>) (windowId, playerInventory, data) -> {
-        BlockEntitySeller sellerbuyTE = (BlockEntitySeller) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntitySeller sellerbuyTE = (BlockEntitySeller) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuSellerBuy(windowId, playerInventory, sellerbuyTE);
     });
     
     public static final RegistryObject<MenuType<MenuVault>> VAULT_TYPE = register("containervault", (IContainerFactory<MenuVault>) (windowId, playerInventory, data) -> {
-        BlockEntityVault vaultTE = (BlockEntityVault) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntityVault vaultTE = (BlockEntityVault) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuVault(windowId, playerInventory, playerInventory.player, vaultTE);
     });
 
     public static final RegistryObject<MenuType<MenuVault2by2>> VAULT2BY2_TYPE = register("containervault2by2", (IContainerFactory<MenuVault2by2>) (windowId, playerInventory, data) -> {
-    	BlockEntityVault2by2 vault2by2TE = (BlockEntityVault2by2) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+    	BlockEntityVault2by2 vault2by2TE = (BlockEntityVault2by2) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuVault2by2(windowId, playerInventory, playerInventory.player, vault2by2TE);
     });
 
     public static final RegistryObject<MenuType<MenuChanger>> CHANGER_TYPE = register("containerchanger", (IContainerFactory<MenuChanger>) (windowId, playerInventory, data) -> {
-        BlockEntityChanger changerTE = (BlockEntityChanger) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntityChanger changerTE = (BlockEntityChanger) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuChanger(windowId, playerInventory, changerTE);
     });
     
     public static final RegistryObject<MenuType<MenuBuyer>> BUYER_TYPE = register("containerbuyer", (IContainerFactory<MenuBuyer>) (windowId, playerInventory, data) -> {
-        BlockEntityBuyer buyerTE = (BlockEntityBuyer) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntityBuyer buyerTE = (BlockEntityBuyer) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuBuyer(windowId, playerInventory, buyerTE);
     });
     
     public static final RegistryObject<MenuType<MenuBuyerCreation>> BUYER_CREA_TYPE = register("containercreabuyer", (IContainerFactory<MenuBuyerCreation>) (windowId, playerInventory, data) -> {
-        BlockEntityBuyer buyerCreaTE = (BlockEntityBuyer) playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        BlockEntityBuyer buyerCreaTE = (BlockEntityBuyer) playerInventory.player.level().getBlockEntity(data.readBlockPos());
         return new MenuBuyerCreation(windowId, playerInventory, buyerCreaTE);
     });
     

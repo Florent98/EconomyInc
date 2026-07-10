@@ -2,14 +2,14 @@
  *******************************************************************************/
 package fr.fifoube.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import fr.fifoube.blocks.blockentity.BlockEntityVault2by2;
+import fr.fifoube.gui.utilities.GuiText;
 import fr.fifoube.main.ModEconomyInc;
 import fr.fifoube.packets.PacketVaultSettings;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -60,7 +60,7 @@ public class GuiVaultSettings2by2  extends Screen
 		this.commandTextField = new EditBox(this.font, this.width / 2 - 75, this.height / 2 - 70, 150, 20, Component.translatable("gui.vaultsettings"));
 	    this.commandTextField.setMaxLength(35);
 	    this.commandTextField.insertText("Add other players.");
-	    this.addWidget(this.commandTextField);
+	    this.addRenderableWidget(this.commandTextField);
 	    buttonList.clear();
 	    for(int i = 0; i < 5; i++)
 	    {
@@ -75,24 +75,22 @@ public class GuiVaultSettings2by2  extends Screen
 	
 	
 	@Override
-	public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		
-		this.renderBackground(stack);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-	    this.blit(stack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize); 
-	    super.render(stack, mouseX, mouseY, partialTicks);
+		this.renderBackground(guiGraphics);
+	    guiGraphics.blit(BACKGROUND, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize); 
+	    super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	    if(!Minecraft.getInstance().hasSingleplayerServer())
 	    {
 		    if(tile.getOwner().equals(Minecraft.getInstance().player.getUUID()))
 		    {
-		    	this.commandTextField.render(stack, mouseX, mouseY, partialTicks);
+		    	this.commandTextField.render(guiGraphics, mouseX, mouseY, partialTicks);
 		    }
 	    }
 	    for (int i = 0; i < tile.getAllowedPlayers().size(); i++) {
 	    	
     		String playerName = tile.getAllowedPlayers().get(i).substring(0, tile.getAllowedPlayers().get(i).indexOf(","));
-    		this.font.draw(stack, playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0x00);
+    		GuiText.draw(this.font, guiGraphics, playerName, ((this.width - this.xSize) / 2) + 52 , ((this.height - this.ySize) / 2) + (20 * (i + 1)), 0xFFFFFF);
 		}
 	    for (int j = 0; j < 5; j++) {
 			
@@ -189,6 +187,4 @@ public class GuiVaultSettings2by2  extends Screen
 	public void onClose() {
 		super.onClose();
 	}
-
-	
 }

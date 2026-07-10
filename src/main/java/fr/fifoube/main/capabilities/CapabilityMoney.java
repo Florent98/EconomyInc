@@ -14,6 +14,9 @@
 package fr.fifoube.main.capabilities;
 
 import fr.fifoube.main.ModEconomyInc;
+import fr.fifoube.main.economy.EconomyConfigService;
+import fr.fifoube.main.economy.EconomyLeaderboardService;
+import fr.fifoube.main.economy.TransactionHistoryService;
 import fr.fifoube.packets.PacketMoneyData;
 import fr.fifoube.packets.PacketsRegistery;
 import net.minecraft.resources.ResourceLocation;
@@ -69,16 +72,19 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 	{
-		if(!event.getEntity().level.isClientSide)
+		if(!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer player)
 			event.getEntity().getCapability(MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
+				EconomyLeaderboardService.update(player, data.getMoney());
+				TransactionHistoryService.syncToClient(player, TransactionHistoryService.copyHistory(data));
+				EconomyConfigService.syncToClient(player);
 			});
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		if(!event.getEntity().level.isClientSide && event.getEntity() instanceof ServerPlayer)
+		if(!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer)
 		{
 			ServerPlayer player = (ServerPlayer)event.getEntity();
 			event.getEntity().getCapability(MONEY_CAPABILITY, null).ifPresent(data -> {
@@ -92,7 +98,7 @@ public class CapabilityMoney {
 	@SubscribeEvent
 	public static void onDimensionTravel(PlayerChangedDimensionEvent event)
 	{
-		if(!event.getEntity().level.isClientSide)
+		if(!event.getEntity().level().isClientSide)
 			event.getEntity().getCapability(CapabilityMoney.MONEY_CAPABILITY).ifPresent(data -> { 
 				data.setMoney(data.getMoney());
 			});

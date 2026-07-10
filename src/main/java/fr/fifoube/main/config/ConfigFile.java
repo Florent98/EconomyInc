@@ -25,4 +25,15 @@ public class ConfigFile {
 	public static double spiderMoney = 0.25;
 	public static double witchMoney = 2.0;
 
+	public static double payMinAmount = 1.0;
+	public static double payMaxAmount = 1_000_000.0;
+	public static int payCooldownSeconds = 3;
+	public static double atmWithdrawFeePercent = 2.0;
+	public static double goldConvertFeePercent = 2.0;
+	public static boolean enableAtmWithdrawFee = true;
+	public static boolean enableGoldConvertFee = true;
+	public static double atmConfirmThreshold = 10_000.0;
+	public static int baltopSize = 10;
+	public static int maxTransactionHistory = 15;
+
 }

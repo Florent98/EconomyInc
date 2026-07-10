@@ -111,7 +111,7 @@ public class CommandsPlots {
 		if(player != null)
 		{
 			ServerPlayer playerTarget = player;
-			ServerLevel worldIn = player.getLevel();
+			ServerLevel worldIn = (ServerLevel) player.level();
 			DimensionDataStorage storage = worldIn.getDataStorage();
 			PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 			if(dataWorld != null)
@@ -131,8 +131,10 @@ public class CommandsPlots {
 					Vec3 center = getCenter(plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.yPos, plotsData.zPosSecond);
 					if(!tpOther)
 					{
-						player.teleportTo(player.getLevel(), center.x, center.y, center.z, player.getYRot(), player.getXRot());
-						src.sendSuccess(Component.translatable("commands.plot.teleport.success", player.getDisplayName().getString(), plotsData.name), false);
+						final String teleportPlayerName = player.getDisplayName().getString();
+						final String teleportPlotName = plotsData.name;
+						player.teleportTo((ServerLevel) player.level(), center.x, center.y, center.z, player.getYRot(), player.getXRot());
+						src.sendSuccess(() -> Component.translatable("commands.plot.teleport.success", teleportPlayerName, teleportPlotName), false);
 					}
 					else
 					{
@@ -140,8 +142,10 @@ public class CommandsPlots {
 							if(e instanceof ServerPlayer)
 							{
 								ServerPlayer playerMP = (ServerPlayer)e;
-								playerMP.teleportTo(playerTarget.getLevel(), center.x, center.y, center.z, playerMP.getYRot(), playerMP.getXRot());
-								src.sendSuccess(Component.translatable("commands.plot.teleport.success", playerMP.getDisplayName().getString(), plotsData.name), false);
+								final String targetPlayerName = playerMP.getDisplayName().getString();
+								final String targetPlotName = plotsData.name;
+								playerMP.teleportTo((ServerLevel) playerTarget.level(), center.x, center.y, center.z, playerMP.getYRot(), playerMP.getXRot());
+								src.sendSuccess(() -> Component.translatable("commands.plot.teleport.success", targetPlayerName, targetPlotName), false);
 							}	
 						});
 					}
@@ -167,7 +171,7 @@ public class CommandsPlots {
 		
 		if(player != null)
 		{
-				ServerLevel worldIn = player.getLevel();
+				ServerLevel worldIn = (ServerLevel) player.level();
 				DimensionDataStorage storage = worldIn.getDataStorage();
 				PlotsWorldSavedData dataWorld = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 				if(dataWorld != null)
@@ -198,8 +202,10 @@ public class CommandsPlots {
 					plotsData.owner = assignedPlayer.getStringUUID();
 					dataWorld.setDirty();
 					CommandsPlotsBuy.replaceSign(worldIn, plotsData.xPosFirst, plotsData.yPos, plotsData.zPosFirst, plotsData.xPosSecond, plotsData.zPosSecond, plotsData.name, plotsData.owner);	
+					final ServerPlayer assigningPlayer = player;
+					final String assignedName = assignedPlayer.getDisplayName().getString();
 					saveAll(src, false);
-					src.sendSuccess(Component.translatable("commands.plot.assigned.success", player, assignedPlayer.getDisplayName().getString()), false);
+					src.sendSuccess(() -> Component.translatable("commands.plot.assigned.success", assigningPlayer, assignedName), false);
 				}
 		}
 		return 0;
@@ -215,7 +221,7 @@ public class CommandsPlots {
 		
 		if(player != null)
 		{
-			DimensionDataStorage storage = player.getLevel().getDataStorage();
+			DimensionDataStorage storage = ((ServerLevel) player.level()).getDataStorage();
 			PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 			List<String> namePlot = new ArrayList<String>();
 			if(data != null)
@@ -239,7 +245,8 @@ public class CommandsPlots {
 					}
 					name += namePlot.get(i) + seperator; 
 				}
-				src.sendSuccess(Component.literal(name), false);
+				final String plotListMessage = name;
+				src.sendSuccess(() -> Component.literal(plotListMessage), false);
 			}
 		}
 		
@@ -263,8 +270,8 @@ public class CommandsPlots {
 		{
 					if(Math.abs(to.getX() - from.getX()) < 26 && Math.abs(to.getZ() - from.getZ()) < 26)
 					{
-						DimensionDataStorage storage = player.getLevel().getDataStorage();
-						ServerLevel worldIn = player.getLevel();
+						DimensionDataStorage storage = ((ServerLevel) player.level()).getDataStorage();
+						ServerLevel worldIn = (ServerLevel) player.level();
 						PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
 						if(data != null)
 						{
@@ -282,7 +289,7 @@ public class CommandsPlots {
 						if(canProceed)
 						{
 							createData(src, worldIn, name, player, from.getX(), from.getZ(), to.getX(), to.getZ(), from.getY(), price);
-							src.sendSuccess(Component.translatable("commands.plot.success"), false);
+							src.sendSuccess(() -> Component.translatable("commands.plot.success"), false);
 							saveAll(src, false);
 						}
 
@@ -311,7 +318,7 @@ public class CommandsPlots {
 			e.printStackTrace();
 			}
 		
-		DimensionDataStorage storage = player.getLevel().getDataStorage();
+		DimensionDataStorage storage = ((ServerLevel) player.level()).getDataStorage();
 		PlotsWorldSavedData data = (PlotsWorldSavedData)storage.computeIfAbsent(PlotsWorldSavedData::new, PlotsWorldSavedData::new, PlotsWorldSavedData.DATA_NAME);
     	if(player != null)
 		if(data != null)
@@ -325,7 +332,7 @@ public class CommandsPlots {
 				{
 					indexToProceed = i;
 					canProceedRemove = true;
-					src.sendSuccess(Component.translatable("commands.plot.removed"), false);
+					src.sendSuccess(() -> Component.translatable("commands.plot.removed"), false);
 					saveAll(src, false);
 				}
 				else
@@ -445,10 +452,11 @@ public class CommandsPlots {
 				
 		if(tileEntityIn != null)
 		{
-			tileEntityIn.setMessage(0 , Component.literal("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE));
-			tileEntityIn.setMessage(1 , Component.literal(senderName).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
-			tileEntityIn.setMessage(2 , Component.literal(String.valueOf(priceIn) + "$").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
-			tileEntityIn.setMessage(3 , Component.literal("[BUY]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GREEN));
+			tileEntityIn.updateText(text -> text
+					.setMessage(0, Component.literal("[" + name + "]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLUE))
+					.setMessage(1, Component.literal(senderName).withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK))
+					.setMessage(2, Component.literal(String.valueOf(priceIn) + "$").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK))
+					.setMessage(3, Component.literal("[BUY]").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GREEN)), true);
 			tileEntityIn.setChanged();
 		}
 		
@@ -465,7 +473,7 @@ public class CommandsPlots {
 	      boolean flag = minecraftserver.saveAllChunks(true, flush, true);
 	      if(flag)
 	      {
-	    	  source.sendSuccess(Component.translatable("commands.plot.saved"), false);
+	    	  source.sendSuccess(() -> Component.translatable("commands.plot.saved"), false);
 	    	  return 1;
 	      }
 	      else

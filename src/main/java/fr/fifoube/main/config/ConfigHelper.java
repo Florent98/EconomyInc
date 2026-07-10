@@ -31,5 +31,16 @@ public class ConfigHelper {
 		ConfigFile.spiderMoney = ConfigHolder.SERVER.spiderMoney.get();
 		ConfigFile.witchMoney = ConfigHolder.SERVER.witchMoney.get();
 
+		ConfigFile.payMinAmount = ConfigHolder.SERVER.payMinAmount.get();
+		ConfigFile.payMaxAmount = ConfigHolder.SERVER.payMaxAmount.get();
+		ConfigFile.payCooldownSeconds = ConfigHolder.SERVER.payCooldownSeconds.get();
+		ConfigFile.atmWithdrawFeePercent = ConfigHolder.SERVER.atmWithdrawFeePercent.get();
+		ConfigFile.enableAtmWithdrawFee = ConfigHolder.SERVER.enableAtmWithdrawFee.get();
+		ConfigFile.goldConvertFeePercent = ConfigHolder.SERVER.goldConvertFeePercent.get();
+		ConfigFile.enableGoldConvertFee = ConfigHolder.SERVER.enableGoldConvertFee.get();
+		ConfigFile.atmConfirmThreshold = ConfigHolder.SERVER.atmConfirmThreshold.get();
+		ConfigFile.baltopSize = ConfigHolder.SERVER.baltopSize.get();
+		ConfigFile.maxTransactionHistory = ConfigHolder.SERVER.maxTransactionHistory.get();
+
 	}
 }

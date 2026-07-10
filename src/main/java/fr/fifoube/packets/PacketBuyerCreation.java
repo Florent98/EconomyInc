@@ -61,7 +61,7 @@ public class PacketBuyerCreation {
 		ctx.get().enqueueWork(() -> {
 			
 				Player player = ctx.get().getSender(); // GET PLAYER
-	  			Level world = player.level;
+	  			Level world = player.level();
 				BlockEntityBuyer te = (BlockEntityBuyer)world.getBlockEntity(packet.pos); //WE TAKE THE POSITION OF THE TILE ENTITY TO ADD INFO
 				if(te != null) // CHECK IF PLAYER HAS NOT DESTROYED TILE ENTITY IN THE SHORT TIME OF SENDING PACKET
 				{

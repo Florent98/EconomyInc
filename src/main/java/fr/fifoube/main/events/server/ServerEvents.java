@@ -44,7 +44,7 @@ public class ServerEvents {
 		}
 		if(player != null)
 		{
-	    	ServerLevel worldIn = player.getLevel();
+	    	ServerLevel worldIn = (ServerLevel) player.level();
 	    	List<ChunkPos> listPos = new ArrayList<ChunkPos>();
 	    	DimensionDataStorage storage = worldIn.getDataStorage();
 	    	ChunksWorldSavedData data = (ChunksWorldSavedData)storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);
@@ -121,7 +121,7 @@ public class ServerEvents {
 		}
 		if(player != null)
 		{
-	    	ServerLevel worldIn = player.getLevel();
+	    	ServerLevel worldIn = (ServerLevel) player.level();
 	    	List<ChunkPos> listPos = new ArrayList<ChunkPos>();
 	    	DimensionDataStorage storage = worldIn.getDataStorage();
 	    	ChunksWorldSavedData data = (ChunksWorldSavedData)storage.get(ChunksWorldSavedData::new, ChunksWorldSavedData.DATA_NAME);

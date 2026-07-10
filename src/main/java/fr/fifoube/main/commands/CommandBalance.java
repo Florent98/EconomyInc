@@ -77,7 +77,7 @@ public class CommandBalance {
 					ModEconomyInc.LOGGER_MONEY.info(playerMP.getDisplayName().getString() + " has received " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() + money) + "." + "[UUID: " + playerMP.getUUID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUUID() +"]");
 					data.setMoney(data.getMoney() + money);
 				});
-				src.sendSuccess(Component.translatable("commands.balance.added", money, playerMP.getDisplayName().getString()), false);
+				src.sendSuccess(() -> Component.translatable("commands.balance.added", money, playerMP.getDisplayName().getString()), false);
 			}
 		});
 
@@ -94,7 +94,7 @@ public class CommandBalance {
 					ModEconomyInc.LOGGER_MONEY.info(playerMP.getDisplayName().getString() + " has been withdrawn " + money + ". Balance was at " + data.getMoney() + ", balance is now " + (data.getMoney() - money) + "." + "[UUID: " + playerMP.getUUID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUUID() +"]");
 					data.setMoney(data.getMoney() - money);
 				});
-				src.sendSuccess(Component.translatable("commands.balance.withdraw", money, playerMP.getDisplayName().getString()), false);
+				src.sendSuccess(() -> Component.translatable("commands.balance.withdraw", money, playerMP.getDisplayName().getString()), false);
 			}
 		});
 	 	return 0;
@@ -110,7 +110,7 @@ public class CommandBalance {
 					ModEconomyInc.LOGGER_MONEY.info(playerMP.getDisplayName().getString() + " money was define at : " + money + ". Balance was at " + data.getMoney() + ", balance is now " + money + "." + "[UUID: " + playerMP.getUUID() + ",Command exectuor: " + src.getDisplayName().getString() + ", UUID: "+ src.getEntity().getUUID() +"]");
 					data.setMoney(money);
 				});
-				src.sendSuccess(Component.translatable("commands.balance.set", playerMP.getDisplayName().getString(), money), false);
+				src.sendSuccess(() -> Component.translatable("commands.balance.set", playerMP.getDisplayName().getString(), money), false);
 			}
 		});
 
@@ -124,7 +124,7 @@ public class CommandBalance {
 			{
 				ServerPlayer playerMP = (ServerPlayer)e;
 				playerMP.getCapability(CapabilityMoney.MONEY_CAPABILITY, null).ifPresent(data -> {
-					src.sendSuccess(Component.translatable("commands.balance.funds", playerMP.getDisplayName().getString(), data.getMoney()), false);
+					src.sendSuccess(() -> Component.translatable("commands.balance.funds", playerMP.getDisplayName().getString(), data.getMoney()), false);
 				});
 			}
 		});

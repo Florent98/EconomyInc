@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -49,8 +50,14 @@ public class BlockEntityBills extends BlockEntity {
 	
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+		if (pkt.getTag() != null) {
+			handleUpdateTag(pkt.getTag());
+		}
+	}
 
-		this.load(pkt.getTag());
+	@Override
+	public void handleUpdateTag(CompoundTag tag) {
+		load(tag);
 	}
 	
 	public int getBillValue()
@@ -124,10 +131,16 @@ public class BlockEntityBills extends BlockEntity {
 		return stack;
 	}
 
+    public int getTotalValue() {
+        return this.numbBills * this.billRef;
+    }
+
 	@Override
 	public void setChanged() {
 		super.setChanged();
-		level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+		if (level != null) {
+			level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+		}
 	}
 
 	@Override
